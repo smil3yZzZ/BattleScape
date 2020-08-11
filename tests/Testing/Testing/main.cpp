@@ -1,6 +1,4 @@
 #include "constants.hpp"
-#include "SquareProperties.hpp"
-#include "Engine.hpp"
 
 void copyArrayInfo(int* destination, int* source, int size, bool reverse);
 
@@ -139,7 +137,7 @@ int main() {
         std::cout << "\n";
     }
 
-    Engine engine = Engine(FRAMES_PER_SECOND, original, size.at(L), );
+    Engine engine = Engine(FRAMES_PER_SECOND, original, size.at(L), BUFFER_VERTEX_SIZE, VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
 
     return 1;

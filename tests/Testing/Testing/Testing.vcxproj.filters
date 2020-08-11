@@ -18,11 +18,14 @@
     <ClInclude Include="constants.hpp">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="SquareProperties.hpp">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.hpp">
       <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Shader.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\SquareProperties.hpp">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -32,15 +35,21 @@
     <None Include="a.out">
       <Filter>Archivos de origen</Filter>
     </None>
+    <None Include="resources\colors.json">
+      <Filter>Archivos de recursos</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SquareProperties.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Shader.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\SquareProperties.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

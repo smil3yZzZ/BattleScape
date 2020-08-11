@@ -62,7 +62,6 @@ public:
     int render();
     int getIsRunning();
     void setIsRunning(int running);
-    void processSpecialKeys(int key, int xx, int yy);
     Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
 };
 #endif

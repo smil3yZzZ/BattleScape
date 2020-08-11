@@ -2,6 +2,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include "utils/SquareProperties.hpp"
+#include "Engine.hpp"
+
 #include <map>
 #include <iostream>
 #include <cstdlib>
@@ -18,6 +21,13 @@ const int XL = 3;
 const int XXL = 4;
 const int BORDERS_SIZE_IN_MATRIX = 2;
 const int FRAMES_PER_SECOND = 60;
+
+const int BUFFER_VERTEX_SIZE = 6;
+const int INDICES_PER_QUAD = 6;
+const int VERTICES_PER_QUAD = 4;
+const int QUAD_WIDTH = 64;
+const int QUAD_HEIGHT = 64;
+const int QUAD_OFFSET = QUAD_WIDTH;
 
 
 
