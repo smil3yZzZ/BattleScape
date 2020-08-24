@@ -6,13 +6,13 @@ void copyArrayInfo(int* destination, int* source, int size, bool reverse);
 
 int main() {
 
-    int mapDimension = size.at(L) + BORDERS_SIZE_IN_MATRIX;
+    int mapDimension = size.at(S) + BORDERS_SIZE_IN_MATRIX;
 
     int** original = new int* [mapDimension];
     for (int i = 0; i < mapDimension; i++) original[i] = new int[mapDimension];
 
 
-    const int quarter_size = (size.at(L) - 1) / 2;
+    const int quarter_size = (size.at(S) - 1) / 2;
     int** top_left = new int* [quarter_size];
     for (int i = 0; i < quarter_size; i++) top_left[i] = new int[quarter_size];
 
@@ -137,7 +137,7 @@ int main() {
         std::cout << "\n";
     }
 
-    Engine engine = Engine(FRAMES_PER_SECOND, original, size.at(L), BUFFER_VERTEX_SIZE, VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
+    Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
 
     return 1;

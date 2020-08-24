@@ -27,6 +27,8 @@ private:
     static const int platformHeight;
     static const int wallHeight;
 
+    int up, right, down, left;
+
     double framesPerSecond;
     int** map;
     int dimension;
@@ -46,7 +48,9 @@ private:
     float* vertices;
     unsigned int* indices;
 
-    glm::mat4 proj, model, view;
+    glm::mat4 projection, model, view;
+
+    Shader textureShader;
 
     unsigned int VAO;
     unsigned int VBO;
@@ -62,7 +66,11 @@ public:
     int render();
     int getIsRunning();
     void setIsRunning(int running);
-    void processSpecialKeys(int key, int xx, int yy);
+    glm::mat4 getProjection();
+    void setProjection(glm::mat4 projection);
+    Shader getTextureShader();
+    void checkMovementStates();
+    void updateMovementStates(int key, int action);
     Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
 };
 #endif
