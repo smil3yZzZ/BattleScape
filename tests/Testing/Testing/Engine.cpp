@@ -86,6 +86,9 @@ int Engine::run() {
         double oldTime = glfwGetTime();
 
         update(colors);
+
+        clearScreen();
+        
         render();
 
         double frameTime = glfwGetTime() - oldTime;
@@ -100,12 +103,25 @@ int Engine::run() {
         checkMovementStates();
     }
 
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+
+
+    delete[] vertices;
+    delete[] indices;
+
+
+    glfwTerminate();
+
     return 1;
 }
 
 int Engine::init(const rapidjson::Document& colors) {
     initMaze(colors);
     initCamera();
+    initShaders();
+    generateBuffers();
     return 1;
 }
 
@@ -157,17 +173,6 @@ int Engine::initMaze(const rapidjson::Document& colors) {
         }
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-
-
-    delete[] vertices;
-    delete[] indices;
-
-
-    glfwTerminate();
-
     return 1;
 }
 
@@ -189,6 +194,26 @@ int Engine::initCamera() {
     return 1;
 }
 
+int Engine::clearScreen() {
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    return 1;
+}
+
+int Engine::initShaders() {
+    Engine::textureShader = Shader("shaders/triangleVertexShader.vert", "shaders/triangleFragmentShader.frag");
+    return 1;
+}
+
+int Engine::generateBuffers() {
+    glGenVertexArrays(1, &VAO);
+
+    glGenBuffers(1, &VBO);
+
+    glGenBuffers(1, &EBO);
+    return 1;
+}
+
 int Engine::update(const rapidjson::Document& colors) {
     updateBuffers();
     return 1;
@@ -196,30 +221,27 @@ int Engine::update(const rapidjson::Document& colors) {
 
 int Engine::updateBuffers() {
 
-    glGenVertexArrays(1, &VAO);
-
-    glGenBuffers(1, &VBO);
-
-    glGenBuffers(1, &EBO);
-
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    int vertices_size = sizeof(float) * dimension * dimension * bufferVertexSize * verticesPerQuad;
+    int vertices_size = sizeof(float) * dimension * dimension * verticesPerQuad * bufferVertexSize;
     int indices_size = sizeof(unsigned int) * dimension * dimension * indicesPerQuad;
 
-    std::cout << "VERTICES SIZE VARIABLE:" << vertices_size << std::endl;
-    std::cout << "INDICES SIZE VARIABLE:" << indices_size << std::endl;
+    // Seguir probando, el problema está en updateBuffers()
 
-    std::cout << "VERTICES SIZE" << sizeof(vertices) << std::endl;
-    std::cout << "INDICES SIZE"  << sizeof(indices) << std::endl;
+    //std::cout << "VERTICES SIZE VARIABLE:" << vertices_size << std::endl;
+    //std::cout << "INDICES SIZE VARIABLE:" << indices_size << std::endl;
+
+    //std::cout << "VERTICES SIZE" << sizeof(vertices) << std::endl;
+    //std::cout << "INDICES SIZE"  << sizeof(indices) << std::endl;
 
     glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
+
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)0);
@@ -229,23 +251,22 @@ int Engine::updateBuffers() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    Shader textureShader("shaders/triangleVertexShader.vert", "shaders/triangleFragmentShader.frag");
+    return 1;
+    
+}
+
+int Engine::render() {
 
     textureShader.use();
     textureShader.setFloatMatrix("projection", glm::value_ptr(projection));
     textureShader.setFloatMatrix("view", glm::value_ptr(view));
     textureShader.setFloatMatrix("model", glm::value_ptr(model));
 
-    return 1;
-}
-
-int Engine::render() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
-    //glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     return 1;
 }
 
@@ -287,8 +308,10 @@ void Engine::checkMovementStates() {
         x += 8.0f;
     }
 
+    
     setProjection(glm::translate(getProjection(), glm::vec3(x, y, 0.0f)));
     getTextureShader().setFloatMatrix("projection", (GLfloat*)glm::value_ptr(getProjection()));
+    
 }
 
 void Engine::updateMovementStates(int key, int action) {

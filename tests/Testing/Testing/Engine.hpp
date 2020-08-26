@@ -61,6 +61,9 @@ public:
     int init(const rapidjson::Document& colors);
     int initMaze(const rapidjson::Document& colors);
     int initCamera();
+    int initShaders();
+    int clearScreen();
+    int generateBuffers();
     int update(const rapidjson::Document& colors);
     int updateBuffers();
     int render();
