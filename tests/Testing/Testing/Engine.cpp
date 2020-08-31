@@ -21,6 +21,8 @@ Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVerte
     Engine::quadHeight = quadHeight;
     Engine::quadOffset = quadOffset;
 
+    Engine::input = Input();
+
     isRunning = false;
 
     frameDelay = 1/framesPerSecond;
@@ -31,41 +33,13 @@ Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVerte
     Engine::vertices = new float[dimension * dimension * bufferVertexSize * verticesPerQuad];
 
     Engine::indices = new unsigned int[dimension * dimension * indicesPerQuad];
+
+    Engine::VAO = Engine::VBO = Engine::EBO = 0;
 }
 
 int Engine::run() {
 
     isRunning = true;
-
-    if (!glfwInit())
-    {
-        fprintf(stderr, "Failed to initialize GLFW\n");
-        return -1;
-    }
-
-    // OpenGL version 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Killer", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    glfwSetWindowUserPointer(window, this);
-    glfwSetKeyCallback(window, processKeyCallback);
-    //glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
-
-    glewExperimental = GL_TRUE;
-
-    glewInit();
 
     FILE* fp = fopen("resources/colors.json", "r");
 
@@ -81,26 +55,25 @@ int Engine::run() {
 
     while (!glfwWindowShouldClose(window)) {
 
-        //processInput(window, textureShader);
-
         double oldTime = glfwGetTime();
 
         update(colors);
 
         clearScreen();
-        
+
+        checkCamera();
+
         render();
 
         double frameTime = glfwGetTime() - oldTime;
 
         if (frameTime < frameDelay) {
             Sleep(1000*(frameDelay - frameTime));
-            //std::cout << 1000 * (frameDelay - frameTime) << std::endl;
         }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-        checkMovementStates();
+    
     }
 
     glDeleteVertexArrays(1, &VAO);
@@ -117,12 +90,47 @@ int Engine::run() {
     return 1;
 }
 
+
+
 int Engine::init(const rapidjson::Document& colors) {
+    initGL();
     initMaze(colors);
     initCamera();
     initShaders();
     generateBuffers();
     return 1;
+}
+
+int Engine::initGL() {
+    if (!glfwInit())
+    {
+        fprintf(stderr, "Failed to initialize GLFW\n");
+        return -1;
+    }
+
+    // OpenGL version 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    window = glfwCreateWindow(800, 600, "Killer", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    glfwSetWindowUserPointer(window, this);
+    glfwSetKeyCallback(window, processKeyCallback);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
+    glewExperimental = GL_TRUE;
+
+    glewInit();
 }
 
 int Engine::initMaze(const rapidjson::Document& colors) {
@@ -180,16 +188,15 @@ int Engine::initCamera() {
     projection = glm::ortho(-544.0f, 1600.0f, -144.0f, 1200.0f, -100.0f, 100.0f);
 
     model = glm::mat4(1.0f);
-    //std::cout << glm::to_string(projection) << std::endl;
-    //Create identity matrices for model and view.
-    //Change camera position
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 100.0f);
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    
+    cameraPos = glm::vec3(0.0f, 0.0f, 100.0f);
+    cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+    cameraUp = glm::cross(cameraDirection, cameraRight);
 
+    
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
     return 1;
 }
@@ -228,20 +235,11 @@ int Engine::updateBuffers() {
     int vertices_size = sizeof(float) * dimension * dimension * verticesPerQuad * bufferVertexSize;
     int indices_size = sizeof(unsigned int) * dimension * dimension * indicesPerQuad;
 
-    // Seguir probando, el problema está en updateBuffers()
-
-    //std::cout << "VERTICES SIZE VARIABLE:" << vertices_size << std::endl;
-    //std::cout << "INDICES SIZE VARIABLE:" << indices_size << std::endl;
-
-    //std::cout << "VERTICES SIZE" << sizeof(vertices) << std::endl;
-    //std::cout << "INDICES SIZE"  << sizeof(indices) << std::endl;
-
     glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
-
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)0);
@@ -278,12 +276,8 @@ void Engine::setIsRunning(int isRunning) {
     Engine::isRunning = isRunning;
 }
 
-void Engine::setProjection(glm::mat4 projection) {
-    Engine::projection = projection;
-}
-
-glm::mat4 Engine::getProjection() {
-    return projection;
+void Engine::setView(glm::mat4 view) {
+    Engine::view = view;
 }
 
 Shader Engine::getTextureShader() {
@@ -291,33 +285,37 @@ Shader Engine::getTextureShader() {
 }
 
 
-void Engine::checkMovementStates() {
+void Engine::checkCamera() {
     int x = 0;
     int y = 0;
 
     if (up) {
-        y -= 8.0f;
-    }
-    if (down) {
         y += 8.0f;
     }
-    if (right) {
-        x -= 8.0f;
+    if (down) {
+        y -= 8.0f;
     }
-    if (left) {
+    if (right) {
         x += 8.0f;
     }
+    if (left) {
+        x -= 8.0f;
+    }
 
-    
-    setProjection(glm::translate(getProjection(), glm::vec3(x, y, 0.0f)));
-    getTextureShader().setFloatMatrix("projection", (GLfloat*)glm::value_ptr(getProjection()));
-    
+    std::cout << input.getKeyState(INPUT_UP) << std::endl;
+
+    cameraPos += glm::vec3(x, y, 0.0f);
+    cameraTarget += glm::vec3(x, y, 0.0f);
+
+    setView(glm::lookAt(cameraPos, cameraTarget, cameraUp));
 }
 
-void Engine::updateMovementStates(int key, int action) {
-    if (action == GLFW_PRESS) {
+void Engine::updateCamera(int key, int action) {
+    
+    if (action == GLFW_PRESS){
         switch (key) {
             case GLFW_KEY_UP:
+                input.setKeyState(INPUT_UP, 1);
                 up = 1;
                 break;
             case GLFW_KEY_RIGHT:
@@ -359,6 +357,6 @@ void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         glfwSetWindowShouldClose(window, true);
     }
     else {
-        engine->updateMovementStates(key, action);
+        engine->updateCamera(key, action);
     }
 }

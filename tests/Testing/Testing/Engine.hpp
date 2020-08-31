@@ -13,6 +13,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/filereadstream.h"
 #include "utils/Shader.hpp"
+#include "utils/Input.hpp"
 
 
 #include <GL/glew.h>
@@ -49,6 +50,7 @@ private:
     unsigned int* indices;
 
     glm::mat4 projection, model, view;
+    glm::vec3 cameraPos, cameraUp, cameraTarget;
 
     Shader textureShader;
 
@@ -56,9 +58,14 @@ private:
     unsigned int VBO;
     unsigned int EBO;
 
+    Input input;
+
+    GLFWwindow* window;
+
 public:
     int run();
     int init(const rapidjson::Document& colors);
+    int initGL();
     int initMaze(const rapidjson::Document& colors);
     int initCamera();
     int initShaders();
@@ -69,11 +76,10 @@ public:
     int render();
     int getIsRunning();
     void setIsRunning(int running);
-    glm::mat4 getProjection();
-    void setProjection(glm::mat4 projection);
+    void setView(glm::mat4 view);
     Shader getTextureShader();
-    void checkMovementStates();
-    void updateMovementStates(int key, int action);
+    void checkCamera();
+    void updateCamera(int key, int action);
     Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
 };
 #endif
