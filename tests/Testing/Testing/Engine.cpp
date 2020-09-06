@@ -289,20 +289,19 @@ void Engine::checkCamera() {
     int x = 0;
     int y = 0;
 
-    if (up) {
+    if (input.getKeyState(INPUT_UP)) {
         y += 8.0f;
     }
-    if (down) {
-        y -= 8.0f;
-    }
-    if (right) {
+    if (input.getKeyState(INPUT_RIGHT)) {
         x += 8.0f;
     }
-    if (left) {
+    if (input.getKeyState(INPUT_DOWN)) {
+        y -= 8.0f;
+    }
+    if (input.getKeyState(INPUT_LEFT)) {
         x -= 8.0f;
     }
 
-    std::cout << input.getKeyState(INPUT_UP) << std::endl;
 
     cameraPos += glm::vec3(x, y, 0.0f);
     cameraTarget += glm::vec3(x, y, 0.0f);
@@ -310,38 +309,39 @@ void Engine::checkCamera() {
     setView(glm::lookAt(cameraPos, cameraTarget, cameraUp));
 }
 
-void Engine::updateCamera(int key, int action) {
+void Engine::updateInput(int key, int action) {
     
     if (action == GLFW_PRESS){
         switch (key) {
+            case GLFW_KEY_ESCAPE:
+                glfwSetWindowShouldClose(window, true);
             case GLFW_KEY_UP:
                 input.setKeyState(INPUT_UP, 1);
-                up = 1;
                 break;
             case GLFW_KEY_RIGHT:
-                right = 1;
+                input.setKeyState(INPUT_RIGHT, 1);
                 break;
             case GLFW_KEY_DOWN:
-                down = 1;
+                input.setKeyState(INPUT_DOWN, 1);
                 break;
             case GLFW_KEY_LEFT:
-                left = 1;
+                input.setKeyState(INPUT_LEFT, 1);
                 break;
         }
     }
     if (action == GLFW_RELEASE){
         switch (key) {
             case GLFW_KEY_UP:
-                up = 0;
+                input.setKeyState(INPUT_UP, 0);
                 break;
             case GLFW_KEY_RIGHT:
-                right = 0;
+                input.setKeyState(INPUT_RIGHT, 0);
                 break;
             case GLFW_KEY_DOWN:
-                down = 0;
+                input.setKeyState(INPUT_DOWN, 0);
                 break;
             case GLFW_KEY_LEFT:
-                left = 0;
+                input.setKeyState(INPUT_LEFT, 0);
                 break;
         }
     }
@@ -351,12 +351,14 @@ void Engine::updateCamera(int key, int action) {
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     Engine* engine = (Engine*)glfwGetWindowUserPointer(window);
-    float right, left, top, bottom;
 
+    /*
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
     else {
-        engine->updateCamera(key, action);
+        engine->updateInput(key, action);
     }
+    */
+    engine->updateInput(key, action);
 }

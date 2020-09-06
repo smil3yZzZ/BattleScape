@@ -1,14 +1,22 @@
 #include "Input.hpp"
 
 Input::Input() {
-	keys = {
-		0, //CONTROL_ESC
-		0, //CONTROL_UP
-		0, //CONTROL_RIGHT
-		0, //CONTROL_DOWN
-		0, //CONTROL_LEFT
-		0  //CONTROL_SPACE
-	}
+	/*
+	int keys[6] = {
+		0, //INPUT_ESC
+		0, //INPUT_UP
+		0, //INPUT_RIGHT
+		0, //INPUT_DOWN
+		0, //INPUT_LEFT
+		0  //INPUT_SPACE
+	};
+	*/
+	Input::keys[INPUT_ESC] = 0;
+	Input::keys[INPUT_UP] = 0; 
+	Input::keys[INPUT_RIGHT] = 0; 
+	Input::keys[INPUT_DOWN] = 0; 
+	Input::keys[INPUT_LEFT] = 0; 
+	Input::keys[INPUT_SPACE] = 0;
 }
 
 void Input::setKeyState(int key, int state) {

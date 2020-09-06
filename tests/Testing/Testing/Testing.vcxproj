@@ -145,8 +145,10 @@
   <ItemGroup>
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="utils\Input.hpp" />
     <ClInclude Include="utils\Shader.hpp" />
     <ClInclude Include="utils\SquareProperties.hpp" />
+    <ClInclude Include="utils\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="a.out" />
@@ -156,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils\Input.cpp" />
     <ClCompile Include="utils\Shader.cpp" />
     <ClCompile Include="utils\SquareProperties.cpp" />
   </ItemGroup>

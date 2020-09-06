@@ -79,7 +79,7 @@ public:
     void setView(glm::mat4 view);
     Shader getTextureShader();
     void checkCamera();
-    void updateCamera(int key, int action);
+    void updateInput(int key, int action);
     Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
 };
 #endif

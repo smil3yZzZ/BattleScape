@@ -3,6 +3,8 @@
 #define INPUT_H
 #endif
 
+#define NUM_KEYS 6
+
 #define INPUT_ESC 0
 #define INPUT_UP 1
 #define INPUT_RIGHT 2
@@ -12,7 +14,7 @@
 
 class Input {
 private:
-	int keys[6];
+	int keys[NUM_KEYS];
 
 public:
 	Input();
