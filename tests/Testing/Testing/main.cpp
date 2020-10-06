@@ -137,7 +137,8 @@ int main() {
         std::cout << "\n";
     }
 
-    Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
+    Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE, 
+        VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
 
     return 1;

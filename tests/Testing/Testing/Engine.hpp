@@ -20,6 +20,7 @@
 #include <GLFW/glfw3.h>
 #include <Windows.h>
 
+#include "utils/GLError.h"
 
 class Engine {
 private:
@@ -39,6 +40,7 @@ private:
     int counter;
 
     int bufferVertexSize;
+    int bufferVertexTexturesSize;
     int verticesPerQuad;
     int indicesPerQuad;
 
@@ -49,14 +51,24 @@ private:
     float* vertices;
     unsigned int* indices;
 
+    unsigned int texture;
+
+    float* textureVertices;
+    unsigned int* textureIndices;
+
     glm::mat4 projection, model, view;
     glm::vec3 cameraPos, cameraUp, cameraTarget;
 
-    Shader textureShader;
+    Shader colorShader;
+    Shader wallShader;
 
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
+
+    unsigned int textureVAO;
+    unsigned int textureVBO;
+    unsigned int textureEBO;
 
     Input input;
 
@@ -77,9 +89,11 @@ public:
     int getIsRunning();
     void setIsRunning(int running);
     void setView(glm::mat4 view);
-    Shader getTextureShader();
+    Shader getColorShader();
+    int initTextures();
     void checkCamera();
     void updateInput(int key, int action);
-    Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
+    Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
+        int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
 };
 #endif

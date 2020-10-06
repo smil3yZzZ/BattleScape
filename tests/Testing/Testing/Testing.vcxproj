@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="utils\GLError.h" />
     <ClInclude Include="utils\Input.hpp" />
     <ClInclude Include="utils\Shader.hpp" />
     <ClInclude Include="utils\SquareProperties.hpp" />
@@ -158,9 +159,13 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils\GLError.cpp" />
     <ClCompile Include="utils\Input.cpp" />
     <ClCompile Include="utils\Shader.cpp" />
     <ClCompile Include="utils\SquareProperties.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\wall\wall64x32.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
