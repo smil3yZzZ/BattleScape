@@ -135,7 +135,7 @@ int Engine::init(const rapidjson::Document& colors) {
     initCamera();
     initShaders();
     generateBuffers();
-    //initTextures();
+    initTextures();
     return 1;
 }
 
@@ -223,7 +223,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
 
 
             // WALLS //
-
+            /*
             if (color > 7) {
                 textureVertices[0] = 64.0f;
                 textureVertices[1] = 32.0f;
@@ -270,6 +270,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
             textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
             textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
+            */
         }
     }
 

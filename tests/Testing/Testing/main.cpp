@@ -24,15 +24,7 @@ int main() {
     SquareProperties bottomRightGrid(quarter_size * 2 + 1, quarter_size + 2, quarter_size + 2);
     SquareProperties bottomLeftGrid(quarter_size * 2 + 1, quarter_size + 2, 1);
 
-    /*
-    int division_dimensions_x[quarter_size];
-    int division_dimensions_y[quarter_size];
-
-    for(int i = 0; i < quarter_size; i++) {
-        division_dimensions_x[i] = i;
-        division_dimensions_y[i] = i;
-    }
-    */
+    int** wallMap = new int* [mapDimension];
 
     srand(static_cast<int>(time(0)));
     std::cout << rand() % 7 + 1 << std::endl;
@@ -43,11 +35,14 @@ int main() {
             if ((i + 1) % 2 == 0 || (j + 1) % 2 == 0) {
                 top_left[i][j] = 8;
                 visited[i][j] = 1;
+                wallMap[i][j] = 0;
             }
             else if (i == quarter_size - 1 && j == quarter_size - 1) {
                 top_left[i][j] = 7;
+                wallMap[i][j] = -1;
             }
             else {
+                wallMap[i][j] = -1;
                 top_left[i][j] = rand() % 7 + 1;
             }
             std::cout << visited[i][j] << " ";
@@ -137,6 +132,20 @@ int main() {
         std::cout << "\n";
     }
 
+    /*
+    for (int i = 0; i < mapDimension; i++) {
+        for (int j = 0; j < mapDimension; j++) {
+            if (original[i][j] == 8) {
+                //segui aquí y en la función getWalType.
+                switch(getWallType(i, j, original, wallMap));
+            }
+            else {
+                wallMap[i][j] = -1;
+            }
+        }
+    }
+    */
+
     Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE, 
         VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
@@ -155,6 +164,11 @@ void copyArrayInfo(int destination [], int source [], int size, bool reverse) {
             destination[i] = source[i];
         }
     }
+}
+
+int getWallType(int i, int j, int ** original, int ** wallMap) {
+    wallMap[i][j] = original[i][j];
+    return 0;
 }
 
 
