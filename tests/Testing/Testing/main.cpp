@@ -35,14 +35,14 @@ int main() {
             if ((i + 1) % 2 == 0 || (j + 1) % 2 == 0) {
                 top_left[i][j] = 8;
                 visited[i][j] = 1;
-                wallMap[i][j] = 0;
+                //wallMap[i][j] = 0;
             }
             else if (i == quarter_size - 1 && j == quarter_size - 1) {
                 top_left[i][j] = 7;
-                wallMap[i][j] = -1;
+                //wallMap[i][j] = -1;
             }
             else {
-                wallMap[i][j] = -1;
+                //wallMap[i][j] = -1;
                 top_left[i][j] = rand() % 7 + 1;
             }
             std::cout << visited[i][j] << " ";
@@ -127,7 +127,7 @@ int main() {
             else {
                 std::cout << "  ";
             }
-            
+
         }
         std::cout << "\n";
     }
@@ -136,7 +136,7 @@ int main() {
     for (int i = 0; i < mapDimension; i++) {
         for (int j = 0; j < mapDimension; j++) {
             if (original[i][j] == 8) {
-                //segui aquí y en la función getWalType.
+                //segui aquï¿½ y en la funciï¿½n getWalType.
                 switch(getWallType(i, j, original, wallMap));
             }
             else {
@@ -146,7 +146,7 @@ int main() {
     }
     */
 
-    Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE, 
+    Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE,
         VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
 
@@ -170,5 +170,3 @@ int getWallType(int i, int j, int ** original, int ** wallMap) {
     wallMap[i][j] = original[i][j];
     return 0;
 }
-
-

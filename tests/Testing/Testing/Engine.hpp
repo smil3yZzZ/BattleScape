@@ -18,7 +18,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <Windows.h>
+//#include <Windows.h>
 
 #include "utils/GLError.h"
 

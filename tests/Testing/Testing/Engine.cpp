@@ -9,7 +9,7 @@ const int Engine::wallHeight = 32;
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 // Engine constructor
-Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize, 
+Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
     int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset)
 {
     Engine::framesPerSecond = framesPerSecond;
@@ -84,7 +84,7 @@ int Engine::run() {
 
             glfwPollEvents();
         }
-        
+
         frameTime = glfwGetTime() - oldTime;
 
         /*
@@ -104,8 +104,8 @@ int Engine::run() {
             Sleep(1000*(frameDelay - frameTime));
         }
         */
-        
-    
+
+
     }
 
     glDeleteVertexArrays(1, &VAO);
@@ -261,7 +261,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
                 textureVertices[30] = 0.0f;
                 textureVertices[31] = 1.0f;
 
-                
+
             }
 
             textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
@@ -281,7 +281,7 @@ int Engine::initCamera() {
     projection = glm::ortho(-272.0f, 800.0f, -72.0f, 600.0f, -100.0f, 100.0f);
 
     model = glm::mat4(1.0f);
-    
+
     cameraPos = glm::vec3(0.0f, 0.0f, 100.0f);
     cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
@@ -289,7 +289,7 @@ int Engine::initCamera() {
     glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
     cameraUp = glm::cross(cameraDirection, cameraRight);
 
-    
+
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
     return 1;
 }
@@ -310,7 +310,7 @@ int Engine::generateBuffers() {
 }
 
 int Engine::initTextures() {
-    
+
 
     Engine::textureVertices[0] = 64.0f;
     Engine::textureVertices[1] = 32.0f;
@@ -368,7 +368,7 @@ int Engine::initTextures() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureEBO);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, textureIndices, GL_STATIC_DRAW);
-    
+
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -381,7 +381,7 @@ int Engine::initTextures() {
     glEnableVertexAttribArray(2);
 
 
-    // load and create a texture 
+    // load and create a texture
     // -------------------------
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
@@ -454,11 +454,11 @@ int Engine::updateBuffers() {
     glEnableVertexAttribArray(1);
 
     return 1;
-    
+
 }
 
 int Engine::render() {
-    
+
     colorShader.use();
     colorShader.setFloatMatrix("projection", glm::value_ptr(projection));
     colorShader.setFloatMatrix("view", glm::value_ptr(view));
@@ -467,7 +467,7 @@ int Engine::render() {
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-  
+
     /*Texture rendering*/
 
     // bind Texture
@@ -477,7 +477,7 @@ int Engine::render() {
     glBindTexture(GL_TEXTURE_2D, texture);
 
     wallShader.use();
-    
+
     wallShader.setFloatMatrix("projection", glm::value_ptr(projection));
     wallShader.setFloatMatrix("view", glm::value_ptr(view));
     wallShader.setFloatMatrix("model", glm::value_ptr(model));
@@ -530,7 +530,7 @@ void Engine::checkCamera() {
 }
 
 void Engine::updateInput(int key, int action) {
-    
+
     if (action == GLFW_PRESS){
         switch (key) {
             case GLFW_KEY_ESCAPE:
