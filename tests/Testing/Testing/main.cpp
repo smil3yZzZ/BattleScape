@@ -3,8 +3,6 @@
 void copyArrayInfo(int* destination, int* source, int size, bool reverse);
 void setWallMap(int ** originalWallMap, int ** original, int mapDimension);
 
-//using namespace std;
-
 int main() {
 
     int mapDimension = size.at(S) + BORDERS_SIZE_IN_MATRIX;
@@ -33,11 +31,6 @@ int main() {
         }
     }
 
-    /*
-    int** quarterWallMap = new int* [quarter_size];
-    for (int i = 0; i < quarter_size; i++) quarterWallMap[i] = new int[quarter_size];
-    */
-
     srand(static_cast<int>(time(0)));
     std::cout << rand() % 7 + 1 << std::endl;
 
@@ -47,15 +40,12 @@ int main() {
             if ((i + 1) % 2 == 0 || (j + 1) % 2 == 0) {
                 top_left[i][j] = 8;
                 visited[i][j] = 1;
-                //quarterWallMap[i][j] = 0;
             }
             else if (i == quarter_size - 1 && j == quarter_size - 1) {
                 top_left[i][j] = 7;
-                //quarterWallMap[i][j] = -1;
             }
             else {
                 top_left[i][j] = rand() % 7 + 1;
-                //quarterWallMap[i][j] = -1;
             }
             std::cout << visited[i][j] << " ";
         }
@@ -71,7 +61,6 @@ int main() {
 
         int i = std::get<0>(algorithmCells.top());
         int j = std::get<1>(algorithmCells.top());
-        //algorithmCells.pop();
         std::vector<std::tuple<int, int>> neighbors;
 
         if (i - 2 >= 0 && visited[i - 2][j] == 0) {
@@ -99,11 +88,9 @@ int main() {
         visited[new_i][new_j] = 1;
         if (new_i - i == 0) {
             top_left[i][(new_j + j) / 2] = rand() % 7 + 1;
-            //setWallMap(originalWallMap, i, (new_j + j) / 2);
         }
         else if (new_j - j == 0) {
             top_left[(new_i + i) / 2][j] = rand() % 7 + 1;
-            //setWallMap(originalWallMap, (new_i + i) / 2, j);
         }
         algorithmCells.push(neighbors.at(selectedCell));
 
@@ -155,20 +142,6 @@ int main() {
         std::cout << "\n";
     }
 
-    /*
-    for (int i = 0; i < mapDimension; i++) {
-        for (int j = 0; j < mapDimension; j++) {
-            if (original[i][j] == 8) {
-                //segui aqu� y en la funci�n getWalType.
-                switch(getWallType(i, j, original, wallMap));
-            }
-            else {
-                wallMap[i][j] = -1;
-            }
-        }
-    }
-    */
-
     Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE,
         VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
     engine.run();
@@ -189,43 +162,14 @@ void copyArrayInfo(int destination [], int source [], int size, bool reverse) {
     }
 }
 
-int getWallType(int i, int j, int ** original, int ** wallMap) {
-    wallMap[i][j] = original[i][j];
-    return 0;
-}
-
 void setWallMap(int ** originalWallMap, int ** original, int mapDimension) {
-
+    //Será necesario quizás añadir estados debido al doble muro. p. ej.:
+    /*
+    03 03 --> Distinto a 01 03. Se podría realizar comprobación extra al renderizar o añadir estado
+    */
     for (int i = 0; i < mapDimension; i++) {
         for (int j = 0; j < mapDimension; j++) {
-            /*
-            if (i == 0 || j == 0 || i == mapDimension - 1 || j == mapDimension - 1) {
-
-                if (i == 0 && j != 0 && i != mapDimension - 1 && j != mapDimension - 1) {
-                    originalWallMap[i][j] = originalWallMap[i][j] >> BOTTOM_WALL_SHIFT;
-                }
-                if (i != 0 && j == 0 && i != mapDimension - 1 && j != mapDimension - 1) {
-                    originalWallMap[i][j] = originalWallMap[i][j] >> RIGHT_WALL_SHIFT;
-                }
-                if (i != 0 && j != 0 && i == mapDimension - 1 && j != mapDimension - 1) {
-                    originalWallMap[i][j] = originalWallMap[i][j] >> TOP_WALL_SHIFT;
-                }
-                if (i != 0 && j != 0 && i != mapDimension - 1 && j == mapDimension - 1) {
-                    originalWallMap[i][j] = originalWallMap[i][j] >> LEFT_WALL_SHIFT;
-                }
-
-            }
-            else {
-            */
                 if (original[i][j] == 8) {
-                    /*
-                    Utilizar aqui unicamente los ifs anteriores para ver si está en el borde, y en base a eso
-                    setear los muros.
-                    originalWallMap[0][mapDimension - 1] = (originalWallMap[0][mapDimension - 1] >> TOP_WALL_SHIFT) >> RIGHT_WALL_SHIFT;
-                    originalWallMap[mapDimension - 1][mapDimension - 1] = (originalWallMap[mapDimension - 1][mapDimension - 1] >> BOTTOM_WALL_SHIFT) >> RIGHT_WALL_SHIFT;
-                    originalWallMap[mapDimension - 1][0] = (originalWallMap[mapDimension - 1][0] >> BOTTOM_WALL_SHIFT) >> LEFT_WALL_SHIFT;
-                    originalWallMap[0][0] = (originalWallMap[0][0] >> TOP_WALL_SHIFT) >> LEFT_WALL_SHIFT;
-                    */
                     originalWallMap[i][j] =
                         (i != 0 ? (original[i - 1][j] == 8 ? 1 << (TOP_WALL_SHIFT - 1) : 0) : 0) +
                         (j != mapDimension - 1 ? (original[i][j + 1] == 8 ? 1 << (RIGHT_WALL_SHIFT - 1) : 0) : 0) +
@@ -235,23 +179,6 @@ void setWallMap(int ** originalWallMap, int ** original, int mapDimension) {
                 else {
                     originalWallMap[i][j] = -1;
                 }
-
-
         }
     }
-
-/*
-    originalWallMap[0][mapDimension - 1] = (originalWallMap[0][mapDimension - 1] >> TOP_WALL_SHIFT) >> RIGHT_WALL_SHIFT;
-    originalWallMap[mapDimension - 1][mapDimension - 1] = (originalWallMap[mapDimension - 1][mapDimension - 1] >> BOTTOM_WALL_SHIFT) >> RIGHT_WALL_SHIFT;
-    originalWallMap[mapDimension - 1][0] = (originalWallMap[mapDimension - 1][0] >> BOTTOM_WALL_SHIFT) >> LEFT_WALL_SHIFT;
-    originalWallMap[0][0] = (originalWallMap[0][0] >> TOP_WALL_SHIFT) >> LEFT_WALL_SHIFT;
-*/
-    /*
-    std::cout << currentX << "," << currentY << std::endl;
-    originalWallMap[currentX][currentY] = -1;
-    originalWallMap[currentX - 1][currentY] = originalWallMap[currentX - 1][currentY] >= 0 ? originalWallMap[currentX - 1][currentY] >> BOTTOM_WALL_SHIFT : -1;
-    originalWallMap[currentX][currentY + 1] = originalWallMap[currentX][currentY + 1] >= 0 ? originalWallMap[currentX][currentY + 1] >> RIGHT_WALL_SHIFT : -1;
-    originalWallMap[currentX + 1][currentY] = originalWallMap[currentX + 1][currentY] >= 0 ? originalWallMap[currentX + 1][currentY] >> TOP_WALL_SHIFT : -1;
-    originalWallMap[currentX][currentY - 1] = originalWallMap[currentX][currentY - 1] >= 0 ? originalWallMap[currentX][currentY - 1] >> LEFT_WALL_SHIFT : -1;
-    */
 }
