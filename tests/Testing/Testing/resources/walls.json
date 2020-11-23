@@ -13,23 +13,23 @@
   },
   "3": {
     "upper": "top_right_border.png",
-    "lower": "right_border.png"
+    "lower": "horizontal_border.png"
   },
   "4": {
     "upper": "top_left_border.png",
     "lower": "bottom_left_border.png"
   },
   "5": {
-    "upper": "top_right_border.png",
-    "lower": "bottom_right_border.png"
+    "upper": "top_border.png",
+    "lower": "bottom_border.png"
   },
   "6": {
-    "upper": "top_right_border.png",
-    "lower": "bottom_right_border.png"
+    "upper": "top_left_border.png",
+    "lower": "horizontal_border.png"
   },
   "7": {
-    "upper": "top_right_border.png",
-    "lower": "bottom_right_border.png"
+    "upper": "top_border.png",
+    "lower": "horizontal_border.png"
   },
   "8": {
     "upper": "top_right_border.png",

@@ -173,7 +173,9 @@ void setWallMap(int ** originalWallMap, int ** original, int mapDimension) {
                     originalWallMap[i][j] =
                         (i != 0 ? (original[i - 1][j] == 8 ? 1 << (TOP_WALL_SHIFT - 1) : 0) : 0) +
                         (j != mapDimension - 1 ? (original[i][j + 1] == 8 ? 1 << (RIGHT_WALL_SHIFT - 1) : 0) : 0) +
+                        (i != mapDimension - 1 && j != mapDimension - 1 ? (original[i + 1][j + 1] == 8 ? 1 << (BOTTOM_RIGHT_WALL_SHIFT - 1) : 0) : 0) +
                         (i != mapDimension - 1 ? (original[i + 1][j] == 8 ? 1 << (BOTTOM_WALL_SHIFT - 1) : 0) : 0) +
+                        (i != mapDimension - 1 && j != 0 ? (original[i + 1][j - 1] == 8 ? 1 << (BOTTOM_LEFT_WALL_SHIFT - 1) : 0) : 0) +
                         (j != 0 ? (original[i][j - 1] == 8 ? 1 << (LEFT_WALL_SHIFT - 1) : 0) : 0);
                 }
                 else {

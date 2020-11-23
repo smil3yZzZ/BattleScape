@@ -31,9 +31,11 @@ const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
 const int QUAD_OFFSET = 0;
 
-const int TOP_WALL_SHIFT = 4;
-const int RIGHT_WALL_SHIFT = 3;
-const int BOTTOM_WALL_SHIFT = 2;
+const int TOP_WALL_SHIFT = 6;
+const int RIGHT_WALL_SHIFT = 5;
+const int BOTTOM_RIGHT_WALL_SHIFT = 4;
+const int BOTTOM_WALL_SHIFT = 3;
+const int BOTTOM_LEFT_WALL_SHIFT = 2;
 const int LEFT_WALL_SHIFT = 1;
 
 //The result of (size - 1)/2 has to be odd
