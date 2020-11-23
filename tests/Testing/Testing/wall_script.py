@@ -1,3 +1,5 @@
+import json
+
 filenames = [
 "000000_bottom_horizontal_border.png",
 "010110_top_left_border.png",
@@ -24,8 +26,8 @@ for x in range(64):
     lower_file = [filename for filename in filenames if "top" not in filename and filename.split("_")[0][1] == value[1] and (filename.split("_")[0][2] or value[2]) and filename.split("_")[0][3] == value[3] and (filename.split("_")[0][4] or value[4]) and filename.split("_")[0][5] == value[5]]
     print(upper_file)
     print(lower_file)
-    entry["upper"] = upper_file
-    entry["lower"] = lower_file
+    entry["upper"] = upper_file[0]
+    entry["lower"] = lower_file[0]
     walls[x] = entry;
-
-print(walls)
+print("\n")
+print(json.dumps(walls, indent=4))

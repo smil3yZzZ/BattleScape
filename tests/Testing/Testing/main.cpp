@@ -23,12 +23,8 @@ int main() {
     SquareProperties bottomLeftGrid(quarter_size * 2 + 1, quarter_size + 2, 1);
 
     int** originalWallMap = new int* [mapDimension];
-    // 0-15 --> 1111 clockwise --> (TOP, RIGHT, DOWN, LEFT)
     for (int i = 0; i < mapDimension; i++) {
         originalWallMap[i] = new int[mapDimension];
-        for (int j = 0; j < mapDimension; j++) {
-            originalWallMap[i][j] = 15;
-        }
     }
 
     srand(static_cast<int>(time(0)));
@@ -163,10 +159,6 @@ void copyArrayInfo(int destination [], int source [], int size, bool reverse) {
 }
 
 void setWallMap(int ** originalWallMap, int ** original, int mapDimension) {
-    //Será necesario quizás añadir estados debido al doble muro. p. ej.:
-    /*
-    03 03 --> Distinto a 01 03. Se podría realizar comprobación extra al renderizar o añadir estado
-    */
     for (int i = 0; i < mapDimension; i++) {
         for (int j = 0; j < mapDimension; j++) {
                 if (original[i][j] == 8) {
