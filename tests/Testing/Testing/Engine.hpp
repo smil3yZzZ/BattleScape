@@ -46,7 +46,6 @@ private:
 
     int quadWidth;
     int quadHeight;
-    int quadOffset;
 
     float* vertices;
     unsigned int* indices;
@@ -94,6 +93,6 @@ public:
     void checkCamera();
     void updateInput(int key, int action);
     Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
-        int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset);
+        int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight);
 };
 #endif

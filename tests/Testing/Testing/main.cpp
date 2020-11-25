@@ -139,7 +139,7 @@ int main() {
     }
 
     Engine engine = Engine(FRAMES_PER_SECOND, original, mapDimension, BUFFER_VERTEX_SIZE, BUFFER_VERTEX_TEXTURES_SIZE,
-        VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT, QUAD_OFFSET);
+        VERTICES_PER_QUAD, INDICES_PER_QUAD, QUAD_WIDTH, QUAD_HEIGHT);
     engine.run();
 
     return 1;

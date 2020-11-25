@@ -10,7 +10,7 @@ void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
 // Engine constructor
 Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
-    int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight, int quadOffset)
+    int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight)
 {
     Engine::framesPerSecond = framesPerSecond;
     Engine::map = map;
@@ -23,7 +23,6 @@ Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVerte
 
     Engine::quadWidth = quadWidth;
     Engine::quadHeight = quadHeight;
-    Engine::quadOffset = quadOffset;
 
     Engine::input = Input();
 
@@ -135,7 +134,7 @@ int Engine::init(const rapidjson::Document& colors) {
     initCamera();
     initShaders();
     generateBuffers();
-    initTextures();
+    //initTextures();
     return 1;
 }
 
@@ -185,29 +184,29 @@ int Engine::initMaze(const rapidjson::Document& colors) {
                 const char* color_char = color_string.c_str();
 
                 // PLATFORMS //
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = j * quadWidth + (1 + j) * quadOffset;
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 1] = i * quadHeight + (1 + i) * quadOffset;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = j * quadWidth;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 1] = i * quadHeight;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 2] = 0.0f;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 3] = colors[color_char]["code"]["r"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 4] = colors[color_char]["code"]["g"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 5] = colors[color_char]["code"]["b"].GetInt();
 
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 6] = j * quadWidth + (1 + j) * quadOffset;
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 7] = i * quadHeight + (1 + i) * quadOffset + quadHeight;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 6] = j * quadWidth;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 7] = i * quadHeight + quadHeight;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 8] = 0.0f;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 9] = colors[color_char]["code"]["r"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 10] = colors[color_char]["code"]["g"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 11] = colors[color_char]["code"]["b"].GetInt();
 
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 12] = j * quadWidth + (1 + j) * quadOffset + quadWidth;
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 13] = i * quadHeight + (1 + i) * quadOffset;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 12] = j * quadWidth + quadWidth;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 13] = i * quadHeight;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 14] = 0.0f;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 15] = colors[color_char]["code"]["r"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 16] = colors[color_char]["code"]["g"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 17] = colors[color_char]["code"]["b"].GetInt();
 
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 18] = j * quadWidth + (1 + j) * quadOffset + quadWidth;
-                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 19] = i * quadHeight + (1 + i) * quadOffset + quadHeight;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 18] = j * quadWidth + quadWidth;
+                vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 19] = i * quadHeight + quadHeight;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 20] = 0.0f;
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 21] = colors[color_char]["code"]["r"].GetInt();
                 vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 22] = colors[color_char]["code"]["g"].GetInt();
@@ -225,93 +224,93 @@ int Engine::initMaze(const rapidjson::Document& colors) {
                 // WALLS //
                 // Upper sprite
 
-                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = 64.0f;
-                textureVertices[1] = 32.0f;
-                textureVertices[2] = 0.0f;
-                textureVertices[3] = 0.0f;
-                textureVertices[4] = 0.0f;
-                textureVertices[5] = 0.0f;
-                textureVertices[6] = 1.0f;
-                textureVertices[7] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 1] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 2] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 3] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 4] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 5] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 6] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 7] = 1.0f;
 
-                textureVertices[8] = 64.0f;
-                textureVertices[9] = 0.0f;
-                textureVertices[10] = 0.0f;
-                textureVertices[11] = 0.0f;
-                textureVertices[12] = 0.0f;
-                textureVertices[13] = 0.0f;
-                textureVertices[14] = 1.0f;
-                textureVertices[15] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 8] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 9] = i * quadHeight;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 10] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 11] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 12] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 13] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 14] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 15] = 0.0f;
 
-                textureVertices[16] = 0.0f;
-                textureVertices[17] = 0.0f;
-                textureVertices[18] = 0.0f;
-                textureVertices[19] = 0.0f;
-                textureVertices[20] = 0.0f;
-                textureVertices[21] = 0.0f;
-                textureVertices[22] = 0.0f;
-                textureVertices[23] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 16] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 17] = i * quadHeight;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 18] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 19] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 20] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 21] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 22] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 23] = 0.0f;
 
-                textureVertices[24] = 0.0f;
-                textureVertices[25] = 32.0f;
-                textureVertices[26] = 0.0f;
-                textureVertices[27] = 0.0f;
-                textureVertices[28] = 0.0f;
-                textureVertices[29] = 0.0f;
-                textureVertices[30] = 0.0f;
-                textureVertices[31] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 24] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 25] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 26] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 27] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 28] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 29] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 30] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 31] = 1.0f;
 
-                textureIndices[0] = 0;
-                textureIndices[1] = 1;
-                textureIndices[2] = 3;
-                textureIndices[3] = 1;
-                textureIndices[4] = 2;
-                textureIndices[5] = 3;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
 
                 // Lower sprite
 
-                textureVertices[0] = 64.0f;
-                textureVertices[1] = 32.0f;
-                textureVertices[2] = 0.0f;
-                textureVertices[3] = 0.0f;
-                textureVertices[4] = 0.0f;
-                textureVertices[5] = 0.0f;
-                textureVertices[6] = 1.0f;
-                textureVertices[7] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 32] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 33] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 34] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 35] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 36] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 37] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 38] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 39] = 1.0f;
 
-                textureVertices[8] = 64.0f;
-                textureVertices[9] = 0.0f;
-                textureVertices[10] = 0.0f;
-                textureVertices[11] = 0.0f;
-                textureVertices[12] = 0.0f;
-                textureVertices[13] = 0.0f;
-                textureVertices[14] = 1.0f;
-                textureVertices[15] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 40] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 41] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 42] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 43] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 44] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 45] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 46] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 47] = 0.0f;
 
-                textureVertices[16] = 0.0f;
-                textureVertices[17] = 0.0f;
-                textureVertices[18] = 0.0f;
-                textureVertices[19] = 0.0f;
-                textureVertices[20] = 0.0f;
-                textureVertices[21] = 0.0f;
-                textureVertices[22] = 0.0f;
-                textureVertices[23] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 48] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 49] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 50] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 51] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 52] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 53] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 54] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 55] = 0.0f;
 
-                textureVertices[24] = 0.0f;
-                textureVertices[25] = 32.0f;
-                textureVertices[26] = 0.0f;
-                textureVertices[27] = 0.0f;
-                textureVertices[28] = 0.0f;
-                textureVertices[29] = 0.0f;
-                textureVertices[30] = 0.0f;
-                textureVertices[31] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 56] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 57] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 58] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 59] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 60] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 61] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 62] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 63] = 1.0f;
 
-                textureIndices[0] = 0;
-                textureIndices[1] = 1;
-                textureIndices[2] = 3;
-                textureIndices[3] = 1;
-                textureIndices[4] = 2;
-                textureIndices[5] = 3;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
 
         }
     }

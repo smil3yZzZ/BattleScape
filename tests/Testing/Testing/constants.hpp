@@ -29,7 +29,6 @@ const int INDICES_PER_QUAD = 6;
 const int VERTICES_PER_QUAD = 4;
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
-const int QUAD_OFFSET = 0;
 
 const int TOP_WALL_SHIFT = 6;
 const int RIGHT_WALL_SHIFT = 5;
