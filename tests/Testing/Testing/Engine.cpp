@@ -260,12 +260,12 @@ int Engine::initMaze(const rapidjson::Document& colors) {
                 textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 30] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 31] = 1.0f;
 
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * indicesPerQuad + indicesPerQuad * j;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
 
                 // Lower sprite
 
@@ -305,12 +305,12 @@ int Engine::initMaze(const rapidjson::Document& colors) {
                 textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 62] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * verticesPerQuad + bufferVertexTexturesSize * verticesPerQuad * j + 63] = 1.0f;
 
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * indicesPerQuad + indicesPerQuad * j;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
 
         }
     }
@@ -352,7 +352,7 @@ int Engine::generateBuffers() {
 
 int Engine::initTextures() {
 
-
+    /*
     Engine::textureVertices[0] = 64.0f;
     Engine::textureVertices[1] = 32.0f;
     Engine::textureVertices[2] = 0.0f;
@@ -420,7 +420,7 @@ int Engine::initTextures() {
     // texture coord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
-
+    */
 
     // load and create a texture
     // -------------------------
@@ -473,6 +473,8 @@ int Engine::update(const rapidjson::Document& colors) {
 
 int Engine::updateBuffers() {
 
+    // Platforms
+
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -493,6 +495,36 @@ int Engine::updateBuffers() {
     // gradient attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Walls
+
+    int walls_vertices_size = sizeof(float) * dimension * dimension * verticesPerQuad * bufferVertexTexturesSize;
+    int walls_indices_size = sizeof(unsigned int) * dimension * dimension * indicesPerQuad;
+
+    glGenVertexArrays(1, &textureVAO);
+    glGenBuffers(1, &textureVBO);
+    glGenBuffers(1, &textureEBO);
+
+    glBindVertexArray(textureVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, walls_vertices_size, textureVertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureEBO);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, walls_indices_size, textureIndices, GL_STATIC_DRAW);
+
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     return 1;
 
