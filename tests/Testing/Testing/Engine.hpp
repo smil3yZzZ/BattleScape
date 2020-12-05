@@ -54,6 +54,7 @@ private:
 
     float* textureVertices;
     unsigned int* textureIndices;
+    int numOfWallTextureFiles;
 
     glm::mat4 projection, model, view;
     glm::vec3 cameraPos, cameraUp, cameraTarget;

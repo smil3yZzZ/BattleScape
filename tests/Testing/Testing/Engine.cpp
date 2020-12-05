@@ -44,6 +44,8 @@ Engine::Engine(double framesPerSecond, int** map, int dimension, int bufferVerte
     Engine::textureIndices = new unsigned int[dimension * dimension * indicesPerQuad];
 
     Engine::textureVAO = Engine::textureVBO = Engine::textureEBO;
+
+    Engine::numOfWallTextureFiles = 0;
 }
 
 int Engine::run() {
@@ -134,7 +136,7 @@ int Engine::init(const rapidjson::Document& colors) {
     initCamera();
     initShaders();
     generateBuffers();
-    //initTextures();
+    initTextures();
     return 1;
 }
 
@@ -262,7 +264,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
 
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * indicesPerQuad + indicesPerQuad * j;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
@@ -307,7 +309,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
 
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * indicesPerQuad + indicesPerQuad * j;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
-                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
+                textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * indicesPerQuad + indicesPerQuad * j + 1;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * indicesPerQuad + indicesPerQuad * j + 2;
                 textureIndices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * indicesPerQuad + indicesPerQuad * j + 3;
@@ -342,120 +344,61 @@ int Engine::initShaders() {
 }
 
 int Engine::generateBuffers() {
+    //Platforms
     glGenVertexArrays(1, &VAO);
 
     glGenBuffers(1, &VBO);
 
     glGenBuffers(1, &EBO);
+
+    //Walls
+
+    glGenVertexArrays(1, &textureVAO);
+
+    glGenBuffers(1, &textureVBO);
+    
+    glGenBuffers(1, &textureEBO);
+
     return 1;
 }
 
 int Engine::initTextures() {
 
-    /*
-    Engine::textureVertices[0] = 64.0f;
-    Engine::textureVertices[1] = 32.0f;
-    Engine::textureVertices[2] = 0.0f;
-    Engine::textureVertices[3] = 0.0f;
-    Engine::textureVertices[4] = 0.0f;
-    Engine::textureVertices[5] = 0.0f;
-    Engine::textureVertices[6] = 1.0f;
-    Engine::textureVertices[7] = 1.0f;
 
-    Engine::textureVertices[8] = 64.0f;
-    Engine::textureVertices[9] = 0.0f;
-    Engine::textureVertices[10] = 0.0f;
-    Engine::textureVertices[11] = 0.0f;
-    Engine::textureVertices[12] = 0.0f;
-    Engine::textureVertices[13] = 0.0f;
-    Engine::textureVertices[14] = 1.0f;
-    Engine::textureVertices[15] = 0.0f;
+    FILE *proc = popen("/bin/ls resources/wall","r");
+    char buf[1024];
 
-    Engine::textureVertices[16] = 0.0f;
-    Engine::textureVertices[17] = 0.0f;
-    Engine::textureVertices[18] = 0.0f;
-    Engine::textureVertices[19] = 0.0f;
-    Engine::textureVertices[20] = 0.0f;
-    Engine::textureVertices[21] = 0.0f;
-    Engine::textureVertices[22] = 0.0f;
-    Engine::textureVertices[23] = 0.0f;
-
-    Engine::textureVertices[24] = 0.0f;
-    Engine::textureVertices[25] = 32.0f;
-    Engine::textureVertices[26] = 0.0f;
-    Engine::textureVertices[27] = 0.0f;
-    Engine::textureVertices[28] = 0.0f;
-    Engine::textureVertices[29] = 0.0f;
-    Engine::textureVertices[30] = 0.0f;
-    Engine::textureVertices[31] = 1.0f;
-
-    Engine::textureIndices[0] = 0;
-    Engine::textureIndices[1] = 1;
-    Engine::textureIndices[2] = 3;
-    Engine::textureIndices[3] = 1;
-    Engine::textureIndices[4] = 2;
-    Engine::textureIndices[5] = 3;
-
-    glGenVertexArrays(1, &textureVAO);
-    glGenBuffers(1, &textureVBO);
-    glGenBuffers(1, &textureEBO);
-
-    glBindVertexArray(textureVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 32, textureVertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureEBO);
-
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, textureIndices, GL_STATIC_DRAW);
-
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    */
-
-    // load and create a texture
-    // -------------------------
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    unsigned char* data = stbi_load("resources/wall/top_right_border.png", &width, &height, &nrChannels, 0);
-    if (data)
+    while ( !feof(proc) && fgets(buf,sizeof(buf),proc) )
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        std::cout << width << "," << height;
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+        printf("Line read: %s",buf);
+        // load and create a texture
+        // -------------------------
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        int width, height, nrChannels;
+        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+        unsigned char* data = stbi_load("resources/wall/" + buf, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            std::cout << width << "," << height;
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
 
-    /*
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    */
-
-    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-    // -------------------------------------------------------------------------------
-    //glfwSwapBuffers(window);
+        numOfWallTextureFiles++;
+    }
 
     return 1;
 }
@@ -501,10 +444,6 @@ int Engine::updateBuffers() {
     int walls_vertices_size = sizeof(float) * dimension * dimension * verticesPerQuad * bufferVertexTexturesSize;
     int walls_indices_size = sizeof(unsigned int) * dimension * dimension * indicesPerQuad;
 
-    glGenVertexArrays(1, &textureVAO);
-    glGenBuffers(1, &textureVBO);
-    glGenBuffers(1, &textureEBO);
-
     glBindVertexArray(textureVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
@@ -547,6 +486,7 @@ int Engine::render() {
 
     // render container ---> PROBAR A METER EN SHADER las variables!
     //glActiveTexture(GL_TEXTURE0);
+
     glBindTexture(GL_TEXTURE_2D, texture);
 
     wallShader.use();

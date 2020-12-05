@@ -28,7 +28,6 @@ int main() {
     }
 
     srand(static_cast<int>(time(0)));
-    std::cout << rand() % 7 + 1 << std::endl;
 
     for(int i = 0; i < quarter_size; i++) {
         for(int j = 0; j < quarter_size; j++) {
