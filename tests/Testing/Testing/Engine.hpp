@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
+#include <list>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/filereadstream.h"
@@ -33,6 +34,7 @@ private:
 
     double framesPerSecond;
     int** map;
+    int** wallMap;
     int dimension;
 
     int isRunning;
@@ -41,8 +43,10 @@ private:
 
     int bufferVertexSize;
     int bufferVertexTexturesSize;
+    int textureVerticesPerQuad;
     int verticesPerQuad;
     int indicesPerQuad;
+    int textureIndicesPerQuad;
 
     int quadWidth;
     int quadHeight;
@@ -50,7 +54,8 @@ private:
     float* vertices;
     unsigned int* indices;
 
-    unsigned int texture;
+    //unsigned int texture;
+    unsigned int *wallTextures;
 
     float* textureVertices;
     unsigned int* textureIndices;
@@ -85,7 +90,7 @@ public:
     int generateBuffers();
     int update(const rapidjson::Document& colors);
     int updateBuffers();
-    int render();
+    int render(const rapidjson::Document& walls);
     int getIsRunning();
     void setIsRunning(int running);
     void setView(glm::mat4 view);
@@ -93,7 +98,9 @@ public:
     int initTextures();
     void checkCamera();
     void updateInput(int key, int action);
-    Engine(double framesPerSecond, int** map, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
-        int verticesPerQuad, int indicesPerQuad, int quadWidth, int quadHeight);
+    Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize,
+        int bufferVertexTexturesSize,
+        int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad,
+         int quadWidth, int quadHeight);
 };
 #endif

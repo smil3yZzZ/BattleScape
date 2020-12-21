@@ -1,258 +1,258 @@
 [
     {
-        "upper": "6",
-        "lower": "10"
+        "upper": 6,
+        "lower": 0
     },
     {
-        "upper": "4",
-        "lower": "10"
+        "upper": 4,
+        "lower": 10
     },
     {
-        "upper": "6",
-        "lower": "8"
+        "upper": 6,
+        "lower": 0
     },
     {
-        "upper": "4",
-        "lower": "10"
+        "upper": 4,
+        "lower": 10
     },
     {
-        "upper": "6",
-        "lower": "5"
+        "upper": 6,
+        "lower": 5
     },
     {
-        "upper": "4",
-        "lower": "3"
+        "upper": 4,
+        "lower": 3
     },
     {
-        "upper": "6",
-        "lower": "5"
+        "upper": 6,
+        "lower": 5
     },
     {
-        "upper": "4",
-        "lower": "3"
+        "upper": 4,
+        "lower": 3
     },
     {
-        "upper": "6",
-        "lower": "2"
+        "upper": 6,
+        "lower": 0
     },
     {
-        "upper": "4",
-        "lower": "2"
+        "upper": 4,
+        "lower": 2
     },
     {
-        "upper": "6",
-        "lower": "0"
+        "upper": 6,
+        "lower": 0
     },
     {
-        "upper": "4",
-        "lower": "2"
+        "upper": 4,
+        "lower": 2
     },
     {
-        "upper": "6",
-        "lower": "5"
+        "upper": 6,
+        "lower": 5
     },
     {
-        "upper": "4",
-        "lower": "3"
+        "upper": 4,
+        "lower": 3
     },
     {
-        "upper": "6",
-        "lower": "5"
+        "upper": 6,
+        "lower": 5
     },
     {
-        "upper": "4",
-        "lower": "3"
+        "upper": 4,
+        "lower": 3
     },
     {
-        "upper": "1",
-        "lower": "10"
+        "upper": 1,
+        "lower": 10
     },
     {
-        "upper": "11",
-        "lower": "10"
+        "upper": 11,
+        "lower": 10
     },
     {
-        "upper": "1",
-        "lower": "8"
+        "upper": 1,
+        "lower": 8
     },
     {
-        "upper": "11",
-        "lower": "10"
+        "upper": 11,
+        "lower": 10
     },
     {
-        "upper": "1",
-        "lower": "9"
+        "upper": 1,
+        "lower": 9
     },
     {
-        "upper": "11",
-        "lower": "5"
+        "upper": 11,
+        "lower": 5
     },
     {
-        "upper": "1",
-        "lower": "9"
+        "upper": 1,
+        "lower": 9
     },
     {
-        "upper": "11",
-        "lower": "3"
+        "upper": 11,
+        "lower": 3
     },
     {
-        "upper": "1",
-        "lower": "10"
+        "upper": 1,
+        "lower": 10
     },
     {
-        "upper": "11",
-        "lower": "10"
+        "upper": 11,
+        "lower": 10
     },
     {
-        "upper": "1",
-        "lower": "8"
+        "upper": 1,
+        "lower": 8
     },
     {
-        "upper": "11",
-        "lower": "10"
+        "upper": 11,
+        "lower": 10
     },
     {
-        "upper": "1",
-        "lower": "9"
+        "upper": 1,
+        "lower": 9
     },
     {
-        "upper": "11",
-        "lower": "9"
+        "upper": 11,
+        "lower": 9
     },
     {
-        "upper": "1",
-        "lower": "9"
+        "upper": 1,
+        "lower": 9
     },
     {
-        "upper": "11",
-        "lower": "7"
+        "upper": 11,
+        "lower": 7
     },
     {
-        "upper": "5",
-        "lower": "10"
+        "upper": 5,
+        "lower": 0
     },
     {
-        "upper": "3",
-        "lower": "10"
+        "upper": 3,
+        "lower": 10
     },
     {
-        "upper": "5",
-        "lower": "8"
+        "upper": 5,
+        "lower": 0
     },
     {
-        "upper": "3",
-        "lower": "10"
+        "upper": 3,
+        "lower": 10
     },
     {
-        "upper": "5",
-        "lower": "5"
+        "upper": 5,
+        "lower": 5
     },
     {
-        "upper": "3",
-        "lower": "3"
+        "upper": 3,
+        "lower": 3
     },
     {
-        "upper": "5",
-        "lower": "5"
+        "upper": 5,
+        "lower": 5
     },
     {
-        "upper": "3",
-        "lower": "3"
+        "upper": 3,
+        "lower": 3
     },
     {
-        "upper": "5",
-        "lower": "2"
+        "upper": 5,
+        "lower": 0
     },
     {
-        "upper": "3",
-        "lower": "2"
+        "upper": 3,
+        "lower": 2
     },
     {
-        "upper": "5",
-        "lower": "0"
+        "upper": 5,
+        "lower": 0
     },
     {
-        "upper": "3",
-        "lower": "2"
+        "upper": 3,
+        "lower": 2
     },
     {
-        "upper": "5",
-        "lower": "5"
+        "upper": 5,
+        "lower": 5
     },
     {
-        "upper": "3",
-        "lower": "3"
+        "upper": 3,
+        "lower": 3
     },
     {
-        "upper": "5",
-        "lower": "5"
+        "upper": 5,
+        "lower": 5
     },
     {
-        "upper": "3",
-        "lower": "3"
+        "upper": 3,
+        "lower": 3
     },
     {
-        "upper": "9",
-        "lower": "10"
+        "upper": 9,
+        "lower": 10
     },
     {
-        "upper": "7",
-        "lower": "10"
+        "upper": 7,
+        "lower": 10
     },
     {
-        "upper": "9",
-        "lower": "8"
+        "upper": 9,
+        "lower": 8
     },
     {
-        "upper": "7",
-        "lower": "10"
+        "upper": 7,
+        "lower": 10
     },
     {
-        "upper": "9",
-        "lower": "9"
+        "upper": 9,
+        "lower": 9
     },
     {
-        "upper": "7",
-        "lower": "5"
+        "upper": 7,
+        "lower": 5
     },
     {
-        "upper": "9",
-        "lower": "9"
+        "upper": 9,
+        "lower": 9
     },
     {
-        "upper": "7",
-        "lower": "3"
+        "upper": 7,
+        "lower": 3
     },
     {
-        "upper": "9",
-        "lower": "10"
+        "upper": 9,
+        "lower": 10
     },
     {
-        "upper": "7",
-        "lower": "10"
+        "upper": 7,
+        "lower": 10
     },
     {
-        "upper": "9",
-        "lower": "8"
+        "upper": 9,
+        "lower": 8
     },
     {
-        "upper": "7",
-        "lower": "10"
+        "upper": 7,
+        "lower": 10
     },
     {
-        "upper": "9",
-        "lower": "9"
+        "upper": 9,
+        "lower": 9
     },
     {
-        "upper": "7",
-        "lower": "9"
+        "upper": 7,
+        "lower": 9
     },
     {
-        "upper": "9",
-        "lower": "9"
+        "upper": 9,
+        "lower": 9
     },
     {
-        "upper": "7",
-        "lower": "7"
+        "upper": 7,
+        "lower": 7
     }
 ]

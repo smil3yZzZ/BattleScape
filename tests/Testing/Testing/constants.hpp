@@ -26,7 +26,9 @@ const int FRAMES_PER_SECOND = 60;
 const int BUFFER_VERTEX_SIZE = 6;
 const int BUFFER_VERTEX_TEXTURES_SIZE = 8;
 const int INDICES_PER_QUAD = 6;
+const int TEXTURE_INDICES_PER_QUAD = 12;
 const int VERTICES_PER_QUAD = 4;
+const int TEXTURES_VERTICES_PER_QUAD = 8;
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
 
