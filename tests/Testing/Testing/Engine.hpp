@@ -54,8 +54,9 @@ private:
     float* vertices;
     unsigned int* indices;
 
-    //unsigned int texture;
-    unsigned int *wallTextures;
+    unsigned int texture;
+    //unsigned int *wallTextures;
+    float wallTextureWidth;
 
     float* textureVertices;
     unsigned int* textureIndices;
@@ -81,16 +82,16 @@ private:
 
 public:
     int run();
-    int init(const rapidjson::Document& colors);
+    int init(const rapidjson::Document& colors, const rapidjson::Document& walls);
     int initGL();
-    int initMaze(const rapidjson::Document& colors);
+    int initMaze(const rapidjson::Document& colors, const rapidjson::Document& walls);
     int initCamera();
     int initShaders();
     int clearScreen();
     int generateBuffers();
-    int update(const rapidjson::Document& colors);
+    int update();
     int updateBuffers();
-    int render(const rapidjson::Document& walls);
+    int render();
     int getIsRunning();
     void setIsRunning(int running);
     void setView(glm::mat4 view);

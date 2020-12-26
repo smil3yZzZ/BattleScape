@@ -75,7 +75,7 @@ int Engine::run() {
 
     fclose(fWalls);
 
-    init(colors);
+    init(colors, walls);
 
     double oldTime = glfwGetTime();
 
@@ -86,11 +86,11 @@ int Engine::run() {
         if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-            update(colors);
+            update();
 
             clearScreen();
 
-            render(walls);
+            render();
 
             checkCamera();
 
@@ -143,13 +143,13 @@ int Engine::run() {
 
 
 
-int Engine::init(const rapidjson::Document& colors) {
+int Engine::init(const rapidjson::Document& colors, const rapidjson::Document& walls) {
     initGL();
-    initMaze(colors);
+    initTextures();
+    initMaze(colors, walls);
     initCamera();
     initShaders();
     generateBuffers();
-    initTextures();
     return 1;
 }
 
@@ -176,6 +176,7 @@ int Engine::initGL() {
 
     glfwMakeContextCurrent(window);
 
+
     //glViewport(0, 0, 800, 600);
 
     glfwSetWindowUserPointer(window, this);
@@ -190,11 +191,27 @@ int Engine::initGL() {
     glDepthFunc(GL_ALWAYS);
 
     return 1;
-
-    //glEnable(GL_DEPTH_TEST);
 }
 
-int Engine::initMaze(const rapidjson::Document& colors) {
+int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Document& walls) {
+
+
+    std::cout << (wallTextureWidth*(0/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+
+    std::cout << (wallTextureWidth*(1/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(2/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(3/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(4/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(5/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(6/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(7/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+
+    std::cout << (wallTextureWidth*(8/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+
+    std::cout << (wallTextureWidth*(9/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(10/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+    std::cout << (wallTextureWidth*(11/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
+
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
             int color = map[dimension - i - 1][j];
@@ -231,6 +248,13 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 23] = colors[color_char]["code"]["b"].GetInt();
 
 
+
+                std::cout << "TESTING TEX COORDS:"<< std::endl;
+                std::cout << (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth << std::endl;
+                std::cout << (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth << std::endl;
+
+                // Check -1 here!
+
             //Set indices here
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
@@ -248,7 +272,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 3] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 4] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 5] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 6] = 1.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 6] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 7] = 1.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 8] = j * quadWidth + quadWidth;
@@ -257,7 +281,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 11] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 12] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 13] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 14] = 1.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 14] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 15] = 0.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 16] = j * quadWidth;
@@ -266,7 +290,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 19] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 20] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 21] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 22] = 0.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 22] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 23] = 0.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 24] = j * quadWidth;
@@ -275,7 +299,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 27] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 28] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 29] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 30] = 0.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 30] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 31] = 1.0f;
 
             textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j;
@@ -293,7 +317,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 35] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 36] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 37] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 38] = 1.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 38] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 39] = 1.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 40] = j * quadWidth + quadWidth;
@@ -302,7 +326,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 43] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 44] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 45] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 46] = 1.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 46] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 47] = 0.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 48] = j * quadWidth;
@@ -311,7 +335,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 51] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 52] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 53] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 54] = 0.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 54] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 55] = 0.0f;
 
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 56] = j * quadWidth;
@@ -320,7 +344,7 @@ int Engine::initMaze(const rapidjson::Document& colors) {
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 59] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 60] = 0.0f;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 61] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 62] = 0.0f;
+            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 62] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
             textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 63] = 1.0f;
 
             textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 6] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 4;
@@ -378,6 +402,8 @@ int Engine::generateBuffers() {
 }
 
 int Engine::initTextures() {
+
+    /*
 
     FILE *proc = popen("/bin/ls resources/wall","r");
     char buf[1024];
@@ -437,41 +463,36 @@ int Engine::initTextures() {
         stbi_image_free(data);
 
     }
-
-/*
-    while ( !feof(proc) && fgets(buf,sizeof(buf),proc) )
-    {
-        printf("Line read: %s",buf);
-        // load and create a texture
-        // -------------------------
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-        // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // load image, create texture and generate mipmaps
-        int width, height, nrChannels;
-        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        unsigned char* data = stbi_load("resources/wall/" + buf, &width, &height, &nrChannels, 0);
-
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-            std::cout << width << "," << height;
-        }
-        else
-        {
-            std::cout << "Failed to load texture" << std::endl;
-        }
-        stbi_image_free(data);
-
-        numOfWallTextureFiles++;
-    }
     */
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load("resources/wall.png", &width, &height, &nrChannels, 0);
+
+    wallTextureWidth = width;
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        if(stbi_failure_reason())
+            std::cout << stbi_failure_reason() << std::endl;
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
 
     return 1;
 }
@@ -482,7 +503,7 @@ int Engine::clearScreen() {
     return 1;
 }
 
-int Engine::update(const rapidjson::Document& colors) {
+int Engine::update() {
     updateBuffers();
     return 1;
 }
@@ -542,7 +563,7 @@ int Engine::updateBuffers() {
 
 }
 
-int Engine::render(const rapidjson::Document& walls) {
+int Engine::render() {
 
     colorShader.use();
     colorShader.setFloatMatrix("projection", glm::value_ptr(projection));
@@ -560,6 +581,11 @@ int Engine::render(const rapidjson::Document& walls) {
     wallShader.setFloatMatrix("model", glm::value_ptr(model));
 
     glBindVertexArray(textureVAO);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+/*
+    glBindVertexArray(textureVAO);
 
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
@@ -571,11 +597,7 @@ int Engine::render(const rapidjson::Document& walls) {
             }
         }
     }
-
-
-    //glBindTexture(GL_TEXTURE_2D, texture);
-
-    //
+*/
     glBindVertexArray(0);
 
     return 1;

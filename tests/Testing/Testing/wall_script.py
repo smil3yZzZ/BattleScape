@@ -1,18 +1,18 @@
 import json
 
 filenames = [
-"011011_bottom_horizontal_border_0.png",
-"010110_top_left_border_1.png",
-"000001_bottom_right_border_2.png",
-"101101_right_border_3.png",
-"001101_top_right_border_4.png",
-"101110_horizontal_border_5.png",
-"001110_top_horizontal_border_6.png",
-"110101_central_7.png",
-"010000_bottom_left_border_8.png",
-"110110_left_border_9.png",
+"011011_bottom_horizontal_border_8.png",
+"010110_top_left_border_7.png",
+"000001_bottom_right_border_11.png",
+"101101_right_border_4.png",
+"001101_top_right_border_6.png",
+"101110_horizontal_border_2.png",
+"001110_top_horizontal_border_5.png",
+"110101_central_0.png",
+"010000_bottom_left_border_9.png",
+"110110_left_border_3.png",
 "010001_bottom_border_10.png",
-"010101_top_border_11.png"
+"010101_top_border_1.png"
 ]
 
 walls = []
