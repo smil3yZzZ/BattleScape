@@ -15,6 +15,13 @@
 #include <vector>
 #include <chrono>
 
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+const float VIEWPORT_WIDTH = 400.0f;
+const float VIEWPORT_HEIGHT = 300.0f;
+const float X_ORIGIN = -100.0f;
+const float Y_ORIGIN = -50.0f;
+
 const int S = 0;
 const int M = 1;
 const int L = 2;

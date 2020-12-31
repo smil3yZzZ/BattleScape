@@ -148,7 +148,10 @@ int main() {
         TEXTURES_VERTICES_PER_QUAD,
         INDICES_PER_QUAD,
         TEXTURE_INDICES_PER_QUAD,
-        QUAD_WIDTH, QUAD_HEIGHT);
+        QUAD_WIDTH, QUAD_HEIGHT,
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
+        X_ORIGIN, Y_ORIGIN);
     engine.run();
 
     return 1;

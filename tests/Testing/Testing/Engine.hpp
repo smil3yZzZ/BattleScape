@@ -80,6 +80,13 @@ private:
 
     GLFWwindow* window;
 
+    int screenWidth;
+    int screenHeight;
+    float viewportWidth;
+    float viewportHeight;
+    float xOrigin;
+    float yOrigin;
+
 public:
     int run();
     int init(const rapidjson::Document& colors, const rapidjson::Document& walls);
@@ -102,6 +109,7 @@ public:
     Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize,
         int bufferVertexTexturesSize,
         int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad,
-         int quadWidth, int quadHeight);
+         int quadWidth, int quadHeight, int screenWidth, int screenHeight, float viewportWidth, float viewportHeight,
+         float xOrigin, float yOrigin);
 };
 #endif

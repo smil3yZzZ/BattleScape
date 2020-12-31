@@ -74,13 +74,13 @@ for x in range(64):
     max_keys = [k for k, v in score_obj.items() if v == max_value]
     if ("bottom" in max_keys[0] and "bottom_border" not in max_keys[0]) or (int(value[5]) != int(value[1]) and "bottom_horizontal" in max_keys[0]):
         if int(value[1]) == 0 and int(value[5]) != 0:
-            max_keys[0] = "000001_bottom_right_border_2.png"
+            max_keys[0] = "000001_bottom_right_border_11.png"
         elif int(value[5]) == 0 and int(value[1]) != 0:
-            max_keys[0] = "010000_bottom_left_border_8.png"
+            max_keys[0] = "010000_bottom_left_border_9.png"
         elif int(value[5]) == 1 and int(value[1]) == 1:
             max_keys[0] = "010001_bottom_border_10.png"
         elif int(value[1]) == 0 and int(value[5]) == 0:
-            max_keys[0] = "011011_bottom_horizontal_border_0.png"
+            max_keys[0] = "011011_bottom_horizontal_border_8.png"
 
 
     lower_files_score.append(score_obj)

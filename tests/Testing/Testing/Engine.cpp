@@ -10,7 +10,8 @@ void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
 // Engine constructor
 Engine::Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
-    int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad, int quadWidth, int quadHeight)
+    int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad, int quadWidth, int quadHeight,
+    int screenWidth, int screenHeight, float viewportWidth, float viewportHeight, float xOrigin, float yOrigin)
 {
     Engine::framesPerSecond = framesPerSecond;
     Engine::map = map;
@@ -49,6 +50,15 @@ Engine::Engine(double framesPerSecond, int** map, int** wallMap, int dimension, 
     Engine::textureVAO = Engine::textureVBO = Engine::textureEBO;
 
     Engine::numOfWallTextureFiles = 0;
+
+    Engine::screenWidth = screenWidth;
+    Engine::screenHeight = screenHeight;
+
+    Engine::viewportWidth = viewportWidth;
+    Engine::viewportHeight = viewportHeight;
+
+    Engine::xOrigin = xOrigin;
+    Engine::yOrigin = yOrigin;
 }
 
 int Engine::run() {
@@ -166,7 +176,7 @@ int Engine::initGL() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(800, 600, "Killer", NULL, NULL);
+    window = glfwCreateWindow(screenWidth, screenHeight, "Killer", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -177,7 +187,7 @@ int Engine::initGL() {
     glfwMakeContextCurrent(window);
 
 
-    //glViewport(0, 0, 800, 600);
+    //glViewport(0.0f, 0.0f, screenWidth, screenHeight);
 
     glfwSetWindowUserPointer(window, this);
     glfwSetKeyCallback(window, processKeyCallback);
@@ -194,23 +204,6 @@ int Engine::initGL() {
 }
 
 int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Document& walls) {
-
-
-    std::cout << (wallTextureWidth*(0/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-
-    std::cout << (wallTextureWidth*(1/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(2/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(3/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(4/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(5/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(6/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(7/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-
-    std::cout << (wallTextureWidth*(8/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-
-    std::cout << (wallTextureWidth*(9/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(10/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
-    std::cout << (wallTextureWidth*(11/(wallTextureWidth/quadWidth)))/wallTextureWidth << std::endl;
 
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
@@ -247,14 +240,6 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 22] = colors[color_char]["code"]["g"].GetInt();
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 23] = colors[color_char]["code"]["b"].GetInt();
 
-
-
-                std::cout << "TESTING TEX COORDS:"<< std::endl;
-                std::cout << (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth << std::endl;
-                std::cout << (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth << std::endl;
-
-                // Check -1 here!
-
             //Set indices here
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
@@ -266,93 +251,97 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
             // WALLS //
             // Lower sprite
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j] = j * quadWidth + quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 1] = i * quadHeight + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 2] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 3] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 4] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 5] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 6] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 7] = 1.0f;
+            if (wallMap[dimension - i - 1][j] != -1) {
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 1] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 2] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 3] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 4] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 5] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 6] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth - (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 7] = 1.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 8] = j * quadWidth + quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 9] = i * quadHeight;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 10] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 11] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 12] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 13] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 14] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 15] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 8] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 9] = i * quadHeight;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 10] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 11] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 12] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 13] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 14] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth - (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 15] = 0.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 16] = j * quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 17] = i * quadHeight;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 18] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 19] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 20] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 21] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 22] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 23] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 16] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 17] = i * quadHeight;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 18] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 19] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 20] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 21] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 22] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth + (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 23] = 0.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 24] = j * quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 25] = i * quadHeight + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 26] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 27] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 28] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 29] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 30] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 31] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 24] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 25] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 26] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 27] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 28] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 29] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 30] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth + (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 31] = 1.0f;
 
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 1] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 1;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 2] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 3;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 3] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 1;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 4] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 2;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 5] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 3;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 1] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 1;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 2] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 3;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 3] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 1;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 4] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 2;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 5] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 3;
 
-            // Upper sprite
+                // Upper sprite
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 32] = j * quadWidth + quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 33] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 34] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 35] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 36] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 37] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 38] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 39] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 32] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 33] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 34] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 35] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 36] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 37] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 38] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth - (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 39] = 1.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 40] = j * quadWidth + quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 41] = i * quadHeight + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 42] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 43] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 44] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 45] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 46] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 47] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 40] = j * quadWidth + quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 41] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 42] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 43] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 44] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 45] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 46] = (wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth)) + quadWidth)/wallTextureWidth - (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 47] = 0.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 48] = j * quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 49] = i * quadHeight + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 50] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 51] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 52] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 53] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 54] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 55] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 48] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 49] = i * quadHeight + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 50] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 51] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 52] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 53] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 54] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth + (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 55] = 0.0f;
 
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 56] = j * quadWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 57] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 58] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 59] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 60] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 61] = 0.0f;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 62] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth;
-            textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 63] = 1.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 56] = j * quadWidth;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 57] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 58] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 59] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 60] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 61] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 62] = wallTextureWidth*(walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()/(wallTextureWidth/quadWidth))/wallTextureWidth + (0.5f/wallTextureWidth);
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 63] = 1.0f;
 
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 6] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 4;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 7] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 5;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 8] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 7;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 9] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 5;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 10] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 6;
-            textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 11] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 7;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 6] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 4;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 7] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 5;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 8] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 7;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 9] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 5;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 10] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 6;
+                textureIndices[i * dimension * textureIndicesPerQuad + textureIndicesPerQuad * j + 11] = i * dimension * textureVerticesPerQuad + textureVerticesPerQuad * j + 7;
+            }
+
+
         }
     }
 
@@ -360,8 +349,9 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 }
 
 int Engine::initCamera() {
-    projection = glm::ortho(-272.0f, 800.0f, -72.0f, 600.0f, -100.0f, 100.0f);
-
+    //projection = glm::ortho(-272.0f, 800.0f, -72.0f, 600.0f, -100.0f, 100.0f);
+    //projection = glm::ortho(-100.0f, 400.0f, -50.0f, 300.0f, -100.0f, 100.0f);
+    projection = glm::ortho(xOrigin, viewportWidth, yOrigin, viewportHeight, -100.0f, 100.0f);
     model = glm::mat4(1.0f);
 
     cameraPos = glm::vec3(0.0f, 0.0f, 100.0f);
@@ -498,7 +488,7 @@ int Engine::initTextures() {
 }
 
 int Engine::clearScreen() {
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     return 1;
 }
@@ -569,9 +559,16 @@ int Engine::render() {
     colorShader.setFloatMatrix("projection", glm::value_ptr(projection));
     colorShader.setFloatMatrix("view", glm::value_ptr(view));
     colorShader.setFloatMatrix("model", glm::value_ptr(model));
+    colorShader.setFloat2DVector("viewportScreen", viewportWidth, viewportHeight);
+    colorShader.setFloat2DVector("worldScreenOrigin", xOrigin, yOrigin);
+
+    std::cout << "ORIGINS:" << std::endl;
+    std::cout << xOrigin << std::endl;
+    std::cout << yOrigin << std::endl;
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     wallShader.use();
@@ -582,23 +579,10 @@ int Engine::render() {
 
     glBindVertexArray(textureVAO);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-
-/*
-    glBindVertexArray(textureVAO);
-
-    for (int i = 0; i < dimension; i++) {
-        for (int j = 0; j < dimension; j++) {
-            if (wallMap[dimension - i - 1][j] != -1) {
-                glBindTexture(GL_TEXTURE_2D, wallTextures[walls[wallMap[dimension - i - 1][j]]["lower"].GetInt()]);
-                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)((textureIndicesPerQuad * i * dimension + textureIndicesPerQuad * j) * sizeof(GLuint)));
-                glBindTexture(GL_TEXTURE_2D, wallTextures[walls[wallMap[dimension - i - 1][j]]["upper"].GetInt()]);
-                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)((textureIndicesPerQuad * i * dimension + textureIndicesPerQuad * j + (textureIndicesPerQuad / 2)) * sizeof(GLuint)));
-            }
-        }
-    }
-*/
+    glDrawElements(GL_TRIANGLES, textureIndicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    //std::cout << glm::to_string(projection * view * model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) << std::endl;
 
     return 1;
 }
@@ -626,15 +610,19 @@ void Engine::checkCamera() {
 
     if (input.getKeyState(INPUT_UP)) {
         y += 8.0f;
+        yOrigin += 8.0f;
     }
     if (input.getKeyState(INPUT_RIGHT)) {
         x += 8.0f;
+        xOrigin += 8.0f;
     }
     if (input.getKeyState(INPUT_DOWN)) {
         y -= 8.0f;
+        yOrigin -= 8.0f;
     }
     if (input.getKeyState(INPUT_LEFT)) {
         x -= 8.0f;
+        xOrigin -= 8.0f;
     }
 
 

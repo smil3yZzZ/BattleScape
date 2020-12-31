@@ -25,6 +25,7 @@ public:
     void setBool(const std::string& name, bool value) const;
     void setInt(const std::string& name, int value) const;
     void setFloat(const std::string& name, float value) const;
+    void setFloat2DVector(const std::string& name, float x, float y) const;
     void setFloatMatrix(const std::string& name, GLfloat* value) const;
     void setGradients(const std::string& name, GLfloat* value) const;
     unsigned int getID();
