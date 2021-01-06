@@ -11,7 +11,8 @@ void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 // Engine constructor
 Engine::Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize, int bufferVertexTexturesSize,
     int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad, int quadWidth, int quadHeight,
-    int screenWidth, int screenHeight, float viewportWidth, float viewportHeight, float xOrigin, float yOrigin)
+    int screenWidth, int screenHeight, float viewportWidth, float viewportHeight, float xOrigin, float yOrigin,
+    int numberOfPlatforms, int numberOfRgbaChannels)
 {
     Engine::framesPerSecond = framesPerSecond;
     Engine::map = map;
@@ -59,6 +60,9 @@ Engine::Engine(double framesPerSecond, int** map, int** wallMap, int dimension, 
 
     Engine::xOrigin = xOrigin;
     Engine::yOrigin = yOrigin;
+
+    Engine::numberOfPlatforms = numberOfPlatforms;
+    Engine::numberOfRgbaChannels = numberOfRgbaChannels;
 }
 
 int Engine::run() {
@@ -155,7 +159,7 @@ int Engine::run() {
 
 int Engine::init(const rapidjson::Document& colors, const rapidjson::Document& walls) {
     initGL();
-    initTextures();
+    initTextures(colors);
     initMaze(colors, walls);
     initCamera();
     initShaders();
@@ -198,6 +202,7 @@ int Engine::initGL() {
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_SMOOTH);
     glDepthFunc(GL_ALWAYS);
 
     return 1;
@@ -215,30 +220,30 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = j * quadWidth;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 1] = i * quadHeight;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 2] = 0.0f;
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 3] = colors[color_char]["code"]["r"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 4] = colors[color_char]["code"]["g"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 5] = colors[color_char]["code"]["b"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 3] = colors[color_char]["codePrimary"]["r"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 4] = colors[color_char]["codePrimary"]["g"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 5] = colors[color_char]["codePrimary"]["b"].GetInt();
 
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 6] = j * quadWidth;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 7] = i * quadHeight + quadHeight;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 8] = 0.0f;
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 9] = colors[color_char]["code"]["r"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 10] = colors[color_char]["code"]["g"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 11] = colors[color_char]["code"]["b"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 9] = colors[color_char]["codePrimary"]["r"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 10] = colors[color_char]["codePrimary"]["g"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 11] = colors[color_char]["codePrimary"]["b"].GetInt();
 
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 12] = j * quadWidth + quadWidth;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 13] = i * quadHeight;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 14] = 0.0f;
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 15] = colors[color_char]["code"]["r"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 16] = colors[color_char]["code"]["g"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 17] = colors[color_char]["code"]["b"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 15] = colors[color_char]["codePrimary"]["r"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 16] = colors[color_char]["codePrimary"]["g"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 17] = colors[color_char]["codePrimary"]["b"].GetInt();
 
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 18] = j * quadWidth + quadWidth;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 19] = i * quadHeight + quadHeight;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 20] = 0.0f;
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 21] = colors[color_char]["code"]["r"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 22] = colors[color_char]["code"]["g"].GetInt();
-            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 23] = colors[color_char]["code"]["b"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 21] = colors[color_char]["codePrimary"]["r"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 22] = colors[color_char]["codePrimary"]["g"].GetInt();
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 23] = colors[color_char]["codePrimary"]["b"].GetInt();
 
             //Set indices here
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
@@ -369,6 +374,7 @@ int Engine::initCamera() {
 int Engine::initShaders() {
     Engine::colorShader = Shader("shaders/squareColors.vs", "shaders/squareColors.fs");
     Engine::wallShader = Shader("shaders/squareTextures.vs", "shaders/squareTextures.fs");
+    Engine::platformShader = Shader("shaders/squarePlatformTextures.vs", "shaders/squarePlatformTextures.fs");
     return 1;
 }
 
@@ -391,69 +397,74 @@ int Engine::generateBuffers() {
     return 1;
 }
 
-int Engine::initTextures() {
-
+int Engine::initTextures(const rapidjson::Document& colors) {
+    //INTRODUCIR GLTEXSUBIMAGE2D()!
     /*
-
-    FILE *proc = popen("/bin/ls resources/wall","r");
-    char buf[1024];
-
-    std::stringstream ss;
-
-    std::list<std::string> wallFiles = {};
-
-    while ( !feof(proc) && fgets(buf,sizeof(buf),proc) )
-    {
-        std::string fileName = std::string(buf);
-        fileName.erase(std::remove(fileName.begin(), fileName.end(), '\n'), fileName.end());
-        wallFiles.push_back(fileName);
-        numOfWallTextureFiles++;
-    }
-
-    //GLuint wallTextures[numOfWallTextureFiles];
-    Engine::wallTextures = new unsigned int[numOfWallTextureFiles];
-
-    for (std::string wallFile : wallFiles) {
-        ss.str(std::string());
-
-        ss << "resources/wall/" << wallFile;
-        std::string number;
-        std::istringstream file(wallFile);
-
-        getline(file, number, '_');
-
-
-        // load and create a texture
-        // -------------------------
-        glGenTextures(1, &(wallTextures[stoi(number)]));
-        glBindTexture(GL_TEXTURE_2D, wallTextures[stoi(number)]); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-        // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // load image, create texture and generate mipmaps
-        int width, height, nrChannels;
-
-        stbi_set_flip_vertically_on_load(true);
-        unsigned char* data = stbi_load(ss.str().c_str(), &width, &height, &nrChannels, 0);
-
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else
-        {
-            if(stbi_failure_reason())
-                std::cout << stbi_failure_reason() << std::endl;
-            std::cout << "Failed to load texture" << std::endl;
-        }
-        stbi_image_free(data);
-
-    }
+    GLubyte pixels[quadWidth * quadHeight * numberOfRgbaChannels * numberOfPlatforms] = {
+        W,W,W,W,W,W,W,W,
+        W,W,G,G,G,W,W,W,
+        W,G,W,W,W,G,W,W,
+        W,G,W,W,W,G,W,W,
+        W,W,G,G,G,W,W,W,
+        W,G,W,W,W,G,W,W,
+        W,G,W,W,W,G,W,W,
+        W,W,G,G,G,W,W,W
+    };
     */
+
+    //Colors
+    GLubyte* pixels = new GLubyte[quadWidth * quadHeight * numberOfRgbaChannels];
+
+    for (int i = 0; i < quadHeight; i++) {
+        for (int j = 0; j < quadWidth; j++) {
+            if (i < 2 || j < 2 || i > 61 || j > 61) {
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = 0.0f;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = 0.0f;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = 0.0f;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
+            }
+            else {
+                float randomNumber = (float) rand()/RAND_MAX;
+                float red, green, blue, diff;
+                if (colors["4"]["codePrimary"]["r"].GetInt() != colors["4"]["codeSecondary"]["r"].GetInt()) {
+                    diff = (float)abs(colors["4"]["codePrimary"]["r"].GetInt() - colors["4"]["codeSecondary"]["r"].GetInt()) * randomNumber;
+                    red = colors["4"]["codePrimary"]["r"].GetInt() < colors["4"]["codeSecondary"]["r"].GetInt() ? colors["4"]["codePrimary"]["r"].GetInt() + diff : colors["4"]["codeSecondary"]["r"].GetInt() + diff;
+                }
+                else {
+                    red = colors["4"]["codePrimary"]["r"].GetInt();
+                }
+                if (colors["4"]["codePrimary"]["g"].GetInt() != colors["4"]["codeSecondary"]["g"].GetInt()) {
+                    diff = (float)abs(colors["4"]["codePrimary"]["g"].GetInt() - colors["4"]["codeSecondary"]["g"].GetInt()) * randomNumber;
+                    green = colors["4"]["codePrimary"]["g"].GetInt() < colors["4"]["codeSecondary"]["g"].GetInt() ? colors["4"]["codePrimary"]["g"].GetInt() + diff : colors["4"]["codeSecondary"]["g"].GetInt() + diff;
+                }
+                else {
+                    green = colors["4"]["codePrimary"]["g"].GetInt();
+                }
+                if (colors["4"]["codePrimary"]["b"].GetInt() != colors["4"]["codeSecondary"]["b"].GetInt()) {
+                    diff = (float)abs(colors["4"]["codePrimary"]["b"].GetInt() - colors["4"]["codeSecondary"]["b"].GetInt()) * randomNumber;
+                    blue = colors["4"]["codePrimary"]["b"].GetInt() < colors["4"]["codeSecondary"]["b"].GetInt() ? colors["4"]["codePrimary"]["b"].GetInt() + diff : colors["4"]["codeSecondary"]["b"].GetInt() + diff;
+                }
+                else {
+                    blue = colors["4"]["codePrimary"]["b"].GetInt();
+                }
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = red;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = green;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = blue;
+                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
+            }
+        }
+    }
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures(1, &colorTexture);
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    //Walls
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
@@ -559,16 +570,11 @@ int Engine::render() {
     colorShader.setFloatMatrix("projection", glm::value_ptr(projection));
     colorShader.setFloatMatrix("view", glm::value_ptr(view));
     colorShader.setFloatMatrix("model", glm::value_ptr(model));
-    colorShader.setFloat2DVector("viewportScreen", viewportWidth, viewportHeight);
-    colorShader.setFloat2DVector("worldScreenOrigin", xOrigin, yOrigin);
-
-    std::cout << "ORIGINS:" << std::endl;
-    std::cout << xOrigin << std::endl;
-    std::cout << yOrigin << std::endl;
+    //colorShader.setFloat("randomValue", )
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
-    //glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 600, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     wallShader.use();
@@ -581,8 +587,6 @@ int Engine::render() {
     glBindTexture(GL_TEXTURE_2D, texture);
     glDrawElements(GL_TRIANGLES, textureIndicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-
-    //std::cout << glm::to_string(projection * view * model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) << std::endl;
 
     return 1;
 }
@@ -605,24 +609,25 @@ Shader Engine::getColorShader() {
 
 
 void Engine::checkCamera() {
-    int x = 0;
-    int y = 0;
+    float x = 0;
+    float y = 0;
 
+    //Añadir aqui frameTime;
     if (input.getKeyState(INPUT_UP)) {
-        y += 8.0f;
-        yOrigin += 8.0f;
+        y += 4.0f;
+        yOrigin += 4.0f;
     }
     if (input.getKeyState(INPUT_RIGHT)) {
-        x += 8.0f;
-        xOrigin += 8.0f;
+        x += 4.0f;
+        xOrigin += 4.0f;
     }
     if (input.getKeyState(INPUT_DOWN)) {
-        y -= 8.0f;
-        yOrigin -= 8.0f;
+        y -= 4.0f;
+        yOrigin -= 4.0f;
     }
     if (input.getKeyState(INPUT_LEFT)) {
-        x -= 8.0f;
-        xOrigin -= 8.0f;
+        x -= 4.0f;
+        xOrigin -= 4.0f;
     }
 
 

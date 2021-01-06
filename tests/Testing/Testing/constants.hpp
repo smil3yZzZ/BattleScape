@@ -30,6 +30,8 @@ const int XXL = 4;
 const int BORDERS_SIZE_IN_MATRIX = 2;
 const int FRAMES_PER_SECOND = 60;
 
+const int NUMBER_OF_PLATFORMS = 8;
+const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int BUFFER_VERTEX_SIZE = 6;
 const int BUFFER_VERTEX_TEXTURES_SIZE = 8;
 const int INDICES_PER_QUAD = 6;

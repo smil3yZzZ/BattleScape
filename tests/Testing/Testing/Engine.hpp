@@ -55,6 +55,7 @@ private:
     unsigned int* indices;
 
     unsigned int texture;
+    unsigned int colorTexture;
     //unsigned int *wallTextures;
     float wallTextureWidth;
 
@@ -67,6 +68,7 @@ private:
 
     Shader colorShader;
     Shader wallShader;
+    Shader platformShader;
 
     unsigned int VAO;
     unsigned int VBO;
@@ -87,6 +89,9 @@ private:
     float xOrigin;
     float yOrigin;
 
+    int numberOfPlatforms;
+    int numberOfRgbaChannels;
+
 public:
     int run();
     int init(const rapidjson::Document& colors, const rapidjson::Document& walls);
@@ -103,13 +108,13 @@ public:
     void setIsRunning(int running);
     void setView(glm::mat4 view);
     Shader getColorShader();
-    int initTextures();
+    int initTextures(const rapidjson::Document& colors);
     void checkCamera();
     void updateInput(int key, int action);
     Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize,
         int bufferVertexTexturesSize,
         int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad,
          int quadWidth, int quadHeight, int screenWidth, int screenHeight, float viewportWidth, float viewportHeight,
-         float xOrigin, float yOrigin);
+         float xOrigin, float yOrigin, int numberOfPlatforms, int numberOfRgbaChannels);
 };
 #endif

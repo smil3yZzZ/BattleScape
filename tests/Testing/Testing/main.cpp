@@ -151,7 +151,8 @@ int main() {
         QUAD_WIDTH, QUAD_HEIGHT,
         SCREEN_WIDTH, SCREEN_HEIGHT,
         VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
-        X_ORIGIN, Y_ORIGIN);
+        X_ORIGIN, Y_ORIGIN,
+        NUMBER_OF_PLATFORMS, NUMBER_OF_RGBA_CHANNELS);
     engine.run();
 
     return 1;
