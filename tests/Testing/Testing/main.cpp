@@ -47,6 +47,8 @@ int main() {
         std::cout << "\n";
     }
 
+    top_left[1][1] = 0;
+
     std::stack<std::tuple<int, int>> algorithmCells;
     algorithmCells.push(std::tuple<int, int>{0, 0});
     visited[0][0] = 1;

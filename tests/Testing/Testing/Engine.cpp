@@ -203,7 +203,7 @@ int Engine::initGL() {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_SMOOTH);
-    glDepthFunc(GL_ALWAYS);
+    glDepthFunc(GL_LESS);
 
     return 1;
 }
@@ -213,10 +213,12 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
             int color = map[dimension - i - 1][j];
-            std::string color_string = std::to_string(color);
-            const char* color_char = color_string.c_str();
+            //std::string color_string = std::to_string(color);
+            //const char* color_char = color_string.c_str();
 
+            /*
             // PLATFORMS //
+
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = j * quadWidth;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 1] = i * quadHeight;
             vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 2] = 0.0f;
@@ -253,13 +255,52 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
             indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
 
+            */
+            // PLATFORMS //
+
+            float top = ((float)color + 1.0f)/(float)numberOfPlatforms;
+            float bottom = (float)color/(float)numberOfPlatforms;// - 1.0f/(float)quadHeight;
+
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j] = j * quadWidth;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 1] = i * quadHeight;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 2] = 5.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 3] = 0.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 4] = bottom;//(quadHeight*numberOfPlatforms*(colors[color_char]["codePrimary"]["r"].GetInt()/(quadHeight*numberOfPlatforms/quadWidth)) + quadWidth)/wallTextureWidth - (0.5f/wallTextureWidth);
+
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 5] = j * quadWidth;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 6] = i * quadHeight + quadHeight;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 7] = 5.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 8] = 0.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 9] = top;
+
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 10] = j * quadWidth + quadWidth;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 11] = i * quadHeight;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 12] = 5.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 13] = 1.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 14] = bottom;
+
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 15] = j * quadWidth + quadWidth;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 16] = i * quadHeight + quadHeight;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 17] = 5.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 18] = 1.0f;
+            vertices[i * dimension * bufferVertexSize * verticesPerQuad + bufferVertexSize * verticesPerQuad * j + 19] = top;
+
+            //Set indices here
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j;
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 1] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 2] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 3] = i * dimension * verticesPerQuad + verticesPerQuad * j + 1;
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 4] = i * dimension * verticesPerQuad + verticesPerQuad * j + 2;
+            indices[i * dimension * indicesPerQuad + indicesPerQuad * j + 5] = i * dimension * verticesPerQuad + verticesPerQuad * j + 3;
+
+
             // WALLS //
             // Lower sprite
 
             if (wallMap[dimension - i - 1][j] != -1) {
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j] = j * quadWidth + quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 1] = i * quadHeight + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 2] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 2] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 3] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 4] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 5] = 0.0f;
@@ -268,7 +309,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 8] = j * quadWidth + quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 9] = i * quadHeight;
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 10] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 10] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 11] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 12] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 13] = 0.0f;
@@ -277,7 +318,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 16] = j * quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 17] = i * quadHeight;
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 18] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 18] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 19] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 20] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 21] = 0.0f;
@@ -286,7 +327,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 24] = j * quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 25] = i * quadHeight + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 26] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 26] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 27] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 28] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 29] = 0.0f;
@@ -304,7 +345,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 32] = j * quadWidth + quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 33] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 34] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 34] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 35] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 36] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 37] = 0.0f;
@@ -313,7 +354,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 40] = j * quadWidth + quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 41] = i * quadHeight + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 42] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 42] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 43] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 44] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 45] = 0.0f;
@@ -322,7 +363,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 48] = j * quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 49] = i * quadHeight + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 50] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 50] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 51] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 52] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 53] = 0.0f;
@@ -331,7 +372,7 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 56] = j * quadWidth;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 57] = i * quadHeight + (quadHeight / 2) + (quadHeight / 2);
-                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 58] = 0.0f;
+                textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 58] = 10.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 59] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 60] = 0.0f;
                 textureVertices[i * dimension * bufferVertexTexturesSize * textureVerticesPerQuad + bufferVertexTexturesSize * textureVerticesPerQuad * j + 61] = 0.0f;
@@ -398,59 +439,58 @@ int Engine::generateBuffers() {
 }
 
 int Engine::initTextures(const rapidjson::Document& colors) {
-    //INTRODUCIR GLTEXSUBIMAGE2D()!
-    /*
-    GLubyte pixels[quadWidth * quadHeight * numberOfRgbaChannels * numberOfPlatforms] = {
-        W,W,W,W,W,W,W,W,
-        W,W,G,G,G,W,W,W,
-        W,G,W,W,W,G,W,W,
-        W,G,W,W,W,G,W,W,
-        W,W,G,G,G,W,W,W,
-        W,G,W,W,W,G,W,W,
-        W,G,W,W,W,G,W,W,
-        W,W,G,G,G,W,W,W
-    };
-    */
 
     //Colors
-    GLubyte* pixels = new GLubyte[quadWidth * quadHeight * numberOfRgbaChannels];
+    unsigned char * pixels = new unsigned char[numberOfPlatforms * quadWidth * quadHeight * numberOfRgbaChannels];
 
-    for (int i = 0; i < quadHeight; i++) {
-        for (int j = 0; j < quadWidth; j++) {
-            if (i < 2 || j < 2 || i > 61 || j > 61) {
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = 0.0f;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = 0.0f;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = 0.0f;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
-            }
-            else {
-                float randomNumber = (float) rand()/RAND_MAX;
-                float red, green, blue, diff;
-                if (colors["4"]["codePrimary"]["r"].GetInt() != colors["4"]["codeSecondary"]["r"].GetInt()) {
-                    diff = (float)abs(colors["4"]["codePrimary"]["r"].GetInt() - colors["4"]["codeSecondary"]["r"].GetInt()) * randomNumber;
-                    red = colors["4"]["codePrimary"]["r"].GetInt() < colors["4"]["codeSecondary"]["r"].GetInt() ? colors["4"]["codePrimary"]["r"].GetInt() + diff : colors["4"]["codeSecondary"]["r"].GetInt() + diff;
+    for (int n = 0; n < numberOfPlatforms; n++) {
+        for (int i = 0; i < quadHeight; i++) {
+            for (int j = 0; j < quadWidth; j++) {
+                if (i < 2 || j < 2 || i > 61 || j > 61) {
+                    pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = 157.0f;
+                    pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = 157.0f;
+                    pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = 157.0f;
+                    pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
                 }
                 else {
-                    red = colors["4"]["codePrimary"]["r"].GetInt();
+                    float randomNumber = (float) rand()/RAND_MAX;
+                    float red, green, blue, diff;
+                    if (randomNumber > 0.9) {
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = 0.0f;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = 0.0f;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = 0.0f;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
+                    }
+                    else {
+                        std::string color_string = std::to_string(n);
+                        const char* color_char = color_string.c_str();
+                        if (colors[color_char]["codePrimary"]["r"].GetInt() != colors[color_char]["codeSecondary"]["r"].GetInt()) {
+                            diff = (float)abs(colors[color_char]["codePrimary"]["r"].GetInt() - colors[color_char]["codeSecondary"]["r"].GetInt()) * randomNumber;
+                            red = colors[color_char]["codePrimary"]["r"].GetInt() < colors[color_char]["codeSecondary"]["r"].GetInt() ? colors[color_char]["codePrimary"]["r"].GetInt() + diff : colors[color_char]["codeSecondary"]["r"].GetInt() + diff;
+                        }
+                        else {
+                            red = colors[color_char]["codePrimary"]["r"].GetInt();
+                        }
+                        if (colors[color_char]["codePrimary"]["g"].GetInt() != colors[color_char]["codeSecondary"]["g"].GetInt()) {
+                            diff = (float)abs(colors[color_char]["codePrimary"]["g"].GetInt() - colors[color_char]["codeSecondary"]["g"].GetInt()) * randomNumber;
+                            green = colors[color_char]["codePrimary"]["g"].GetInt() < colors[color_char]["codeSecondary"]["g"].GetInt() ? colors[color_char]["codePrimary"]["g"].GetInt() + diff : colors[color_char]["codeSecondary"]["g"].GetInt() + diff;
+                        }
+                        else {
+                            green = colors[color_char]["codePrimary"]["g"].GetInt();
+                        }
+                        if (colors[color_char]["codePrimary"]["b"].GetInt() != colors[color_char]["codeSecondary"]["b"].GetInt()) {
+                            diff = (float)abs(colors[color_char]["codePrimary"]["b"].GetInt() - colors[color_char]["codeSecondary"]["b"].GetInt()) * randomNumber;
+                            blue = colors[color_char]["codePrimary"]["b"].GetInt() < colors[color_char]["codeSecondary"]["b"].GetInt() ? colors[color_char]["codePrimary"]["b"].GetInt() + diff : colors[color_char]["codeSecondary"]["b"].GetInt() + diff;
+                        }
+                        else {
+                            blue = colors[color_char]["codePrimary"]["b"].GetInt();
+                        }
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = red;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = green;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = blue;
+                        pixels[n * quadHeight * quadWidth * numberOfRgbaChannels + i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
+                    }
                 }
-                if (colors["4"]["codePrimary"]["g"].GetInt() != colors["4"]["codeSecondary"]["g"].GetInt()) {
-                    diff = (float)abs(colors["4"]["codePrimary"]["g"].GetInt() - colors["4"]["codeSecondary"]["g"].GetInt()) * randomNumber;
-                    green = colors["4"]["codePrimary"]["g"].GetInt() < colors["4"]["codeSecondary"]["g"].GetInt() ? colors["4"]["codePrimary"]["g"].GetInt() + diff : colors["4"]["codeSecondary"]["g"].GetInt() + diff;
-                }
-                else {
-                    green = colors["4"]["codePrimary"]["g"].GetInt();
-                }
-                if (colors["4"]["codePrimary"]["b"].GetInt() != colors["4"]["codeSecondary"]["b"].GetInt()) {
-                    diff = (float)abs(colors["4"]["codePrimary"]["b"].GetInt() - colors["4"]["codeSecondary"]["b"].GetInt()) * randomNumber;
-                    blue = colors["4"]["codePrimary"]["b"].GetInt() < colors["4"]["codeSecondary"]["b"].GetInt() ? colors["4"]["codePrimary"]["b"].GetInt() + diff : colors["4"]["codeSecondary"]["b"].GetInt() + diff;
-                }
-                else {
-                    blue = colors["4"]["codePrimary"]["b"].GetInt();
-                }
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels] = red;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 1] = green;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 2] = blue;
-                pixels[i * quadWidth * numberOfRgbaChannels + j * numberOfRgbaChannels + 3] = 1.0f;
             }
         }
     }
@@ -462,7 +502,12 @@ int Engine::initTextures(const rapidjson::Document& colors) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, quadWidth, quadHeight*numberOfPlatforms, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    //Corregir 03 y 24 en muros. Añadir sombras, ver si en el negro compensa meterlo más realista...
+
 
     //Walls
 
@@ -531,7 +576,7 @@ int Engine::updateBuffers() {
     glEnableVertexAttribArray(0);
 
     // gradient attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, bufferVertexSize * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // Walls
@@ -566,13 +611,14 @@ int Engine::updateBuffers() {
 
 int Engine::render() {
 
-    colorShader.use();
-    colorShader.setFloatMatrix("projection", glm::value_ptr(projection));
-    colorShader.setFloatMatrix("view", glm::value_ptr(view));
-    colorShader.setFloatMatrix("model", glm::value_ptr(model));
+    platformShader.use();
+    platformShader.setFloatMatrix("projection", glm::value_ptr(projection));
+    platformShader.setFloatMatrix("view", glm::value_ptr(view));
+    platformShader.setFloatMatrix("model", glm::value_ptr(model));
     //colorShader.setFloat("randomValue", )
 
     glBindVertexArray(VAO);
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
     glDrawElements(GL_TRIANGLES, indicesPerQuad * dimension * dimension, GL_UNSIGNED_INT, 0);
     //glDrawElements(GL_TRIANGLES, 600, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
