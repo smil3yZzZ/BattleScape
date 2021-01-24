@@ -51,17 +51,20 @@ private:
     int quadWidth;
     int quadHeight;
 
-    float* vertices;
-    unsigned int* indices;
+    float* platformVertices;
+    unsigned int* platformIndices;
 
     unsigned int texture;
     unsigned int colorTexture;
     //unsigned int *wallTextures;
     float wallTextureWidth;
 
-    float* textureVertices;
-    unsigned int* textureIndices;
+    float* wallVertices;
+    unsigned int* wallIndices;
     int numOfWallTextureFiles;
+
+    float* wallShadowVertices;
+    unsigned int* wallShadowIndices;
 
     glm::mat4 projection, model, view;
     glm::vec3 cameraPos, cameraUp, cameraTarget;

@@ -47,7 +47,8 @@ int main() {
         std::cout << "\n";
     }
 
-    top_left[1][1] = 0;
+    //Uncomment this if you want to try black holes!
+    //top_left[1][1] = 0;
 
     std::stack<std::tuple<int, int>> algorithmCells;
     algorithmCells.push(std::tuple<int, int>{0, 0});
@@ -144,12 +145,12 @@ int main() {
         original,
         originalWallMap,
         mapDimension,
-        BUFFER_VERTEX_SIZE,
-        BUFFER_VERTEX_TEXTURES_SIZE,
-        VERTICES_PER_QUAD,
-        TEXTURES_VERTICES_PER_QUAD,
-        INDICES_PER_QUAD,
-        TEXTURE_INDICES_PER_QUAD,
+        PLATFORM_BUFFER_VERTEX_SIZE,
+        WALL_BUFFER_VERTEX_SIZE,
+        PLATFORM_VERTICES_PER_QUAD,
+        WALL_VERTICES_PER_QUAD,
+        PLATFORM_INDICES_PER_QUAD,
+        WALL_INDICES_PER_QUAD,
         QUAD_WIDTH, QUAD_HEIGHT,
         SCREEN_WIDTH, SCREEN_HEIGHT,
         VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
