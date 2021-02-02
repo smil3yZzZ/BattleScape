@@ -23,12 +23,24 @@
 
 #include "utils/GLError.h"
 
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+const float VIEWPORT_WIDTH = 400.0f;
+const float VIEWPORT_HEIGHT = 300.0f;
+
+const int NUMBER_OF_PLATFORMS = 8;
+const int NUMBER_OF_RGBA_CHANNELS = 4;
+const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
+const int WALL_BUFFER_VERTEX_SIZE = 8;
+const int PLATFORM_INDICES_PER_QUAD = 6;
+const int WALL_INDICES_PER_QUAD = 12;
+const int PLATFORM_VERTICES_PER_QUAD = 4;
+const int WALL_VERTICES_PER_QUAD = 8;
+const int QUAD_WIDTH = 64;
+const int QUAD_HEIGHT = 64;
+
 class Engine {
 private:
-
-    static const int squareWidth;
-    static const int platformHeight;
-    static const int wallHeight;
 
     int up, right, down, left;
 
@@ -37,31 +49,22 @@ private:
     int** wallMap;
     int dimension;
 
+    float xOrigin;
+    float yOrigin;
+
     int isRunning;
     float frameDelay;
     int counter;
-
-    int bufferVertexSize;
-    int bufferVertexTexturesSize;
-    int textureVerticesPerQuad;
-    int verticesPerQuad;
-    int indicesPerQuad;
-    int textureIndicesPerQuad;
-
-    int quadWidth;
-    int quadHeight;
 
     float* platformVertices;
     unsigned int* platformIndices;
 
     unsigned int texture;
     unsigned int colorTexture;
-    //unsigned int *wallTextures;
     float wallTextureWidth;
 
     float* wallVertices;
     unsigned int* wallIndices;
-    int numOfWallTextureFiles;
 
     float* wallShadowVertices;
     unsigned int* wallShadowIndices;
@@ -69,7 +72,6 @@ private:
     glm::mat4 projection, model, view;
     glm::vec3 cameraPos, cameraUp, cameraTarget;
 
-    Shader colorShader;
     Shader wallShader;
     Shader platformShader;
 
@@ -84,18 +86,12 @@ private:
     Input input;
 
     GLFWwindow* window;
+    unsigned char* createColorPlatforms(const rapidjson::Document& colors);
 
-    int screenWidth;
-    int screenHeight;
-    float viewportWidth;
-    float viewportHeight;
-    float xOrigin;
-    float yOrigin;
-
-    int numberOfPlatforms;
-    int numberOfRgbaChannels;
 
 public:
+    Engine(double framesPerSecond, int** map, int** wallMap, int dimension,
+    float xOrigin, float yOrigin);
     int run();
     int init(const rapidjson::Document& colors, const rapidjson::Document& walls);
     int initGL();
@@ -110,14 +106,9 @@ public:
     int getIsRunning();
     void setIsRunning(int running);
     void setView(glm::mat4 view);
-    Shader getColorShader();
     int initTextures(const rapidjson::Document& colors);
     void checkCamera();
     void updateInput(int key, int action);
-    Engine(double framesPerSecond, int** map, int** wallMap, int dimension, int bufferVertexSize,
-        int bufferVertexTexturesSize,
-        int verticesPerQuad, int textureVerticesPerQuad, int indicesPerQuad, int textureIndicesPerQuad,
-         int quadWidth, int quadHeight, int screenWidth, int screenHeight, float viewportWidth, float viewportHeight,
-         float xOrigin, float yOrigin, int numberOfPlatforms, int numberOfRgbaChannels);
+
 };
 #endif

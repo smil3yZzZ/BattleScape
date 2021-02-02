@@ -145,17 +145,9 @@ int main() {
         original,
         originalWallMap,
         mapDimension,
-        PLATFORM_BUFFER_VERTEX_SIZE,
-        WALL_BUFFER_VERTEX_SIZE,
-        PLATFORM_VERTICES_PER_QUAD,
-        WALL_VERTICES_PER_QUAD,
-        PLATFORM_INDICES_PER_QUAD,
-        WALL_INDICES_PER_QUAD,
-        QUAD_WIDTH, QUAD_HEIGHT,
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
-        X_ORIGIN, Y_ORIGIN,
-        NUMBER_OF_PLATFORMS, NUMBER_OF_RGBA_CHANNELS);
+        X_ORIGIN,
+        Y_ORIGIN
+    );
     engine.run();
 
     return 1;
