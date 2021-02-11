@@ -1,6 +1,6 @@
 #include "Engine.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "utils/stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "utils/stb_image.h"
 
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -193,7 +193,11 @@ int Engine::initGL() {
 int Engine::initTextures(const rapidjson::Document& colors) {
 
     //Colors
-    unsigned char * colorPlatformsData = createColorPlatforms(colors);
+    unsigned char* colorPlatformsData = createColorPlatforms(colors);
+
+    TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*NUMBER_OF_PLATFORMS, NUMBER_OF_RGBA_CHANNELS, colorPlatformsData);
+
+    DrawingObject platforms = DrawingObject(platformsTexture, PLATFORMS_Z);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &colorTexture);
@@ -211,7 +215,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
 
 
     //Walls
-
+    /*
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
     // set the texture wrapping parameters
@@ -220,8 +224,11 @@ int Engine::initTextures(const rapidjson::Document& colors) {
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
     // load image, create texture and generate mipmaps
     int width, height, nrChannels;
+
 
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load("resources/wall.png", &width, &height, &nrChannels, 0);
@@ -239,7 +246,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
+    */
 
     return 1;
 }

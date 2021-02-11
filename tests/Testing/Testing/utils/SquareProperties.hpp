@@ -1,6 +1,8 @@
 #pragma once
 #ifndef SQUAREPROPERTIES_H
 #define SQUAREPROPERTIES_H
+#endif
+
 class SquareProperties {
     private:
         int rowStartGrid;
@@ -16,4 +18,3 @@ class SquareProperties {
         int getRowEndGrid();
         int getColumnStartGrid();
 };
-#endif

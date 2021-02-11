@@ -4,10 +4,6 @@
     #define ENGINE_H
 
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 #include <list>
 #include "rapidjson/document.h"
@@ -15,13 +11,16 @@
 #include "rapidjson/filereadstream.h"
 #include "utils/Shader.hpp"
 #include "utils/Input.hpp"
+#include "DrawingObject.hpp"
+#include "utils/TextureAsset.hpp"
+#include "utils/GLMImporter.hpp"
+#include "utils/GLImporter.hpp"
 
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 //#include <Windows.h>
 
 #include "utils/GLError.h"
+
+#endif
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -38,6 +37,8 @@ const int PLATFORM_VERTICES_PER_QUAD = 4;
 const int WALL_VERTICES_PER_QUAD = 8;
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
+
+const float PLATFORMS_Z = 5.0f;
 
 class Engine {
 private:
@@ -111,4 +112,3 @@ public:
     void updateInput(int key, int action);
 
 };
-#endif

@@ -10,6 +10,8 @@
 #include <sstream>
 #include <iostream>
 
+#endif
+
 class Shader
 {
 private:
@@ -30,5 +32,3 @@ public:
     void setGradients(const std::string& name, GLfloat* value) const;
     unsigned int getID();
 };
-
-#endif

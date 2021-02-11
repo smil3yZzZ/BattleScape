@@ -15,6 +15,8 @@
 #include <vector>
 #include <chrono>
 
+#endif
+
 const int S = 0;
 const int M = 1;
 const int L = 2;
@@ -36,5 +38,3 @@ const int LEFT_WALL_SHIFT = 1;
 //The result of (size - 1)/2 has to be odd
 
 const std::map<int, int> size = { {S, 11}, {M, 19}, {L, 39}, {XL, 71}, {XXL, 155} };
-
-#endif

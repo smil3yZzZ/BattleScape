@@ -1,12 +1,13 @@
 #pragma once
 #ifndef FILELOADER_H
-#define FILELOADER_H
+    #define FILELOADER_H
+#include "TextureAsset.hpp"
 #endif
 
-#include "TextureFile.hpp"
+
 
 class FileLoader {
 
 public:
-	static TextureFile loadTextureFile(const char* path);
+	static TextureAsset loadTextureAsset(const char* path);
 };

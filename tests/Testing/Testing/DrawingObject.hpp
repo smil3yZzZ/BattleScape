@@ -1,5 +1,13 @@
+#pragma once
+
+#ifndef DRAWINGOBJECT_H
+    #define DRAWINGOBJECT_H
+
+
 #include "Texture.hpp"
-#include "utils/TextureFile.hpp"
+#include "utils/TextureAsset.hpp"
+
+#endif
 
 class DrawingObject {
 private:
@@ -12,10 +20,10 @@ private:
 
     float z;
 
-    Texture texture;
+    Texture* texture;
 
-    int initTextures();
+    int initVertices();
 
 public:
-    DrawingObject(TextureFile textureFile);
-}
+    DrawingObject(TextureAsset* textureAsset, float z);
+};
