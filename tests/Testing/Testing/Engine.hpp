@@ -27,7 +27,6 @@ const int SCREEN_HEIGHT = 600;
 const float VIEWPORT_WIDTH = 400.0f;
 const float VIEWPORT_HEIGHT = 300.0f;
 
-const int NUMBER_OF_PLATFORMS = 8;
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
 const int WALL_BUFFER_VERTEX_SIZE = 8;
@@ -37,6 +36,9 @@ const int PLATFORM_VERTICES_PER_QUAD = 4;
 const int WALL_VERTICES_PER_QUAD = 8;
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
+
+const int PLATFORM_TEXTURE_ROWS = 8;
+const int PLATFORM_TEXTURE_COLS = 1;
 
 const float PLATFORMS_Z = 5.0f;
 

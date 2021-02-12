@@ -195,7 +195,8 @@ int Engine::initTextures(const rapidjson::Document& colors) {
     //Colors
     unsigned char* colorPlatformsData = createColorPlatforms(colors);
 
-    TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*NUMBER_OF_PLATFORMS, NUMBER_OF_RGBA_CHANNELS, colorPlatformsData);
+    TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
+            QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS, colorPlatformsData);
 
     DrawingObject platforms = DrawingObject(platformsTexture, PLATFORMS_Z);
 
@@ -207,7 +208,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, QUAD_WIDTH, QUAD_HEIGHT*NUMBER_OF_PLATFORMS, 0, GL_RGBA, GL_UNSIGNED_BYTE, colorPlatformsData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, 0, GL_RGBA, GL_UNSIGNED_BYTE, colorPlatformsData);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     //Corregir 03 y 24 en muros. Añadir sombras, ver si en el negro compensa meterlo más realista...
@@ -258,14 +259,14 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
             int color = map[dimension - i - 1][j];
             // PLATFORMS //
 
-            float top = ((float)color + 1.0f)/(float)NUMBER_OF_PLATFORMS;
-            float bottom = (float)color/(float)NUMBER_OF_PLATFORMS;// - 1.0f/(float)QUAD_HEIGHT;
+            float top = ((float)color + 1.0f)/(float)PLATFORM_TEXTURE_ROWS;
+            float bottom = (float)color/(float)PLATFORM_TEXTURE_ROWS;// - 1.0f/(float)QUAD_HEIGHT;
 
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j] = j * QUAD_WIDTH;
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 1] = i * QUAD_HEIGHT;
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 2] = 5.0f;
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 3] = 0.0f;
-            platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 4] = bottom;//(QUAD_HEIGHT*NUMBER_OF_PLATFORMS*(colors[color_char]["codePrimary"]["r"].GetInt()/(QUAD_HEIGHT*NUMBER_OF_PLATFORMS/QUAD_WIDTH)) + QUAD_WIDTH)/wallTextureWidth - (0.5f/wallTextureWidth);
+            platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 4] = bottom;//(QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS*(colors[color_char]["codePrimary"]["r"].GetInt()/(QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS/QUAD_WIDTH)) + QUAD_WIDTH)/wallTextureWidth - (0.5f/wallTextureWidth);
 
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 5] = j * QUAD_WIDTH;
             platformVertices[i * dimension * PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD + PLATFORM_BUFFER_VERTEX_SIZE * PLATFORM_VERTICES_PER_QUAD * j + 6] = i * QUAD_HEIGHT + QUAD_HEIGHT;
@@ -612,9 +613,9 @@ void Engine::updateInput(int key, int action) {
 }
 
 unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colors) {
-    unsigned char* pixels = new unsigned char[NUMBER_OF_PLATFORMS * QUAD_WIDTH * QUAD_HEIGHT * NUMBER_OF_RGBA_CHANNELS];
+    unsigned char* pixels = new unsigned char[PLATFORM_TEXTURE_ROWS * QUAD_WIDTH * QUAD_HEIGHT * NUMBER_OF_RGBA_CHANNELS];
 
-    for (int n = 0; n < NUMBER_OF_PLATFORMS; n++) {
+    for (int n = 0; n < PLATFORM_TEXTURE_ROWS; n++) {
         for (int i = 0; i < QUAD_HEIGHT; i++) {
             for (int j = 0; j < QUAD_WIDTH; j++) {
                 if (i < 2 || j < 2 || i > 61 || j > 61) {

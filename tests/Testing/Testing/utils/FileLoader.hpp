@@ -9,5 +9,5 @@
 class FileLoader {
 
 public:
-	static TextureAsset loadTextureAsset(const char* path);
+	static TextureAsset loadTextureAsset(const char* path, int numRows, int numCols);
 };
