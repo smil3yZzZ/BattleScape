@@ -3,7 +3,7 @@
 #ifndef DRAWINGOBJECT_H
     #define DRAWINGOBJECT_H
 
-
+#include "utils/RapidjsonImporter.hpp"
 #include "Texture.hpp"
 #include "utils/TextureAsset.hpp"
 
@@ -22,8 +22,7 @@ private:
 
     Texture* texture;
 
-    int initVertices();
-
 public:
-    DrawingObject(TextureAsset* textureAsset, float z);
+    DrawingObject(TextureAsset* textureAsset, float z, float* (*initVertices)(int, float*, TextureAsset*, const rapidjson::Document&));
+    float* (*initVertices)(int, float*, TextureAsset*, const rapidjson::Document&);
 };

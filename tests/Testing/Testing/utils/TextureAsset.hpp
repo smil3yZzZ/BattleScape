@@ -12,6 +12,8 @@ private:
     int numRows;
     int numCols;
     int numChannels;
+    int vertexBufferSize;
+    int indicesPerQuad;
     unsigned char* data;
 
 public:
@@ -23,6 +25,8 @@ public:
         int numRows,
         int numCols,
         int numChannels,
+        int vertexBufferSize,
+        int indicesPerQuad,
         unsigned char* data
     );
 	float getTextureWidth();
@@ -31,6 +35,8 @@ public:
     float getTileHeight();
     int getNumRows();
     int getNumCols();
+    int getVertexBufferSize();
+    int getIndicesPerQuad();
     int getNumChannels();
     unsigned char* getData();
 };

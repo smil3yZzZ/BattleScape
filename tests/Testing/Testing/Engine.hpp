@@ -6,15 +6,14 @@
 
 #include <iostream>
 #include <list>
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/filereadstream.h"
+#include "utils/RapidjsonImporter.hpp"
 #include "utils/Shader.hpp"
 #include "utils/Input.hpp"
 #include "DrawingObject.hpp"
 #include "utils/TextureAsset.hpp"
 #include "utils/GLMImporter.hpp"
 #include "utils/GLImporter.hpp"
+#include "utils/TextureUtils.hpp"
 
 //#include <Windows.h>
 

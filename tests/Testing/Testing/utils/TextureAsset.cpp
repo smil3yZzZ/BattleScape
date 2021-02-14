@@ -1,7 +1,8 @@
 #include "TextureAsset.hpp"
 
 TextureAsset::TextureAsset(float textureWidth, float textureHeight, float tileWidth, float tileHeight,
-    int numRows, int numCols, int numChannels, unsigned char* data) {
+    int numRows, int numCols, int numChannels, int vertexBufferSize, int indicesPerQuad,
+    unsigned char* data) {
     TextureAsset::textureWidth = textureWidth;
     TextureAsset::textureHeight = textureHeight;
     TextureAsset::tileWidth = tileWidth;
@@ -9,6 +10,8 @@ TextureAsset::TextureAsset(float textureWidth, float textureHeight, float tileWi
     TextureAsset::numRows = numRows;
     TextureAsset::numCols = numCols;
     TextureAsset::numChannels = numChannels;
+    TextureAsset::vertexBufferSize = vertexBufferSize;
+    TextureAsset::indicesPerQuad = indicesPerQuad;
     TextureAsset::data = data;
 }
 
@@ -38,6 +41,14 @@ int TextureAsset::getNumCols() {
 
 int TextureAsset::getNumChannels() {
     return numChannels;
+}
+
+int TextureAsset::getVertexBufferSize() {
+    return vertexBufferSize;
+}
+
+int TextureAsset::getIndicesPerQuad() {
+    return indicesPerQuad;
 }
 
 unsigned char* TextureAsset::getData() {
