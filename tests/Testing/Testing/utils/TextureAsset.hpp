@@ -13,6 +13,7 @@ private:
     int numCols;
     int numChannels;
     int vertexBufferSize;
+    int verticesPerQuad;
     int indicesPerQuad;
     unsigned char* data;
 
@@ -26,6 +27,7 @@ public:
         int numCols,
         int numChannels,
         int vertexBufferSize,
+        int verticesPerQuad,
         int indicesPerQuad,
         unsigned char* data
     );
@@ -36,6 +38,7 @@ public:
     int getNumRows();
     int getNumCols();
     int getVertexBufferSize();
+    int getVerticesPerQuad();
     int getIndicesPerQuad();
     int getNumChannels();
     unsigned char* getData();

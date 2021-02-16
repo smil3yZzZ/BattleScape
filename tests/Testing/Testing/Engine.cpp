@@ -197,9 +197,9 @@ int Engine::initTextures(const rapidjson::Document& colors) {
 
     TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
-            PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
+            PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
 
-    DrawingObject platforms = DrawingObject(platformsTexture, PLATFORMS_Z, &TextureUtils::initPlatformVertices);
+    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z, &TextureUtils::initPlatformVerticesAndIndices);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &colorTexture);

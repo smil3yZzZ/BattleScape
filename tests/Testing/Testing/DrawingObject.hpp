@@ -11,6 +11,7 @@
 
 class DrawingObject {
 private:
+
     float* vertices;
     unsigned int* indices;
 
@@ -22,7 +23,9 @@ private:
 
     Texture* texture;
 
+    float* (*initVerticesWrapped)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*);
+
 public:
-    DrawingObject(TextureAsset* textureAsset, float z, float* (*initVertices)(int, float*, TextureAsset*, const rapidjson::Document&));
-    float* (*initVertices)(int, float*, TextureAsset*, const rapidjson::Document&);
+    DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*));
+    void initVertices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
 };

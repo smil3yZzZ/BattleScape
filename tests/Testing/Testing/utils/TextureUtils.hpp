@@ -10,7 +10,7 @@
 class TextureUtils {
 
 public:
-	static TextureAsset loadTextureAsset(const char* path, int numRows, int numCols, int vertexBufferSize, int numberOfIndices);
-    static float* initPlatformVertices(int dimension, float* map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
-    static float* initWallVertices(int dimension, float* map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
+	static TextureAsset loadTextureAsset(const char* path, int numRows, int numCols, int vertexBufferSize, int verticesPerQuad, int indicesPerQuad);
+    static float* initPlatformVerticesAndIndices(int dimension, float z, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData, float* vertices, unsigned int* indices);
+    static float* initWallVerticesAndIndices(int dimension, float z, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData, float* vertices, unsigned int* indices);
 };
