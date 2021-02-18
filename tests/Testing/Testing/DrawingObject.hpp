@@ -26,6 +26,6 @@ private:
     float* (*initVerticesWrapped)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*);
 
 public:
-    DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*));
-    void initVertices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
+    DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*), const char* vertexShaderPath, const char* fragmentShaderPath);
+    void initVerticesAndIndices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
 };

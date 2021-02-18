@@ -199,7 +199,8 @@ int Engine::initTextures(const rapidjson::Document& colors) {
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
 
-    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z, &TextureUtils::initPlatformVerticesAndIndices);
+    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z, &TextureUtils::initPlatformVerticesAndIndices,
+                                SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &colorTexture);
@@ -399,7 +400,8 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 int Engine::initCamera() {
     //projection = glm::ortho(-272.0f, 800.0f, -72.0f, 600.0f, -100.0f, 100.0f);
     //projection = glm::ortho(-100.0f, 400.0f, -50.0f, 300.0f, -100.0f, 100.0f);
-    projection = glm::ortho(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, -100.0f, 100.0f);
+    Camera camera = Camera(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, Z_NEAR, Z_FAR);
+    projection = glm::ortho(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, Z_NEAR, Z_FAR);
     model = glm::mat4(1.0f);
 
     cameraPos = glm::vec3(0.0f, 0.0f, 100.0f);

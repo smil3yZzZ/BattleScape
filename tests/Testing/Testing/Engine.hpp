@@ -14,10 +14,10 @@
 #include "utils/GLMImporter.hpp"
 #include "utils/GLImporter.hpp"
 #include "utils/TextureUtils.hpp"
+#include "utils/GLError.h"
+#include "camera/Camera.hpp"
 
 //#include <Windows.h>
-
-#include "utils/GLError.h"
 
 #endif
 
@@ -25,6 +25,8 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const float VIEWPORT_WIDTH = 400.0f;
 const float VIEWPORT_HEIGHT = 300.0f;
+const float Z_NEAR = -100.0f;
+const float Z_FAR = 100.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
@@ -40,6 +42,9 @@ const int PLATFORM_TEXTURE_ROWS = 8;
 const int PLATFORM_TEXTURE_COLS = 1;
 
 const float PLATFORMS_Z = 5.0f;
+
+const char* const SQUARE_VERTEX_SHADER_PATH = "shaders/squareTextures.vs";
+const char* const SQUARE_FRAGMENT_SHADER_PATH = "shaders/squareTextures.fs";
 
 class Engine {
 private:

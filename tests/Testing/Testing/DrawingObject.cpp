@@ -1,6 +1,7 @@
 #include "DrawingObject.hpp"
 
-DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*)) {
+DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*),
+                        const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     DrawingObject::texture = new Texture(textureAsset);
 
@@ -27,6 +28,6 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
     //vertices
 }
 
-void DrawingObject::initVertices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData) {
+void DrawingObject::initVerticesAndIndices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData) {
     this->initVerticesWrapped(dimension, z, map, textureAsset, tileData, vertices, indices);
 }
