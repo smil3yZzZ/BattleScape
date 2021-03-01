@@ -1,7 +1,9 @@
 #include "DrawingObject.hpp"
 
-DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*),
+DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
                         const char* vertexShaderPath, const char* fragmentShaderPath) {
+
+    DrawingObject::textureAsset = textureAsset;
 
     DrawingObject::texture = new Texture(textureAsset);
 
@@ -9,13 +11,11 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
 
     DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()];
 
-    DrawingObject::initVerticesWrapped = initVertices;
-
     DrawingObject::VAO = DrawingObject::VBO = DrawingObject::EBO = 0;
 
     DrawingObject::z = z;
 
-
+    DrawingObject::shader = new Shader(vertexShaderPath, fragmentShaderPath);
     //Init Maze:
     //Pasar como parámetro variables para indexar en array, así como QUAD_HEIGHT y QUAD_WIDTH.
     //Explorar método para indexar textureTileMap de forma común
@@ -28,6 +28,35 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
     //vertices
 }
 
-void DrawingObject::initVerticesAndIndices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData) {
-    this->initVerticesWrapped(dimension, z, map, textureAsset, tileData, vertices, indices);
+void DrawingObject::initBuffers() {
+    glGenVertexArrays(1, &VAO);
+
+    glGenBuffers(1, &VBO);
+
+    glGenBuffers(1, &EBO);
+}
+
+void DrawingObject::updateBuffers(int dimension) {
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    float vertexBufferSize = textureAsset->getVertexBufferSize();
+
+    int vertices_size = sizeof(float) * dimension * dimension * textureAsset->getVerticesPerQuad() * vertexBufferSize;
+    int indices_size = sizeof(unsigned int) * dimension * dimension * textureAsset->getIndicesPerQuad();
+
+    glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // gradient attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 }

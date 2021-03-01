@@ -199,7 +199,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
 
-    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z, &TextureUtils::initPlatformVerticesAndIndices,
+    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z,
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -213,6 +213,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, 0, GL_RGBA, GL_UNSIGNED_BYTE, colorPlatformsData);
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    //Compilar y ver cómo adaptar todo esto!
     //Corregir 03 y 24 en muros. Añadir sombras, ver si en el negro compensa meterlo más realista...
     //Al meter personaje, igualar Y a Z. (profundidad --> Ver cómo solucionarlo)
 
@@ -418,7 +419,7 @@ int Engine::initCamera() {
 
 int Engine::initShaders() {
     Engine::wallShader = Shader("shaders/squareTextures.vs", "shaders/squareTextures.fs");
-    Engine::platformShader = Shader("shaders/squarePlatformTextures.vs", "shaders/squarePlatformTextures.fs");
+    Engine::platformShader = Shader("shaders/mapQuad.vs", "shaders/mapQuad.fs");
     return 1;
 }
 

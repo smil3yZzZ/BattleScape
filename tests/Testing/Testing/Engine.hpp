@@ -30,7 +30,7 @@ const float Z_FAR = 100.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
-const int WALL_BUFFER_VERTEX_SIZE = 8;
+const int WALL_BUFFER_VERTEX_SIZE = 5;
 const int PLATFORM_INDICES_PER_QUAD = 6;
 const int WALL_INDICES_PER_QUAD = 12;
 const int PLATFORM_VERTICES_PER_QUAD = 4;
@@ -43,8 +43,8 @@ const int PLATFORM_TEXTURE_COLS = 1;
 
 const float PLATFORMS_Z = 5.0f;
 
-const char* const SQUARE_VERTEX_SHADER_PATH = "shaders/squareTextures.vs";
-const char* const SQUARE_FRAGMENT_SHADER_PATH = "shaders/squareTextures.fs";
+const char* const SQUARE_VERTEX_SHADER_PATH = "mapQuad.vs";
+const char* const SQUARE_FRAGMENT_SHADER_PATH = "mapQuad.fs";
 
 class Engine {
 private:

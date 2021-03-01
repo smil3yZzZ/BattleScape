@@ -12,20 +12,22 @@
 class DrawingObject {
 private:
 
-    float* vertices;
-    unsigned int* indices;
+    Shader* shader;
 
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
 
-    float z;
-
     Texture* texture;
 
-    float* (*initVerticesWrapped)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*);
+protected:
+    float* vertices;
+    unsigned int* indices;
+    float z;
+    TextureAsset* textureAsset;
 
 public:
-    DrawingObject(int dimension, TextureAsset* textureAsset, float z, float* (*initVertices)(int, float, float**, TextureAsset*, const rapidjson::Document&, float*, unsigned int*), const char* vertexShaderPath, const char* fragmentShaderPath);
-    void initVerticesAndIndices(int dimension, float** map, TextureAsset* textureAsset, const rapidjson::Document& tileData);
+    DrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
+    void initBuffers();
+    void updateBuffers(int dimension);
 };

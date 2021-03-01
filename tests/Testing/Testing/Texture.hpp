@@ -4,6 +4,7 @@
 #include "utils/TextureAsset.hpp"
 #include "utils/GLMImporter.hpp"
 #include "utils/GLImporter.hpp"
+#include "utils/Shader.hpp"
 #endif
 
 class Texture {
@@ -13,5 +14,3 @@ private:
 public:
     Texture(TextureAsset* textureAsset);
 };
-
-//Corregir instrucciones de preprocesado (endif antes de funciones), sustituir TextureAsset por TextureAsset
