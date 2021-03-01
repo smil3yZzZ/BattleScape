@@ -13,4 +13,6 @@ private:
 
 public:
     Texture(TextureAsset* textureAsset);
+    unsigned int getId();
+    ~Texture();
 };

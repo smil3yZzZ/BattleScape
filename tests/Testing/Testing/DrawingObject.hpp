@@ -12,15 +12,15 @@
 class DrawingObject {
 private:
 
-    Shader* shader;
-
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
 
-    Texture* texture;
+
 
 protected:
+    Shader* shader;
+    Texture* texture;
     float* vertices;
     unsigned int* indices;
     float z;
@@ -30,4 +30,5 @@ public:
     DrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
     void initBuffers();
     void updateBuffers(int dimension);
+    void render(int dimension, glm::mat4 projection, glm::mat4 view, glm::mat4 model);
 };

@@ -12,13 +12,15 @@ TextureAsset TextureUtils::loadTextureAsset(const char* path, int numRows, int n
 	return TextureAsset(width, height, width/((float)numCols), height/((float)numRows), numRows, numCols, nrChannels, vertexBufferSize, verticesPerQuad, indicesPerQuad, data);
 }
 
-void TextureUtils::initMap(int dimension, float** map, float** wallMap, PlatformsDrawingObject* platforms, WallsDrawingObject* walls, const rapidjson::Document& wallsInfo) {
+void TextureUtils::initMap(int dimension, int** map, int** wallMap, PlatformsDrawingObject* platforms, WallsDrawingObject* walls, const rapidjson::Document& wallsInfo) {
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
             platforms->initVerticesAndIndices(i, j, dimension, map);
+            /* Descomentar tras probar plataformas!
             if (wallMap[dimension - i - 1][j] != -1) {
                 walls->initVerticesAndIndices(i, j, dimension, wallMap, wallsInfo);
             }
+            */
         }
     }
 }

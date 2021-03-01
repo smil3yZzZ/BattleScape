@@ -1,6 +1,4 @@
 #include "Engine.hpp"
-//#define STB_IMAGE_IMPLEMENTATION
-//#include "utils/stb_image.h"
 
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -77,20 +75,34 @@ int Engine::run() {
 
     double frameTime = frameDelay;
 
+    std::cout << "Starting loop..." << std::endl;
+
     while (!glfwWindowShouldClose(window)) {
 
         if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-            update();
+            std::cout << "Updating..." << std::endl;
+
+            //update();
+
+            std::cout << "Clearing screen..." << std::endl;
 
             clearScreen();
 
-            render();
+            std::cout << "Rendering..." << std::endl;
+
+            //render();
+
+            std::cout << "Checking camera..." << std::endl;
 
             checkCamera();
 
+            std::cout << "Swapping buffers..." << std::endl;
+
             glfwSwapBuffers(window);
+
+            std::cout << "Polling events..." << std::endl;
 
             glfwPollEvents();
         }
@@ -118,6 +130,8 @@ int Engine::run() {
 
     }
 
+    delete platforms;
+    /*
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
@@ -125,13 +139,14 @@ int Engine::run() {
     glDeleteVertexArrays(1, &textureVAO);
     glDeleteBuffers(1, &textureVBO);
     glDeleteBuffers(1, &textureEBO);
+    */
 
     delete[] platformVertices;
     delete[] wallVertices;
     //delete[] wallShadowVertices;
     delete[] platformIndices;
     delete[] wallIndices;
-    //delete[] wallShadowIndices;
+    //delete[] wallSh adowIndices;
 
 
     glfwTerminate();
@@ -139,13 +154,17 @@ int Engine::run() {
     return 1;
 }
 
-int Engine::init(const rapidjson::Document& colors, const rapidjson::Document& walls) {
+int Engine::init(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
     initGL();
-    initTextures(colors);
-    initMaze(colors, walls);
+    initTextures(colorsInfo, wallsInfo);
+    std::cout << "Initializing maze..." << std::endl;
+    //initMaze(colorsInfo, wallsInfo);
+    std::cout << "Initializing camera..." << std::endl;
     initCamera();
-    initShaders();
-    generateBuffers();
+    std::cout << "Initializing shaders..." << std::endl;
+    //initShaders();
+    std::cout << "Generating buffers..." << std::endl;
+    //generateBuffers();
     return 1;
 }
 
@@ -190,18 +209,25 @@ int Engine::initGL() {
     return 1;
 }
 
-int Engine::initTextures(const rapidjson::Document& colors) {
+int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
+
+    std::cout << "Pre-Initializing textures..." << std::endl;
 
     //Colors
-    unsigned char* colorPlatformsData = createColorPlatforms(colors);
+    unsigned char* colorPlatformsData = createColorPlatforms(colorsInfo);
 
     TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
 
-    DrawingObject platforms = DrawingObject(dimension, platformsTexture, PLATFORMS_Z,
+    Engine::platforms = new PlatformsDrawingObject(dimension, platformsTexture, PLATFORMS_Z,
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
+    TextureUtils::initMap(dimension, map, wallMap, platforms, nullptr, wallsInfo);
+
+    std::cout << "Initializing textures..." << std::endl;
+
+    /*
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &colorTexture);
     glBindTexture(GL_TEXTURE_2D, colorTexture);
@@ -212,6 +238,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, 0, GL_RGBA, GL_UNSIGNED_BYTE, colorPlatformsData);
     glGenerateMipmap(GL_TEXTURE_2D);
+    */
 
     //Compilar y ver cómo adaptar todo esto!
     //Corregir 03 y 24 en muros. Añadir sombras, ver si en el negro compensa meterlo más realista...
@@ -220,6 +247,7 @@ int Engine::initTextures(const rapidjson::Document& colors) {
 
     //Walls
     /*
+
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
     // set the texture wrapping parameters
@@ -250,6 +278,8 @@ int Engine::initTextures(const rapidjson::Document& colors) {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
+
+    std::cout << "Textures loaded succesfully!" << std::endl;
     */
 
     return 1;
@@ -425,24 +455,25 @@ int Engine::initShaders() {
 
 int Engine::generateBuffers() {
     //Platforms
+    /*
     glGenVertexArrays(1, &VAO);
 
     glGenBuffers(1, &VBO);
 
     glGenBuffers(1, &EBO);
-
+    */
     //Walls
-
+    /*
     glGenVertexArrays(1, &textureVAO);
 
     glGenBuffers(1, &textureVBO);
 
     glGenBuffers(1, &textureEBO);
-
+    */
     //Shadow
 
     //Fill with VertexBuffer
-
+    platforms->initBuffers();
     return 1;
 }
 
@@ -460,6 +491,8 @@ int Engine::update() {
 int Engine::updateBuffers() {
 
     // Platforms
+    platforms->updateBuffers(dimension);
+    /*
 
     glBindVertexArray(VAO);
 
@@ -481,8 +514,11 @@ int Engine::updateBuffers() {
     // gradient attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, PLATFORM_BUFFER_VERTEX_SIZE * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    */
 
     // Walls
+
+    /*
 
     int walls_vertices_size = sizeof(float) * dimension * dimension * WALL_VERTICES_PER_QUAD * WALL_BUFFER_VERTEX_SIZE;
     int walls_indices_size = sizeof(unsigned int) * dimension * dimension * WALL_INDICES_PER_QUAD;
@@ -506,12 +542,15 @@ int Engine::updateBuffers() {
     // texture coord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
-
+    */
     return 1;
 }
 
 int Engine::render() {
 
+    platforms->render(dimension, projection, view, model);
+
+    /*
     platformShader.use();
     platformShader.setFloatMatrix("projection", glm::value_ptr(projection));
     platformShader.setFloatMatrix("view", glm::value_ptr(view));
@@ -521,6 +560,9 @@ int Engine::render() {
     glBindTexture(GL_TEXTURE_2D, colorTexture);
     glDrawElements(GL_TRIANGLES, PLATFORM_INDICES_PER_QUAD * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    */
+
+    /*
 
     wallShader.use();
 
@@ -532,6 +574,7 @@ int Engine::render() {
     glBindTexture(GL_TEXTURE_2D, texture);
     glDrawElements(GL_TRIANGLES, WALL_INDICES_PER_QUAD * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    */
 
     return 1;
 }
@@ -578,7 +621,7 @@ void Engine::checkCamera() {
 }
 
 void Engine::updateInput(int key, int action) {
-
+    std::cout << "Update Input!" << std::endl;
     if (action == GLFW_PRESS){
         switch (key) {
             case GLFW_KEY_ESCAPE:
@@ -616,7 +659,7 @@ void Engine::updateInput(int key, int action) {
     }
 }
 
-unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colors) {
+unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInfo) {
     unsigned char* pixels = new unsigned char[PLATFORM_TEXTURE_ROWS * QUAD_WIDTH * QUAD_HEIGHT * NUMBER_OF_RGBA_CHANNELS];
 
     for (int n = 0; n < PLATFORM_TEXTURE_ROWS; n++) {
@@ -640,26 +683,26 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colors) {
                     else {
                         std::string color_string = std::to_string(n);
                         const char* color_char = color_string.c_str();
-                        if (colors[color_char]["codePrimary"]["r"].GetInt() != colors[color_char]["codeSecondary"]["r"].GetInt()) {
-                            diff = (float)abs(colors[color_char]["codePrimary"]["r"].GetInt() - colors[color_char]["codeSecondary"]["r"].GetInt()) * randomNumber;
-                            red = colors[color_char]["codePrimary"]["r"].GetInt() < colors[color_char]["codeSecondary"]["r"].GetInt() ? colors[color_char]["codePrimary"]["r"].GetInt() + diff : colors[color_char]["codeSecondary"]["r"].GetInt() + diff;
+                        if (colorsInfo[color_char]["codePrimary"]["r"].GetInt() != colorsInfo[color_char]["codeSecondary"]["r"].GetInt()) {
+                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["r"].GetInt() - colorsInfo[color_char]["codeSecondary"]["r"].GetInt()) * randomNumber;
+                            red = colorsInfo[color_char]["codePrimary"]["r"].GetInt() < colorsInfo[color_char]["codeSecondary"]["r"].GetInt() ? colorsInfo[color_char]["codePrimary"]["r"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["r"].GetInt() + diff;
                         }
                         else {
-                            red = colors[color_char]["codePrimary"]["r"].GetInt();
+                            red = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
                         }
-                        if (colors[color_char]["codePrimary"]["g"].GetInt() != colors[color_char]["codeSecondary"]["g"].GetInt()) {
-                            diff = (float)abs(colors[color_char]["codePrimary"]["g"].GetInt() - colors[color_char]["codeSecondary"]["g"].GetInt()) * randomNumber;
-                            green = colors[color_char]["codePrimary"]["g"].GetInt() < colors[color_char]["codeSecondary"]["g"].GetInt() ? colors[color_char]["codePrimary"]["g"].GetInt() + diff : colors[color_char]["codeSecondary"]["g"].GetInt() + diff;
-                        }
-                        else {
-                            green = colors[color_char]["codePrimary"]["g"].GetInt();
-                        }
-                        if (colors[color_char]["codePrimary"]["b"].GetInt() != colors[color_char]["codeSecondary"]["b"].GetInt()) {
-                            diff = (float)abs(colors[color_char]["codePrimary"]["b"].GetInt() - colors[color_char]["codeSecondary"]["b"].GetInt()) * randomNumber;
-                            blue = colors[color_char]["codePrimary"]["b"].GetInt() < colors[color_char]["codeSecondary"]["b"].GetInt() ? colors[color_char]["codePrimary"]["b"].GetInt() + diff : colors[color_char]["codeSecondary"]["b"].GetInt() + diff;
+                        if (colorsInfo[color_char]["codePrimary"]["g"].GetInt() != colorsInfo[color_char]["codeSecondary"]["g"].GetInt()) {
+                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["g"].GetInt() - colorsInfo[color_char]["codeSecondary"]["g"].GetInt()) * randomNumber;
+                            green = colorsInfo[color_char]["codePrimary"]["g"].GetInt() < colorsInfo[color_char]["codeSecondary"]["g"].GetInt() ? colorsInfo[color_char]["codePrimary"]["g"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["g"].GetInt() + diff;
                         }
                         else {
-                            blue = colors[color_char]["codePrimary"]["b"].GetInt();
+                            green = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
+                        }
+                        if (colorsInfo[color_char]["codePrimary"]["b"].GetInt() != colorsInfo[color_char]["codeSecondary"]["b"].GetInt()) {
+                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["b"].GetInt() - colorsInfo[color_char]["codeSecondary"]["b"].GetInt()) * randomNumber;
+                            blue = colorsInfo[color_char]["codePrimary"]["b"].GetInt() < colorsInfo[color_char]["codeSecondary"]["b"].GetInt() ? colorsInfo[color_char]["codePrimary"]["b"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["b"].GetInt() + diff;
+                        }
+                        else {
+                            blue = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
                         }
                         pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS] = red;
                         pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 1] = green;
@@ -676,7 +719,7 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colors) {
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     Engine* engine = (Engine*)glfwGetWindowUserPointer(window);
-
+    std::cout << "Event!" << std::endl;
     /*
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);

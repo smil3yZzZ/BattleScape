@@ -117,3 +117,6 @@ unsigned int Shader::getID()
 {
     return ID;
 }
+Shader::~Shader() {
+    
+}

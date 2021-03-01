@@ -31,4 +31,5 @@ public:
     void setFloatMatrix(const std::string& name, GLfloat* value) const;
     void setGradients(const std::string& name, GLfloat* value) const;
     unsigned int getID();
+    ~Shader();
 };

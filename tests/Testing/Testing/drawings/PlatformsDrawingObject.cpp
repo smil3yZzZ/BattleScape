@@ -6,7 +6,7 @@ PlatformsDrawingObject::PlatformsDrawingObject(int dimension, TextureAsset* text
                                                 vertexShaderPath, fragmentShaderPath) {
 }
 
-void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, float** map) {
+void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int** map) {
     int color = map[dimension - i - 1][j];
 
     float top = ((float)color + 1.0f)/(float)textureAsset->getNumRows();
@@ -30,4 +30,12 @@ void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension,
     for (int k = 0; k < indicesPerQuad; k++) {
         indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k - 2 : k);
     }
+}
+
+PlatformsDrawingObject::~PlatformsDrawingObject(){
+    delete shader;
+    delete texture;
+    delete textureAsset;
+    delete[] vertices;
+    delete[] indices;
 }

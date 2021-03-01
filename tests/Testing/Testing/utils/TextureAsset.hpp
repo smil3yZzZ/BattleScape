@@ -42,4 +42,5 @@ public:
     int getIndicesPerQuad();
     int getNumChannels();
     unsigned char* getData();
+    ~TextureAsset();
 };

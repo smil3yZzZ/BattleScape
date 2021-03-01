@@ -12,3 +12,10 @@ Texture::Texture(TextureAsset* textureAsset) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureAsset->getTextureWidth(), textureAsset->getTextureHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textureAsset->getData());
     glGenerateMipmap(GL_TEXTURE_2D);
 }
+
+unsigned int Texture::getId() {
+    return id;
+}
+
+Texture::~Texture() {
+}

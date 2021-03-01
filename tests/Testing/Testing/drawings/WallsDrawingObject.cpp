@@ -3,7 +3,7 @@
 WallsDrawingObject::WallsDrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(dimension, textureAsset, z, vertexShaderPath, fragmentShaderPath) {
 }
 
-void WallsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, float** map,
+void WallsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int** map,
                                                 const rapidjson::Document& wallsInfo) {
 
     int vertexBufferSize = textureAsset->getVertexBufferSize();

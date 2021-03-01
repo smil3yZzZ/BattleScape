@@ -59,3 +59,7 @@ int TextureAsset::getIndicesPerQuad() {
 unsigned char* TextureAsset::getData() {
     return data;
 }
+
+TextureAsset::~TextureAsset() {
+    
+}

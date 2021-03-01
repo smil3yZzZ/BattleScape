@@ -7,7 +7,7 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
 
     DrawingObject::texture = new Texture(textureAsset);
 
-    DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVerticesPerQuad()];
+    DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()];
 
     DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()];
 
@@ -59,4 +59,16 @@ void DrawingObject::updateBuffers(int dimension) {
     // gradient attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+}
+
+void DrawingObject::render(int dimension, glm::mat4 projection, glm::mat4 view, glm::mat4 model) {
+    shader->use();
+    shader->setFloatMatrix("projection", glm::value_ptr(projection));
+    shader->setFloatMatrix("view", glm::value_ptr(view));
+    shader->setFloatMatrix("model", glm::value_ptr(model));
+
+    glBindVertexArray(VAO);
+    glBindTexture(GL_TEXTURE_2D, texture->getId());
+    glDrawElements(GL_TRIANGLES, textureAsset->getIndicesPerQuad() * dimension * dimension, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

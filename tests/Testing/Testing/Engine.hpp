@@ -30,7 +30,8 @@ const float Z_FAR = 100.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
-const int WALL_BUFFER_VERTEX_SIZE = 5;
+const int WALL_BUFFER_VERTEX_SIZE = 8;
+//Cambiar a este! const int WALL_BUFFER_VERTEX_SIZE = 5;
 const int PLATFORM_INDICES_PER_QUAD = 6;
 const int WALL_INDICES_PER_QUAD = 12;
 const int PLATFORM_VERTICES_PER_QUAD = 4;
@@ -43,8 +44,8 @@ const int PLATFORM_TEXTURE_COLS = 1;
 
 const float PLATFORMS_Z = 5.0f;
 
-const char* const SQUARE_VERTEX_SHADER_PATH = "mapQuad.vs";
-const char* const SQUARE_FRAGMENT_SHADER_PATH = "mapQuad.fs";
+const char* const SQUARE_VERTEX_SHADER_PATH = "shaders/mapQuad.vs";
+const char* const SQUARE_FRAGMENT_SHADER_PATH = "shaders/mapQuad.fs";
 
 class Engine {
 private:
@@ -62,6 +63,8 @@ private:
     int isRunning;
     float frameDelay;
     int counter;
+
+    PlatformsDrawingObject* platforms;
 
     float* platformVertices;
     unsigned int* platformIndices;
@@ -93,16 +96,16 @@ private:
     Input input;
 
     GLFWwindow* window;
-    unsigned char* createColorPlatforms(const rapidjson::Document& colors);
+    unsigned char* createColorPlatforms(const rapidjson::Document& colorsInfo);
 
 
 public:
     Engine(double framesPerSecond, int** map, int** wallMap, int dimension,
     float xOrigin, float yOrigin);
     int run();
-    int init(const rapidjson::Document& colors, const rapidjson::Document& walls);
+    int init(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     int initGL();
-    int initMaze(const rapidjson::Document& colors, const rapidjson::Document& walls);
+    int initMaze(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     int initCamera();
     int initShaders();
     int clearScreen();
@@ -113,7 +116,7 @@ public:
     int getIsRunning();
     void setIsRunning(int running);
     void setView(glm::mat4 view);
-    int initTextures(const rapidjson::Document& colors);
+    int initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     void checkCamera();
     void updateInput(int key, int action);
 
