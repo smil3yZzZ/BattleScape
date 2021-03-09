@@ -10,7 +10,7 @@ void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension,
     int color = map[dimension - i - 1][j];
 
     float top = ((float)color + 1.0f)/(float)textureAsset->getNumRows();
-    float bottom = (float)color/(float)textureAsset->getNumRows();
+    float bottom = ((float)color)/(float)textureAsset->getNumRows();
 
     int vertexBufferSize = textureAsset->getVertexBufferSize();
     int verticesPerQuad = textureAsset->getVerticesPerQuad();
@@ -28,14 +28,6 @@ void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension,
     }
 
     for (int k = 0; k < indicesPerQuad; k++) {
-        indices[i * dimension * indicesPerQuad + indicesPerQuad * j] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k - 2 : k);
+        indices[i * dimension * indicesPerQuad + indicesPerQuad * j + k] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k - 2 : k);
     }
-}
-
-PlatformsDrawingObject::~PlatformsDrawingObject(){
-    delete shader;
-    delete texture;
-    delete textureAsset;
-    delete[] vertices;
-    delete[] indices;
 }

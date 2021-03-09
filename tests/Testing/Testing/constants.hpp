@@ -3,7 +3,7 @@
 #define CONSTANTS_H
 
 #include "utils/SquareProperties.hpp"
-#include "Engine.hpp"
+#include "engine/Engine.hpp"
 
 #include <map>
 #include <iostream>

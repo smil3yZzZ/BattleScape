@@ -48,7 +48,7 @@ int main() {
     }
 
     //Uncomment this if you want to try black holes!
-    //top_left[1][1] = 0;
+    top_left[1][1] = 0;
 
     std::stack<std::tuple<int, int>> algorithmCells;
     algorithmCells.push(std::tuple<int, int>{0, 0});

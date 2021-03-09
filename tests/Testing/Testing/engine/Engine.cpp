@@ -19,7 +19,7 @@ Engine::Engine(
     Engine::xOrigin = xOrigin;
     Engine::yOrigin = yOrigin;
 
-    Engine::input = Input();
+    Engine::input = new Input();
 
     isRunning = false;
 
@@ -64,12 +64,12 @@ int Engine::run() {
 
     rapidjson::FileReadStream isWalls(fWalls, readBuffer, sizeof(readBuffer));
 
-    rapidjson::Document walls;
-    walls.ParseStream(isWalls);
+    rapidjson::Document wallsInfo;
+    wallsInfo.ParseStream(isWalls);
 
     fclose(fWalls);
 
-    init(colors, walls);
+    init(colors, wallsInfo);
 
     double oldTime = glfwGetTime();
 
@@ -82,27 +82,21 @@ int Engine::run() {
         if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-            std::cout << "Updating..." << std::endl;
 
-            //update();
+            update();
 
-            std::cout << "Clearing screen..." << std::endl;
 
             clearScreen();
 
-            std::cout << "Rendering..." << std::endl;
 
-            //render();
+            render();
 
-            std::cout << "Checking camera..." << std::endl;
 
             checkCamera();
 
-            std::cout << "Swapping buffers..." << std::endl;
 
             glfwSwapBuffers(window);
 
-            std::cout << "Polling events..." << std::endl;
 
             glfwPollEvents();
         }
@@ -131,6 +125,7 @@ int Engine::run() {
     }
 
     delete platforms;
+    delete walls;
     /*
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
@@ -164,7 +159,7 @@ int Engine::init(const rapidjson::Document& colorsInfo, const rapidjson::Documen
     std::cout << "Initializing shaders..." << std::endl;
     //initShaders();
     std::cout << "Generating buffers..." << std::endl;
-    //generateBuffers();
+    generateBuffers();
     return 1;
 }
 
@@ -214,16 +209,22 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
     std::cout << "Pre-Initializing textures..." << std::endl;
 
     //Colors
-    unsigned char* colorPlatformsData = createColorPlatforms(colorsInfo);
+    unsigned char* platformsData = createColorPlatforms(colorsInfo);
 
     TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
-            PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, colorPlatformsData);
+            PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
 
     Engine::platforms = new PlatformsDrawingObject(dimension, platformsTexture, PLATFORMS_Z,
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
-    TextureUtils::initMap(dimension, map, wallMap, platforms, nullptr, wallsInfo);
+    TextureAsset* wallsTexture = TextureUtils::loadTextureAsset(WALL_TEXTURE_PATH, WALL_TEXTURE_ROWS,
+        WALL_TEXTURE_COLS, WALL_BUFFER_VERTEX_SIZE, WALL_VERTICES_PER_QUAD, WALL_INDICES_PER_QUAD);
+
+    Engine::walls = new WallsDrawingObject(dimension, wallsTexture, WALLS_Z,
+                    SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
+
+    TextureUtils::initMap(dimension, map, wallMap, platforms, walls, wallsInfo);
 
     std::cout << "Initializing textures..." << std::endl;
 
@@ -431,7 +432,9 @@ int Engine::initMaze(const rapidjson::Document& colors, const rapidjson::Documen
 int Engine::initCamera() {
     //projection = glm::ortho(-272.0f, 800.0f, -72.0f, 600.0f, -100.0f, 100.0f);
     //projection = glm::ortho(-100.0f, 400.0f, -50.0f, 300.0f, -100.0f, 100.0f);
-    Camera camera = Camera(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, Z_NEAR, Z_FAR);
+    camera = new Camera(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, Z_NEAR, Z_FAR);
+
+    /*
     projection = glm::ortho(xOrigin, VIEWPORT_WIDTH, yOrigin, VIEWPORT_HEIGHT, Z_NEAR, Z_FAR);
     model = glm::mat4(1.0f);
 
@@ -444,6 +447,7 @@ int Engine::initCamera() {
 
 
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+    */
     return 1;
 }
 
@@ -474,6 +478,9 @@ int Engine::generateBuffers() {
 
     //Fill with VertexBuffer
     platforms->initBuffers();
+
+    walls->initBuffers();
+
     return 1;
 }
 
@@ -492,7 +499,10 @@ int Engine::updateBuffers() {
 
     // Platforms
     platforms->updateBuffers(dimension);
+
+    walls->updateBuffers(dimension);
     /*
+
 
     glBindVertexArray(VAO);
 
@@ -548,8 +558,9 @@ int Engine::updateBuffers() {
 
 int Engine::render() {
 
-    platforms->render(dimension, projection, view, model);
+    platforms->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
 
+    walls->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
     /*
     platformShader.use();
     platformShader.setFloatMatrix("projection", glm::value_ptr(projection));
@@ -596,64 +607,55 @@ void Engine::checkCamera() {
     float x = 0;
     float y = 0;
 
-    //Añadir aqui frameTime;
-    if (input.getKeyState(INPUT_UP)) {
+    if (input->getKeyState(INPUT_UP)) {
         y += 4.0f;
-        yOrigin += 4.0f;
     }
-    if (input.getKeyState(INPUT_RIGHT)) {
+    if (input->getKeyState(INPUT_RIGHT)) {
         x += 4.0f;
-        xOrigin += 4.0f;
     }
-    if (input.getKeyState(INPUT_DOWN)) {
+    if (input->getKeyState(INPUT_DOWN)) {
         y -= 4.0f;
-        yOrigin -= 4.0f;
     }
-    if (input.getKeyState(INPUT_LEFT)) {
+    if (input->getKeyState(INPUT_LEFT)) {
         x -= 4.0f;
-        xOrigin -= 4.0f;
     }
 
-    cameraPos += glm::vec3(x, y, 0.0f);
-    cameraTarget += glm::vec3(x, y, 0.0f);
-
-    setView(glm::lookAt(cameraPos, cameraTarget, cameraUp));
+    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
 }
 
 void Engine::updateInput(int key, int action) {
-    std::cout << "Update Input!" << std::endl;
     if (action == GLFW_PRESS){
         switch (key) {
             case GLFW_KEY_ESCAPE:
                 //Will be changed to "pause"
                 glfwSetWindowShouldClose(window, true);
             case GLFW_KEY_UP:
-                input.setKeyState(INPUT_UP, 1);
+                input->setKeyState(INPUT_UP, 1);
                 break;
             case GLFW_KEY_RIGHT:
-                input.setKeyState(INPUT_RIGHT, 1);
+                input->setKeyState(INPUT_RIGHT, 1);
                 break;
             case GLFW_KEY_DOWN:
-                input.setKeyState(INPUT_DOWN, 1);
+                input->setKeyState(INPUT_DOWN, 1);
                 break;
             case GLFW_KEY_LEFT:
-                input.setKeyState(INPUT_LEFT, 1);
+                input->setKeyState(INPUT_LEFT, 1);
                 break;
         }
     }
     if (action == GLFW_RELEASE){
         switch (key) {
             case GLFW_KEY_UP:
-                input.setKeyState(INPUT_UP, 0);
+                input->setKeyState(INPUT_UP, 0);
                 break;
             case GLFW_KEY_RIGHT:
-                input.setKeyState(INPUT_RIGHT, 0);
+                input->setKeyState(INPUT_RIGHT, 0);
                 break;
             case GLFW_KEY_DOWN:
-                input.setKeyState(INPUT_DOWN, 0);
+                input->setKeyState(INPUT_DOWN, 0);
                 break;
             case GLFW_KEY_LEFT:
-                input.setKeyState(INPUT_LEFT, 0);
+                input->setKeyState(INPUT_LEFT, 0);
                 break;
         }
     }
@@ -719,14 +721,5 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInf
 void processKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     Engine* engine = (Engine*)glfwGetWindowUserPointer(window);
-    std::cout << "Event!" << std::endl;
-    /*
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-    else {
-        engine->updateInput(key, action);
-    }
-    */
     engine->updateInput(key, action);
 }

@@ -3,9 +3,10 @@
 #ifndef DRAWINGOBJECT_H
     #define DRAWINGOBJECT_H
 
-#include "utils/RapidjsonImporter.hpp"
-#include "Texture.hpp"
-#include "utils/TextureAsset.hpp"
+#include "../utils/GLImporter.hpp"
+#include "../utils/RapidjsonImporter.hpp"
+#include "../texture/Texture.hpp"
+#include "../texture/TextureAsset.hpp"
 
 #endif
 
@@ -30,5 +31,6 @@ public:
     DrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
     void initBuffers();
     void updateBuffers(int dimension);
-    void render(int dimension, glm::mat4 projection, glm::mat4 view, glm::mat4 model);
+    void render(int dimension, GLfloat* projection, GLfloat* view, GLfloat* model);
+    ~DrawingObject();
 };

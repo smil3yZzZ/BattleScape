@@ -6,16 +6,16 @@
 
 #include <iostream>
 #include <list>
-#include "utils/RapidjsonImporter.hpp"
-#include "utils/Shader.hpp"
-#include "utils/Input.hpp"
-#include "DrawingObject.hpp"
-#include "utils/TextureAsset.hpp"
-#include "utils/GLMImporter.hpp"
-#include "utils/GLImporter.hpp"
-#include "utils/TextureUtils.hpp"
-#include "utils/GLError.h"
-#include "camera/Camera.hpp"
+#include "../utils/RapidjsonImporter.hpp"
+#include "../shader/Shader.hpp"
+#include "../input/Input.hpp"
+#include "../drawings/DrawingObject.hpp"
+#include "../texture/TextureAsset.hpp"
+#include "../utils/GLMImporter.hpp"
+#include "../utils/GLImporter.hpp"
+#include "../texture/TextureUtils.hpp"
+#include "../utils/GLError.h"
+#include "../camera/Camera.hpp"
 
 //#include <Windows.h>
 
@@ -30,22 +30,28 @@ const float Z_FAR = 100.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
-const int WALL_BUFFER_VERTEX_SIZE = 8;
-//Cambiar a este! const int WALL_BUFFER_VERTEX_SIZE = 5;
-const int PLATFORM_INDICES_PER_QUAD = 6;
-const int WALL_INDICES_PER_QUAD = 12;
+const int WALL_BUFFER_VERTEX_SIZE = 5;
 const int PLATFORM_VERTICES_PER_QUAD = 4;
 const int WALL_VERTICES_PER_QUAD = 8;
+const int PLATFORM_INDICES_PER_QUAD = 6;
+const int WALL_INDICES_PER_QUAD = 12;
+
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
 
 const int PLATFORM_TEXTURE_ROWS = 8;
 const int PLATFORM_TEXTURE_COLS = 1;
 
-const float PLATFORMS_Z = 5.0f;
+const int WALL_TEXTURE_ROWS = 1;
+const int WALL_TEXTURE_COLS = 12;
 
-const char* const SQUARE_VERTEX_SHADER_PATH = "shaders/mapQuad.vs";
-const char* const SQUARE_FRAGMENT_SHADER_PATH = "shaders/mapQuad.fs";
+const float PLATFORMS_Z = 5.0f;
+const float WALLS_Z = 10.0f;
+
+const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
+const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
+
+const char* const WALL_TEXTURE_PATH = "resources/wall.png";
 
 class Engine {
 private:
@@ -64,7 +70,10 @@ private:
     float frameDelay;
     int counter;
 
+    Camera* camera;
+
     PlatformsDrawingObject* platforms;
+    WallsDrawingObject* walls;
 
     float* platformVertices;
     unsigned int* platformIndices;
@@ -93,7 +102,7 @@ private:
     unsigned int textureVBO;
     unsigned int textureEBO;
 
-    Input input;
+    Input* input;
 
     GLFWwindow* window;
     unsigned char* createColorPlatforms(const rapidjson::Document& colorsInfo);

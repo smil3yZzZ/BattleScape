@@ -1,10 +1,10 @@
 #pragma once
 #ifndef TEXTURE_H
     #define TEXTURE_H
-#include "utils/TextureAsset.hpp"
-#include "utils/GLMImporter.hpp"
-#include "utils/GLImporter.hpp"
-#include "utils/Shader.hpp"
+#include "TextureAsset.hpp"
+#include "../utils/GLMImporter.hpp"
+#include "../utils/GLImporter.hpp"
+#include "../shader/Shader.hpp"
 #endif
 
 class Texture {

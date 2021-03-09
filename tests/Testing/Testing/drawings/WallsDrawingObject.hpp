@@ -3,7 +3,7 @@
 #ifndef WALLSDRAWINGOBJECT_H
     #define WALLSDRAWINGOBJECT_H
 
-#include "../DrawingObject.hpp"
+#include "DrawingObject.hpp"
 #include "../utils/RapidjsonImporter.hpp"
 
 #endif

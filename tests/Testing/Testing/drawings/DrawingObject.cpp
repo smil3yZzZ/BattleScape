@@ -7,9 +7,9 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
 
     DrawingObject::texture = new Texture(textureAsset);
 
-    DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()];
+    DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
 
-    DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()];
+    DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
 
     DrawingObject::VAO = DrawingObject::VBO = DrawingObject::EBO = 0;
 
@@ -61,14 +61,22 @@ void DrawingObject::updateBuffers(int dimension) {
     glEnableVertexAttribArray(1);
 }
 
-void DrawingObject::render(int dimension, glm::mat4 projection, glm::mat4 view, glm::mat4 model) {
+void DrawingObject::render(int dimension, GLfloat* projection, GLfloat* view, GLfloat* model) {
     shader->use();
-    shader->setFloatMatrix("projection", glm::value_ptr(projection));
-    shader->setFloatMatrix("view", glm::value_ptr(view));
-    shader->setFloatMatrix("model", glm::value_ptr(model));
+    shader->setFloatMatrix("projection", projection);
+    shader->setFloatMatrix("view", view);
+    shader->setFloatMatrix("model", model);
 
     glBindVertexArray(VAO);
     glBindTexture(GL_TEXTURE_2D, texture->getId());
     glDrawElements(GL_TRIANGLES, textureAsset->getIndicesPerQuad() * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+}
+
+DrawingObject::~DrawingObject(){
+    delete shader;
+    delete texture;
+    delete textureAsset;
+    delete[] vertices;
+    delete[] indices;
 }

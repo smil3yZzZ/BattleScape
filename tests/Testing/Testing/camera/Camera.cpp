@@ -14,3 +14,21 @@ Camera::Camera(float xOrigin, float viewportWidth, float yOrigin, float viewport
 
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 }
+
+void Camera::setView(glm::vec3 cameraPosDiff, glm::vec3 cameraTargetDiff) {
+    cameraPos += cameraPosDiff;
+    cameraTarget += cameraTargetDiff;
+    view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+}
+
+GLfloat* Camera::getView() {
+    return glm::value_ptr(view);
+}
+
+GLfloat* Camera::getProjection() {
+    return glm::value_ptr(projection);
+}
+
+GLfloat* Camera::getModel() {
+    return glm::value_ptr(model);
+}
