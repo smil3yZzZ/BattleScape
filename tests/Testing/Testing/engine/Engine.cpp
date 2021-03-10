@@ -64,7 +64,6 @@ int Engine::run() {
         if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-
             update();
 
 
@@ -139,6 +138,7 @@ int Engine::initGL() {
     glewExperimental = GL_TRUE;
 
     glewInit();
+
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_SMOOTH);
@@ -226,16 +226,16 @@ void Engine::checkCamera() {
     float y = 0;
 
     if (input->getKeyState(INPUT_UP)) {
-        y += 4.0f;
+        y += 2.0f;
     }
     if (input->getKeyState(INPUT_RIGHT)) {
-        x += 4.0f;
+        x += 2.0f;
     }
     if (input->getKeyState(INPUT_DOWN)) {
-        y -= 4.0f;
+        y -= 2.0f;
     }
     if (input->getKeyState(INPUT_LEFT)) {
-        x -= 4.0f;
+        x -= 2.0f;
     }
 
     camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));

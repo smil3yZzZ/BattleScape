@@ -23,8 +23,8 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const float VIEWPORT_WIDTH = 200.0f;
-const float VIEWPORT_HEIGHT = 150.0f;
+const float VIEWPORT_WIDTH = 240.0f;
+const float VIEWPORT_HEIGHT = 180.0f;
 const float Z_NEAR = -100.0f;
 const float Z_FAR = 100.0f;
 
