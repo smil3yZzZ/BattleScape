@@ -4,6 +4,7 @@
     #define PLATFORMSDRAWINGOBJECT_H
 
 #include "DrawingObject.hpp"
+#include "../utils/GLImporter.hpp"
 
 #endif
 

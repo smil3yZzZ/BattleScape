@@ -285,11 +285,19 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInf
     for (int n = 0; n < PLATFORM_TEXTURE_ROWS; n++) {
         for (int i = 0; i < QUAD_HEIGHT; i++) {
             for (int j = 0; j < QUAD_WIDTH; j++) {
-                if (i < 2 || j < 2 || i > 61 || j > 61) {
-                    pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS] = 157.0f;
-                    pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 1] = 157.0f;
-                    pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 2] = 157.0f;
-                    pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                if (i < 3 || j < 3 || i > 60 || j > 60) {
+                    if (i < 1 || j < 1 || i > 62 || j > 62) {
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS] = 0.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 1] = 0.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 2] = 0.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                    }
+                    else {
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS] = 157.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 1] = 157.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 2] = 157.0f;
+                        pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + i * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                    }
                 }
                 else {
                     float randomNumber = (float) rand()/RAND_MAX;

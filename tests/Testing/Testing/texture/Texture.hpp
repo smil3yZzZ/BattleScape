@@ -12,7 +12,7 @@ private:
     unsigned int id;
 
 public:
-    Texture(TextureAsset* textureAsset);
+    Texture(TextureAsset* textureAsset, GLint minFilter, GLint magFilter);
     unsigned int getId();
     ~Texture();
 };

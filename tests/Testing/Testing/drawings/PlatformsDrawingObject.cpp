@@ -4,6 +4,8 @@ PlatformsDrawingObject::PlatformsDrawingObject(int dimension, TextureAsset* text
                         const char* vertexShaderPath, const char* fragmentShaderPath):
                         DrawingObject(dimension, textureAsset, z,
                                                 vertexShaderPath, fragmentShaderPath) {
+    PlatformsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_NEAREST);
+
 }
 
 void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int** map) {

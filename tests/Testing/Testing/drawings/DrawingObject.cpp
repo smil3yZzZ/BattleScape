@@ -5,8 +5,6 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
 
     DrawingObject::textureAsset = textureAsset;
 
-    DrawingObject::texture = new Texture(textureAsset);
-
     DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
 
     DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();

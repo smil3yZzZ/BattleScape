@@ -23,8 +23,8 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const float VIEWPORT_WIDTH = 240.0f;
-const float VIEWPORT_HEIGHT = 180.0f;
+const float VIEWPORT_WIDTH = 400.0f;
+const float VIEWPORT_HEIGHT = 300.0f;
 const float Z_NEAR = -100.0f;
 const float Z_FAR = 100.0f;
 
@@ -43,7 +43,7 @@ const int PLATFORM_TEXTURE_ROWS = 8;
 const int PLATFORM_TEXTURE_COLS = 1;
 
 const int WALL_TEXTURE_ROWS = 1;
-const int WALL_TEXTURE_COLS = 12;
+const int WALL_TEXTURE_COLS = 16;
 
 const float PLATFORMS_Z = 5.0f;
 const float WALLS_Z = 10.0f;
@@ -51,7 +51,8 @@ const float WALLS_Z = 10.0f;
 const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
 const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
-const char* const WALL_TEXTURE_PATH = "resources/wall.png";
+//const char* const WALL_TEXTURE_PATH = "resources/wall_1x16.png";
+const char* const WALL_TEXTURE_PATH = "resources/wall_1x16_redundancy.png";
 
 class Engine {
 private:

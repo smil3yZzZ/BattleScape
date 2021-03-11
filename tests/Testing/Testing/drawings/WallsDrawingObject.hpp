@@ -5,6 +5,7 @@
 
 #include "DrawingObject.hpp"
 #include "../utils/RapidjsonImporter.hpp"
+#include "../utils/GLImporter.hpp"
 
 #endif
 
