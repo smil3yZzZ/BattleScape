@@ -52,7 +52,8 @@ const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
 const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
 //const char* const WALL_TEXTURE_PATH = "resources/wall_1x16.png";
-const char* const WALL_TEXTURE_PATH = "resources/wall_1x16_redundancy.png";
+//const char* const WALL_TEXTURE_PATH = "resources/wall_1x16_gray_dark.png";
+const char* const WALL_TEXTURE_PATH = "resources/wall64_grayborders_redundancy_dark_sampled.png";
 
 class Engine {
 private:

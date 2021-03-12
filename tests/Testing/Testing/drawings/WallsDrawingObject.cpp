@@ -22,7 +22,7 @@ void WallsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k] = k > 1 ? j * tileWidth + tileWidth : j * tileWidth;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 1] = k % 2 == 0 ? i * tileHeight * 2 : i * tileHeight * 2 + tileHeight;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 2] = z;
-        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > 1 ? (lowerTileIndexPixel + tileWidth - 0.5f)/textureWidth : (lowerTileIndexPixel + 0.5f)/textureWidth;
+        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > 1 ? (lowerTileIndexPixel + tileWidth)/textureWidth : (lowerTileIndexPixel)/textureWidth;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 1.0f;
     }
 
@@ -34,7 +34,7 @@ void WallsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k] = k > verticesPerQuad/2 + 1 ? j * tileWidth + tileWidth : j * tileWidth;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 1] = k % 2 == 0 ? i * tileHeight * 2 + tileHeight : i * tileHeight * 2 + tileHeight * 2;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 2] = z;
-        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > verticesPerQuad/2 + 1 ? (upperTileIndexPixel + tileWidth - 0.5f)/textureWidth : (upperTileIndexPixel + 0.5f)/textureWidth;
+        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > verticesPerQuad/2 + 1 ? (upperTileIndexPixel + tileWidth)/textureWidth : (upperTileIndexPixel)/textureWidth;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 1.0f;
     }
 
