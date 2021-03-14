@@ -1,13 +1,9 @@
 #include "DrawingObject.hpp"
 
-DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float z,
+DrawingObject::DrawingObject(TextureAsset* textureAsset, float z,
                         const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     DrawingObject::textureAsset = textureAsset;
-
-    DrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
-
-    DrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
 
     DrawingObject::VAO = DrawingObject::VBO = DrawingObject::EBO = 0;
 

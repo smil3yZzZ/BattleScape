@@ -17,8 +17,6 @@ private:
     unsigned int VBO;
     unsigned int EBO;
 
-
-
 protected:
     Shader* shader;
     Texture* texture;
@@ -28,7 +26,7 @@ protected:
     TextureAsset* textureAsset;
 
 public:
-    DrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
+    DrawingObject(TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
     void initBuffers();
     void updateBuffers(int dimension);
     void render(int dimension, GLfloat* projection, GLfloat* view, GLfloat* model);

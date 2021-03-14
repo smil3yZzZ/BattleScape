@@ -1,4 +1,17 @@
 {
+  "9": {
+    "codePrimary": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "codeSecondary": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "color": "white"
+  },
   "8": {
     "codePrimary": {
       "r": 128,
@@ -15,7 +28,7 @@
   "7": {
     "codePrimary": {
       "r": 240,
-      "g": 0,
+      "g": 128,
       "b": 240
     },
     "codeSecondary": {

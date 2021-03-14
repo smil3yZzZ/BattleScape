@@ -2,10 +2,11 @@
 
 PlatformsDrawingObject::PlatformsDrawingObject(int dimension, TextureAsset* textureAsset, float z,
                         const char* vertexShaderPath, const char* fragmentShaderPath):
-                        DrawingObject(dimension, textureAsset, z,
+                        DrawingObject(textureAsset, z,
                                                 vertexShaderPath, fragmentShaderPath) {
+    PlatformsDrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
+    PlatformsDrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
     PlatformsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_NEAREST);
-
 }
 
 void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int dimension, int** map) {

@@ -1,6 +1,8 @@
 #include "WallsDrawingObject.hpp"
 
-WallsDrawingObject::WallsDrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(dimension, textureAsset, z, vertexShaderPath, fragmentShaderPath) {
+WallsDrawingObject::WallsDrawingObject(int dimension, TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(textureAsset, z, vertexShaderPath, fragmentShaderPath) {
+    WallsDrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
+    WallsDrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
     WallsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_NEAREST);
 }
 

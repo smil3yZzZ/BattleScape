@@ -10,6 +10,7 @@
 #endif
 
 class WallsDrawingObject : public DrawingObject {
+
     public:
         WallsDrawingObject(int dimension, TextureAsset* textureAsset, float z,
                                 const char* vertexShaderPath, const char* fragmentShaderPath);

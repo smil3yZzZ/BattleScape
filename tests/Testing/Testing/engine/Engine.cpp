@@ -91,6 +91,8 @@ int Engine::run() {
     delete walls;
     delete input;
     delete camera;
+    delete [] map;
+    delete [] wallMap;
 
     glfwTerminate();
 
