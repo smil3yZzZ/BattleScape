@@ -6,7 +6,7 @@ SpriteDrawingObject::SpriteDrawingObject(TextureAsset* textureAsset, float z, co
     SpriteDrawingObject::indices = new unsigned int[textureAsset->getIndicesPerQuad()]();
 }
 
-void SpriteDrawingObject::initVerticesAndIndices(float x, float y, int dimension, int** map) {
+void SpriteDrawingObject::initVerticesAndIndices(float x, float y) {
 
     int vertexBufferSize = textureAsset->getVertexBufferSize();
     int verticesPerQuad = textureAsset->getVerticesPerQuad();
@@ -27,4 +27,16 @@ void SpriteDrawingObject::initVerticesAndIndices(float x, float y, int dimension
     for (int k = 0; k < indicesPerQuad; k++) {
         indices[k] = (k > 2 ? k - 2 : k);
     }
+}
+
+void SpriteDrawingObject::update(int newState) {
+
+}
+
+void SpriteDrawingObject::changeDirection(int direction) {
+
+}
+
+void SpriteDrawingObject::stop() {
+
 }

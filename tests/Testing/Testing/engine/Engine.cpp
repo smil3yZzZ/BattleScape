@@ -102,6 +102,7 @@ int Engine::run() {
 int Engine::init(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
     initGL();
     initTextures(colorsInfo, wallsInfo);
+    initCharacters();
     initCamera();
     generateBuffers();
     return 1;
@@ -167,6 +168,16 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
                     SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     TextureUtils::initMap(dimension, map, wallMap, platforms, walls, wallsInfo);
+
+    return 1;
+}
+
+int Engine::initCharacters() {
+    TextureAsset* characterTexture = TextureUtils::loadTextureAsset(CHARACTER_TEXTURE_PATH,
+        CHARACTER_TEXTURE_ROWS, CHARACTER_TEXTURE_COLS, CHARACTER_BUFFER_VERTEX_SIZE,
+        CHARACTER_VERTICES_PER_QUAD, CHARACTER_INDICES_PER_QUAD);
+
+    Engine::testCharacter = new Character(characterTexture, CHARACTER_INITIAL_Z, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
 
     return 1;
 }

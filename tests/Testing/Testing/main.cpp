@@ -1,4 +1,4 @@
-#include "constants.hpp"
+#include "main.hpp"
 
 void copyArrayInfo(int* destination, int* source, int size, bool reverse);
 void setWallMap(int ** originalWallMap, int ** original, int mapDimension);
