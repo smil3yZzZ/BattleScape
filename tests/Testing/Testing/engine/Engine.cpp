@@ -144,8 +144,10 @@ int Engine::initGL() {
 
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_SMOOTH);
     glDepthFunc(GL_LESS);
+    glEnable(GL_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     return 1;
 }
@@ -157,6 +159,16 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
     TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
+
+    //Revisar dimension, engancharla desde el principio
+    //Revisar y,z.
+    //Añadir sombras a personaje
+    //Añadir sombras a muros
+    //Movimiento personaje
+    //Colisiones
+    //Niebla de guerra
+    //Objetivos gameplay
+
 
     Engine::platforms = new PlatformsDrawingObject(dimension, platformsTexture, PLATFORMS_Z,
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
@@ -177,7 +189,9 @@ int Engine::initCharacters() {
         CHARACTER_TEXTURE_ROWS, CHARACTER_TEXTURE_COLS, CHARACTER_BUFFER_VERTEX_SIZE,
         CHARACTER_VERTICES_PER_QUAD, CHARACTER_INDICES_PER_QUAD);
 
-    Engine::testCharacter = new Character(characterTexture, CHARACTER_INITIAL_Z, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
+    Engine::testCharacter = new Character(characterTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
+
+    testCharacter->init(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y);
 
     return 1;
 }
@@ -192,6 +206,8 @@ int Engine::generateBuffers() {
     platforms->initBuffers();
 
     walls->initBuffers();
+
+    testCharacter->getSprite()->initBuffers();
 
     return 1;
 }
@@ -213,6 +229,8 @@ int Engine::updateBuffers() {
 
     walls->updateBuffers(dimension);
 
+    testCharacter->getSprite()->updateBuffers(1);
+
     return 1;
 }
 
@@ -221,6 +239,8 @@ int Engine::render() {
     platforms->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
 
     walls->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
+
+    testCharacter->getSprite()->render(1, camera->getProjection(), camera->getView(), camera->getModel());
 
     return 1;
 }
@@ -305,7 +325,7 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInf
                             pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 157.0f;
                             pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 157.0f;
                             pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 157.0f;
-                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                         }
                     }
                 }
@@ -318,7 +338,7 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInf
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 0.0f;
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 0.0f;
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 0.0f;
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                             }
                         }
                         /*
@@ -357,7 +377,7 @@ unsigned char* Engine::createColorPlatforms(const rapidjson::Document& colorsInf
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = red;
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = green;
                                 pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = blue;
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 1.0f;
+                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                             }
                         }
                         /*

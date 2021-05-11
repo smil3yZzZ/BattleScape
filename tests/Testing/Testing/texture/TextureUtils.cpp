@@ -17,6 +17,7 @@ TextureAsset* TextureUtils::loadTextureAsset(const char* path, int numRows, int 
     }
     stbi_image_free(data);
 
+    std::cout << (int)data[3] << std::endl;
 	return new TextureAsset(width, height, width/((float)numCols), height/((float)numRows), numRows, numCols, nrChannels, vertexBufferSize, verticesPerQuad, indicesPerQuad, data);
 }
 

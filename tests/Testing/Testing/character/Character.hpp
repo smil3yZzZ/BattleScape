@@ -21,7 +21,9 @@ private:
     SpriteDrawingObject* sprite;
 
 public:
-    Character(TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
+    Character(TextureAsset* textureAsset, const char* vertexShaderPath, const char* fragmentShaderPath);
+    void init(int x, int y);
     void move(int newState);
     void stop();
+    SpriteDrawingObject* getSprite();
 };

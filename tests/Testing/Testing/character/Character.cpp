@@ -1,8 +1,9 @@
 #include "Character.hpp"
 
-Character::Character(TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath) {
+Character::Character(TextureAsset* textureAsset,
+    const char* vertexShaderPath, const char* fragmentShaderPath) {
 
-    Character::sprite = new SpriteDrawingObject(textureAsset, z, vertexShaderPath, fragmentShaderPath);
+    Character::sprite = new SpriteDrawingObject(textureAsset, vertexShaderPath, fragmentShaderPath);
 
     //Character::state = DOWN;
     //Init Maze:
@@ -17,6 +18,10 @@ Character::Character(TextureAsset* textureAsset, float z, const char* vertexShad
     //vertices
 }
 
+void Character::init(int x, int y) {
+    sprite->initVerticesAndIndices(x, y);
+}
+
 void Character::move(int newState) {
     if (state == newState) {
         sprite->update(newState);
@@ -28,4 +33,8 @@ void Character::move(int newState) {
 
 void Character::stop() {
     sprite->stop();
+}
+
+SpriteDrawingObject* Character::getSprite() {
+    return sprite;
 }
