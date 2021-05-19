@@ -12,7 +12,7 @@
 class WallsDrawingObject : public DrawingObject {
 
     public:
-        WallsDrawingObject(int dimension, TextureAsset* textureAsset, float z,
+        WallsDrawingObject(int dimension, TextureAsset* textureAsset, float zOffset,
                                 const char* vertexShaderPath, const char* fragmentShaderPath);
-        void initVerticesAndIndices(int i, int j, int dimension, int** map, const rapidjson::Document& wallsInfo);
+        void initVerticesAndIndices(int i, int j, int** map, const rapidjson::Document& wallsInfo);
 };

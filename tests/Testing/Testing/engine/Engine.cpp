@@ -160,8 +160,7 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
             QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
 
-    //Revisar dimension, engancharla desde el principio
-    //Revisar y,z.
+    //Revisar y,z. Hecho. Falta meter constantes en temas de cámara y perspectiva
     //Añadir sombras a personaje
     //Añadir sombras a muros
     //Movimiento personaje
@@ -170,13 +169,13 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
     //Objetivos gameplay
 
 
-    Engine::platforms = new PlatformsDrawingObject(dimension, platformsTexture, PLATFORMS_Z,
+    Engine::platforms = new PlatformsDrawingObject(dimension, platformsTexture, PLATFORMS_Z_OFFSET,
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     TextureAsset* wallsTexture = TextureUtils::loadTextureAsset(WALL_TEXTURE_PATH, WALL_TEXTURE_ROWS,
         WALL_TEXTURE_COLS, WALL_BUFFER_VERTEX_SIZE, WALL_VERTICES_PER_QUAD, WALL_INDICES_PER_QUAD);
 
-    Engine::walls = new WallsDrawingObject(dimension, wallsTexture, WALLS_Z,
+    Engine::walls = new WallsDrawingObject(dimension, wallsTexture, WALLS_Z_OFFSET,
                     SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     TextureUtils::initMap(dimension, map, wallMap, platforms, walls, wallsInfo);
@@ -225,22 +224,22 @@ int Engine::update() {
 
 int Engine::updateBuffers() {
 
-    platforms->updateBuffers(dimension);
+    platforms->updateBuffers();
 
-    walls->updateBuffers(dimension);
+    walls->updateBuffers();
 
-    testCharacter->getSprite()->updateBuffers(1);
+    testCharacter->getSprite()->updateBuffers();
 
     return 1;
 }
 
 int Engine::render() {
 
-    platforms->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
+    platforms->render(camera->getProjection(), camera->getView(), camera->getModel());
 
-    walls->render(dimension, camera->getProjection(), camera->getView(), camera->getModel());
+    walls->render(camera->getProjection(), camera->getView(), camera->getModel());
 
-    testCharacter->getSprite()->render(1, camera->getProjection(), camera->getView(), camera->getModel());
+    testCharacter->getSprite()->render(camera->getProjection(), camera->getView(), camera->getModel());
 
     return 1;
 }

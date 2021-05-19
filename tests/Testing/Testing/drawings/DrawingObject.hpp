@@ -22,13 +22,14 @@ protected:
     Texture* texture;
     float* vertices;
     unsigned int* indices;
-    float z;
+    float zOffset;
     TextureAsset* textureAsset;
+    int dimension;
 
 public:
-    DrawingObject(TextureAsset* textureAsset, float z, const char* vertexShaderPath, const char* fragmentShaderPath);
+    DrawingObject(int dimension, TextureAsset* textureAsset, float zOffset, const char* vertexShaderPath, const char* fragmentShaderPath);
     void initBuffers();
-    void updateBuffers(int dimension);
-    void render(int dimension, GLfloat* projection, GLfloat* view, GLfloat* model);
+    void updateBuffers();
+    void render(GLfloat* projection, GLfloat* view, GLfloat* model);
     ~DrawingObject();
 };

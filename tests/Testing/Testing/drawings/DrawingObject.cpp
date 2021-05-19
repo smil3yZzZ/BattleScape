@@ -1,15 +1,17 @@
 #include "DrawingObject.hpp"
 
-DrawingObject::DrawingObject(TextureAsset* textureAsset, float z,
+DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float zOffset,
                         const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     DrawingObject::textureAsset = textureAsset;
 
     DrawingObject::VAO = DrawingObject::VBO = DrawingObject::EBO = 0;
 
-    DrawingObject::z = z;
+    DrawingObject::zOffset = zOffset;
 
     DrawingObject::shader = new Shader(vertexShaderPath, fragmentShaderPath);
+
+    DrawingObject::dimension = dimension;
     //Init Maze:
     //Pasar como parámetro variables para indexar en array, así como QUAD_HEIGHT y QUAD_WIDTH.
     //Explorar método para indexar textureTileMap de forma común
@@ -30,7 +32,7 @@ void DrawingObject::initBuffers() {
     glGenBuffers(1, &EBO);
 }
 
-void DrawingObject::updateBuffers(int dimension) {
+void DrawingObject::updateBuffers() {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -55,7 +57,7 @@ void DrawingObject::updateBuffers(int dimension) {
     glEnableVertexAttribArray(1);
 }
 
-void DrawingObject::render(int dimension, GLfloat* projection, GLfloat* view, GLfloat* model) {
+void DrawingObject::render(GLfloat* projection, GLfloat* view, GLfloat* model) {
     shader->use();
     shader->setFloatMatrix("projection", projection);
     shader->setFloatMatrix("view", view);

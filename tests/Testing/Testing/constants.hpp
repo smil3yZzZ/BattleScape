@@ -50,8 +50,8 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const float VIEWPORT_WIDTH = 200.0f;
 const float VIEWPORT_HEIGHT = 150.0f;
-const float Z_NEAR = -100.0f;
-const float Z_FAR = 100.0f;
+const float Z_NEAR = 0.0f;
+const float Z_FAR = 1000.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
@@ -70,9 +70,6 @@ const int PLATFORM_TEXTURE_COLS = 1;
 const int WALL_TEXTURE_ROWS = 1;
 const int WALL_TEXTURE_COLS = 16;
 
-const float PLATFORMS_Z = 5.0f;
-const float WALLS_Z = 10.0f;
-
 const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
 const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
@@ -87,9 +84,15 @@ const int CHARACTER_INDICES_PER_QUAD = 6;
 
 const float CHARACTER_INITIAL_X = 100.0f;
 const float CHARACTER_INITIAL_Y = 100.0f;
-const float CHARACTER_INITIAL_Z = 15.0f;
+
 const char* const CHARACTER_VERTEX_SHADER_PATH = "resources/shaders/character.vs";
 const char* const CHARACTER_FRAGMENT_SHADER_PATH = "resources/shaders/character.fs";
+
+const float PLATFORMS_Z_OFFSET = 5.0f;
+const float WALLS_Z_OFFSET = 10.0f;
+const float CHARACTER_Z_OFFSET = 15.0f;
+
+const int SPRITE_DRAWING_OBJECT_DIMENSION = 1;
 
 /* CHARACTER MOVEMENT CONSTANTS */
 

@@ -24,9 +24,9 @@ TextureAsset* TextureUtils::loadTextureAsset(const char* path, int numRows, int 
 void TextureUtils::initMap(int dimension, int** map, int** wallMap, PlatformsDrawingObject* platforms, WallsDrawingObject* walls, const rapidjson::Document& wallsInfo) {
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
-            platforms->initVerticesAndIndices(i, j, dimension, map);
+            platforms->initVerticesAndIndices(i, j, map);
             if (wallMap[dimension - i - 1][j] != -1) {
-                walls->initVerticesAndIndices(i, j, dimension, wallMap, wallsInfo);
+                walls->initVerticesAndIndices(i, j, wallMap, wallsInfo);
             }
         }
     }

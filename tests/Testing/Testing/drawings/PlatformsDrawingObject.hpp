@@ -10,7 +10,7 @@
 
 class PlatformsDrawingObject : public DrawingObject {
     public:
-        PlatformsDrawingObject(int dimension, TextureAsset* textureAsset, float z,
+        PlatformsDrawingObject(int dimension, TextureAsset* textureAsset, float zOffset,
                                 const char* vertexShaderPath, const char* fragmentShaderPath);
-        void initVerticesAndIndices(int i, int j, int dimension, int** map);
+        void initVerticesAndIndices(int i, int j, int** map);
 };
