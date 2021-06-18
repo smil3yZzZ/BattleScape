@@ -5,12 +5,14 @@ void setWallMap(int ** originalWallMap, int ** original, int mapDimension);
 
 int main() {
 
-    int mapDimension = size.at(S) + BORDERS_SIZE_IN_MATRIX;
+    int mapSize = size.at(M);
+
+    int mapDimension = mapSize + BORDERS_SIZE_IN_MATRIX;
 
     int** original = new int* [mapDimension];
     for (int i = 0; i < mapDimension; i++) original[i] = new int[mapDimension];
 
-    const int quarter_size = (size.at(S) - 1) / 2;
+    const int quarter_size = (mapSize - 1) / 2;
     int** top_left = new int* [quarter_size];
     for (int i = 0; i < quarter_size; i++) top_left[i] = new int[quarter_size];
 
@@ -48,7 +50,7 @@ int main() {
     }
 
     //Uncomment this if you want to try black holes!
-    top_left[1][1] = 0;
+    //top_left[1][1] = 0;
 
     std::stack<std::tuple<int, int>> algorithmCells;
     algorithmCells.push(std::tuple<int, int>{0, 0});

@@ -28,7 +28,7 @@ const int L = 2;
 const int XL = 3;
 const int XXL = 4;
 const int BORDERS_SIZE_IN_MATRIX = 2;
-const int FRAMES_PER_SECOND = 60;
+const int FRAMES_PER_SECOND = 90;
 
 const float X_ORIGIN = -100.0f;
 const float Y_ORIGIN = -50.0f;
@@ -48,10 +48,10 @@ const std::map<int, int> size = { {S, 11}, {M, 19}, {L, 39}, {XL, 71}, {XXL, 155
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const float VIEWPORT_WIDTH = 200.0f;
-const float VIEWPORT_HEIGHT = 150.0f;
+const float VIEWPORT_WIDTH = 400.0f;
+const float VIEWPORT_HEIGHT = 300.0f;
 const float Z_NEAR = 0.0f;
-const float Z_FAR = 1000.0f;
+const float Z_FAR = 10000.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;

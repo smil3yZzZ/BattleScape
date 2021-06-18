@@ -3,7 +3,7 @@
 #ifndef ENGINE_H
     #define ENGINE_H
 
-
+#include <thread>
 #include <iostream>
 #include <list>
 #include "../constants.hpp"
@@ -49,7 +49,7 @@ private:
     Input* input;
 
     GLFWwindow* window;
-    unsigned char* createColorPlatforms(const rapidjson::Document& colorsInfo);
+    unsigned char* createColorPlatformsAndShadows(const rapidjson::Document& colorsInfo);
 
 
 public:

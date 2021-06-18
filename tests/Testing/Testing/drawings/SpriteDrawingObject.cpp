@@ -25,9 +25,6 @@ void SpriteDrawingObject::initVerticesAndIndices(float initialX, float initialY)
         vertices[vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 0.25f;
     }
 
-    std::cout << "SPRITE:" << std::endl;
-    std::cout << vertices[vertexBufferSize + 2] << std::endl;
-
     for (int k = 0; k < indicesPerQuad; k++) {
         indices[k] = (k > 2 ? k - 2 : k);
     }

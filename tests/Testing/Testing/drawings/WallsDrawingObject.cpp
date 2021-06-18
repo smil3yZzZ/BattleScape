@@ -29,10 +29,6 @@ void WallsDrawingObject::initVerticesAndIndices(int i, int j, int** map,
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 1.0f;
     }
 
-    std::cout << "LOW WALL:" << std::endl;
-    std::cout << vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + 2] << std::endl;
-
-
     for (int k = 0; k < indicesPerQuad/2; k++) {
         indices[i * dimension * indicesPerQuad + indicesPerQuad * j + k] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k - 2 : k);
     }
@@ -45,10 +41,6 @@ void WallsDrawingObject::initVerticesAndIndices(int i, int j, int** map,
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > verticesPerQuad/2 + 1 ? (upperTileIndexPixel + tileWidth)/textureWidth : (upperTileIndexPixel)/textureWidth;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 1.0f;
     }
-
-    std::cout << "TOP WALL:" << std::endl;
-    std::cout << vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + 2] << std::endl;
-
 
     for (int k = 0; k < indicesPerQuad/2; k++) {
         indices[i * dimension * indicesPerQuad + indicesPerQuad * j + k + indicesPerQuad/2] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k + verticesPerQuad/2 - 2 : k + verticesPerQuad/2);

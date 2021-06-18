@@ -12,6 +12,7 @@ DrawingObject::DrawingObject(int dimension, TextureAsset* textureAsset, float zO
     DrawingObject::shader = new Shader(vertexShaderPath, fragmentShaderPath);
 
     DrawingObject::dimension = dimension;
+
     //Init Maze:
     //Pasar como parámetro variables para indexar en array, así como QUAD_HEIGHT y QUAD_WIDTH.
     //Explorar método para indexar textureTileMap de forma común

@@ -32,9 +32,6 @@ void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int** map) {
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 4] = k % 2 == 0 ? bottom : top;
     }
 
-    std::cout << "PLATFORM:" << std::endl;
-    std::cout << vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + 2] << std::endl;
-
     for (int k = 0; k < indicesPerQuad; k++) {
         indices[i * dimension * indicesPerQuad + indicesPerQuad * j + k] = i * dimension * verticesPerQuad + verticesPerQuad * j + (k > 2 ? k - 2 : k);
     }
