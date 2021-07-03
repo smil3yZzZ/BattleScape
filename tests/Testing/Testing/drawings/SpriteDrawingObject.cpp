@@ -1,7 +1,7 @@
 #include "SpriteDrawingObject.hpp"
 
 SpriteDrawingObject::SpriteDrawingObject(TextureAsset* textureAsset, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(SPRITE_DRAWING_OBJECT_DIMENSION, textureAsset, CHARACTER_Z_OFFSET, vertexShaderPath, fragmentShaderPath) {
-    SpriteDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_NEAREST);
+    SpriteDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_LINEAR);
     SpriteDrawingObject::vertices = new float[textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     SpriteDrawingObject::indices = new unsigned int[textureAsset->getIndicesPerQuad()]();
 }
@@ -17,8 +17,8 @@ void SpriteDrawingObject::initVerticesAndIndices(float initialX, float initialY)
     float textureWidth = textureAsset->getTextureWidth();
 
     for (int k = 0; k < verticesPerQuad; k++) {
-        int y = k % 2 == 0 ? initialY : initialY + tileHeight;
-        vertices[vertexBufferSize * k] = k > 1 ? initialX + tileWidth : initialX;
+        int y = k % 2 == 0 ? initialY + 0.5f: initialY + tileHeight + 0.5f;
+        vertices[vertexBufferSize * k] = k > 1 ? initialX + tileWidth + 0.5f: initialX + 0.5f;
         vertices[vertexBufferSize * k + 1] = y;
         vertices[vertexBufferSize * k + 2] = zOffset - y;
         vertices[vertexBufferSize * k + 3] = k > 1 ? 0.2f : 0.0f;

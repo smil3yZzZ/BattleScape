@@ -61,6 +61,8 @@ int Engine::run() {
 
     auto nextFrameTime = oldTime + frameTime;
 
+    float deltaTime = 0.0f;
+    float lastFrame = glfwGetTime();
 
     std::cout << "Starting loop..." << std::endl;
 
@@ -69,26 +71,25 @@ int Engine::run() {
         //if (frameTime >= frameDelay) {
             //oldTime = glfwGetTime();
 
-            update();
+            checkCamera(deltaTime);
 
+            update();
 
             clearScreen();
 
-
             render();
 
-
-            checkCamera();
-
-
             glfwSwapBuffers(window);
-
 
             glfwPollEvents();
         //}
 
             std::this_thread::sleep_until(nextFrameTime);
             nextFrameTime += frameTime;
+
+            float currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
 
         //frameTime = glfwGetTime() - oldTime;
 
@@ -163,8 +164,8 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
 
     unsigned char* platformsData = createColorPlatformsAndShadows(colorsInfo);
 
-    TextureAsset* platformsTexture = new TextureAsset(QUAD_WIDTH, QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS, QUAD_WIDTH,
-            QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
+    TextureAsset* platformsTexture = new TextureAsset(ORIGINAL_QUAD_WIDTH*PLATFORM_TEXTURE_COLS, ORIGINAL_QUAD_HEIGHT*PLATFORM_TEXTURE_ROWS,
+        QUAD_WIDTH, QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
 
     //Revisar y,z. Hecho. Falta meter constantes en temas de cámara y perspectiva
@@ -181,7 +182,8 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
                                 SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
     TextureAsset* wallsTexture = TextureUtils::loadTextureAsset(WALL_TEXTURE_PATH, WALL_TEXTURE_ROWS,
-        WALL_TEXTURE_COLS, WALL_BUFFER_VERTEX_SIZE, WALL_VERTICES_PER_QUAD, WALL_INDICES_PER_QUAD);
+        WALL_TEXTURE_COLS, WALL_BUFFER_VERTEX_SIZE, WALL_VERTICES_PER_QUAD, WALL_INDICES_PER_QUAD,
+        WALL_TEXTURE_LOAD_SUBSAMPLING_FACTOR);
     Engine::walls = new WallsDrawingObject(dimension, wallsTexture, WALLS_Z_OFFSET,
                     SQUARE_VERTEX_SHADER_PATH, SQUARE_FRAGMENT_SHADER_PATH);
 
@@ -193,7 +195,7 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
 int Engine::initCharacters() {
     TextureAsset* characterTexture = TextureUtils::loadTextureAsset(CHARACTER_TEXTURE_PATH,
         CHARACTER_TEXTURE_ROWS, CHARACTER_TEXTURE_COLS, CHARACTER_BUFFER_VERTEX_SIZE,
-        CHARACTER_VERTICES_PER_QUAD, CHARACTER_INDICES_PER_QUAD);
+        CHARACTER_VERTICES_PER_QUAD, CHARACTER_INDICES_PER_QUAD, SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR);
 
     Engine::testCharacter = new Character(characterTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
 
@@ -260,21 +262,21 @@ void Engine::setIsRunning(int isRunning) {
 }
 
 
-void Engine::checkCamera() {
+void Engine::checkCamera(float deltaTime) {
     float x = 0;
     float y = 0;
 
     if (input->getKeyState(INPUT_UP)) {
-        y += 2.0f;
+        y += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_RIGHT)) {
-        x += 2.0f;
+        x += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_DOWN)) {
-        y -= 2.0f;
+        y -= MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_LEFT)) {
-        x -= 2.0f;
+        x -= MOVEMENT_SPEED;
     }
 
     camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
@@ -319,68 +321,57 @@ void Engine::updateInput(int key, int action) {
 }
 
 unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document& colorsInfo) {
-    unsigned char* pixels = new unsigned char[PLATFORM_TEXTURE_ROWS * QUAD_WIDTH * QUAD_HEIGHT * NUMBER_OF_RGBA_CHANNELS];
+    unsigned char* pixels = new unsigned char[PLATFORM_TEXTURE_ROWS * ORIGINAL_QUAD_WIDTH * ORIGINAL_QUAD_HEIGHT * NUMBER_OF_RGBA_CHANNELS];
 
-    //Llevar sombras y grietas a otra función
+    //Llevar sombras y grietas a otro Drawing Object
     for (int n = 0; n < PLATFORM_TEXTURE_ROWS; n++) {
-        for (int i = 0; i < QUAD_HEIGHT; i+=2) {
-            for (int j = 0; j < QUAD_WIDTH; j+=2) {
-                if (i == 0 || j == 0 || i == 62 || j == 62) {
+        for (int i = 0; i < ORIGINAL_QUAD_HEIGHT - 1; i+=2) {
+            for (int j = 0; j < ORIGINAL_QUAD_WIDTH - 1; j+=2) {
+                if (i < 4 || j < 4 || i > ORIGINAL_QUAD_WIDTH - 6 || j > ORIGINAL_QUAD_WIDTH - 6) {
                     for (int y = i; y < i + 2; y++) {
                         for (int x = j; x < j + 2; x++) {
-                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 157.0f;
-                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 157.0f;
-                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 157.0f;
-                            pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 157.0f;
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 157.0f;
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 157.0f;
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                         }
                     }
                 }
                 else {
+                    /*
                     float randomNumber = (float) rand()/RAND_MAX;
                     float red, green, blue, diff;
                     if (randomNumber < ((float)(PLATFORM_TEXTURE_ROWS - n))/12.0f) {
                         for (int y = i; y < i + 2; y++) {
                             for (int x = j; x < j + 2; x++) {
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 66.0f;
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 66.0f;
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 66.0f;
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 66.0f;
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 66.0f;
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 66.0f;
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                             }
                         }
                     }
                     else {
                         std::string color_string = std::to_string(n);
                         const char* color_char = color_string.c_str();
-                        /*
-                        if (colorsInfo[color_char]["codePrimary"]["r"].GetInt() != colorsInfo[color_char]["codeSecondary"]["r"].GetInt()) {
-                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["r"].GetInt() - colorsInfo[color_char]["codeSecondary"]["r"].GetInt()) * randomNumber;
-                            red = colorsInfo[color_char]["codePrimary"]["r"].GetInt() < colorsInfo[color_char]["codeSecondary"]["r"].GetInt() ? colorsInfo[color_char]["codePrimary"]["r"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["r"].GetInt() + diff;
-                        }
-                        else {
-                            red = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
-                        }
-                        if (colorsInfo[color_char]["codePrimary"]["g"].GetInt() != colorsInfo[color_char]["codeSecondary"]["g"].GetInt()) {
-                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["g"].GetInt() - colorsInfo[color_char]["codeSecondary"]["g"].GetInt()) * randomNumber;
-                            green = colorsInfo[color_char]["codePrimary"]["g"].GetInt() < colorsInfo[color_char]["codeSecondary"]["g"].GetInt() ? colorsInfo[color_char]["codePrimary"]["g"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["g"].GetInt() + diff;
-                        }
-                        else {
-                            green = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
-                        }
-                        if (colorsInfo[color_char]["codePrimary"]["b"].GetInt() != colorsInfo[color_char]["codeSecondary"]["b"].GetInt()) {
-                            diff = (float)abs(colorsInfo[color_char]["codePrimary"]["b"].GetInt() - colorsInfo[color_char]["codeSecondary"]["b"].GetInt()) * randomNumber;
-                            blue = colorsInfo[color_char]["codePrimary"]["b"].GetInt() < colorsInfo[color_char]["codeSecondary"]["b"].GetInt() ? colorsInfo[color_char]["codePrimary"]["b"].GetInt() + diff : colorsInfo[color_char]["codeSecondary"]["b"].GetInt() + diff;
-                        }
-                        else {
-                            blue = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
-                        }
-                        */
                         for (int y = i; y < i + 2; y++) {
                             for (int x = j; x < j + 2; x++) {
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
-                                pixels[n * QUAD_HEIGHT * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
+                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                             }
+                        }
+                    }
+                    */
+                    std::string color_string = std::to_string(n);
+                    const char* color_char = color_string.c_str();
+                    for (int y = i; y < i + 2; y++) {
+                        for (int x = j; x < j + 2; x++) {
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
+                            pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
                         }
                     }
                 }

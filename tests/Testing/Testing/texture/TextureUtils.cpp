@@ -2,7 +2,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../utils/stb_image.h"
 
-TextureAsset* TextureUtils::loadTextureAsset(const char* path, int numRows, int numCols, int vertexBufferSize, int verticesPerQuad, int indicesPerQuad) {
+TextureAsset* TextureUtils::loadTextureAsset(const char* path, int numRows, int numCols, int vertexBufferSize, int verticesPerQuad, int indicesPerQuad,
+                                            int subsamplingFactor) {
 
     int width, height, nrChannels;
 
@@ -16,7 +17,7 @@ TextureAsset* TextureUtils::loadTextureAsset(const char* path, int numRows, int 
         std::cout << "Failed to load texture" << std::endl;
     }
 
-	return new TextureAsset(width, height, width/((float)numCols), height/((float)numRows), numRows, numCols, nrChannels, vertexBufferSize, verticesPerQuad, indicesPerQuad, data);
+	return new TextureAsset(width, height, (width/((float)numCols))/subsamplingFactor, (height/((float)numRows))/subsamplingFactor, numRows, numCols, nrChannels, vertexBufferSize, verticesPerQuad, indicesPerQuad, data);
 }
 
 void TextureUtils::initMap(int dimension, int** map, int** wallMap, PlatformsDrawingObject* platforms, WallsDrawingObject* walls, const rapidjson::Document& wallsInfo) {

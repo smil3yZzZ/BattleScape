@@ -6,7 +6,7 @@ PlatformsDrawingObject::PlatformsDrawingObject(int dimension, TextureAsset* text
                                                 vertexShaderPath, fragmentShaderPath) {
     PlatformsDrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     PlatformsDrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
-    PlatformsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_NEAREST);
+    PlatformsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_LINEAR);
 }
 
 void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int** map) {
@@ -24,8 +24,8 @@ void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int** map) {
     float tileHeight = textureAsset->getTileHeight();
 
     for (int k = 0; k < verticesPerQuad; k++) {
-        int y = k % 2 == 0 ? i * tileHeight : i * tileHeight + tileHeight;
-        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k] = k > 1 ? j * tileWidth + tileWidth : j * tileWidth;
+        int y = k % 2 == 0 ? i * tileHeight + 0.5f : i * tileHeight + tileHeight + 0.5f;
+        vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k] = k > 1 ? j * tileWidth + tileWidth + 0.5f: j * tileWidth + 0.5f;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 1] = y;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 2] = zOffset - y;
         vertices[i * dimension * vertexBufferSize * verticesPerQuad + vertexBufferSize * verticesPerQuad * j + vertexBufferSize * k + 3] = k > 1 ? 1.0f : 0.0f;

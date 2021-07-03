@@ -28,10 +28,10 @@ const int L = 2;
 const int XL = 3;
 const int XXL = 4;
 const int BORDERS_SIZE_IN_MATRIX = 2;
-const int FRAMES_PER_SECOND = 90;
+const int FRAMES_PER_SECOND = 120;
 
-const float X_ORIGIN = -100.0f;
-const float Y_ORIGIN = -50.0f;
+const float X_ORIGIN = 0.0f;
+const float Y_ORIGIN = 0.0f;
 
 const int TOP_WALL_SHIFT = 6;
 const int RIGHT_WALL_SHIFT = 5;
@@ -43,13 +43,12 @@ const int LEFT_WALL_SHIFT = 1;
 //The result of (size - 1)/2 has to be odd
 
 const std::map<int, int> size = { {S, 11}, {M, 19}, {L, 39}, {XL, 71}, {XXL, 155} };
-
 /* ENGINE CONSTANTS */
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-const float VIEWPORT_WIDTH = 400.0f;
-const float VIEWPORT_HEIGHT = 300.0f;
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 400;
+const float VIEWPORT_WIDTH = 320.0f;
+const float VIEWPORT_HEIGHT = 200.0f;
 const float Z_NEAR = 0.0f;
 const float Z_FAR = 10000.0f;
 
@@ -61,6 +60,12 @@ const int WALL_VERTICES_PER_QUAD = 8;
 const int PLATFORM_INDICES_PER_QUAD = 6;
 const int WALL_INDICES_PER_QUAD = 12;
 
+const int WALL_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 16;
+const int SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 4;
+
+const int ORIGINAL_QUAD_WIDTH = 256;
+const int ORIGINAL_QUAD_HEIGHT = 256;
+
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
 
@@ -70,12 +75,14 @@ const int PLATFORM_TEXTURE_COLS = 1;
 const int WALL_TEXTURE_ROWS = 1;
 const int WALL_TEXTURE_COLS = 16;
 
+const float MOVEMENT_SPEED = 1.0f;
+
 const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
 const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
-const char* const WALL_TEXTURE_PATH = "resources/wall_sampled.png";
+const char* const WALL_TEXTURE_PATH = "resources/wall_sampled_awesome.png";
 
-const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_big.png";
+const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_awesome.png";
 const int CHARACTER_TEXTURE_ROWS = 4;
 const int CHARACTER_TEXTURE_COLS = 5;
 const int CHARACTER_BUFFER_VERTEX_SIZE = 5;
