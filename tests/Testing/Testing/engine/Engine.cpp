@@ -53,25 +53,25 @@ int Engine::run() {
 
     init(colors, wallsInfo);
 
-    //double frameTime = frameDelay;
-    auto const frameTime = std::chrono::milliseconds{(int)(frameDelay * 1000.0f)};;
+    double frameTime = frameDelay;
+    //auto const frameTime = std::chrono::milliseconds{(int)(frameDelay * 1000.0f)};;
 
-    //double oldTime = glfwGetTime();
-    auto const oldTime = std::chrono::steady_clock::now();
+    double oldTime = glfwGetTime();
+    //auto const oldTime = std::chrono::steady_clock::now();
 
-    auto nextFrameTime = oldTime + frameTime;
+    //auto nextFrameTime = oldTime + frameTime;
 
-    float deltaTime = 0.0f;
-    float lastFrame = glfwGetTime();
+    //float deltaTime = 0.0f;
+    //float lastFrame = glfwGetTime();
 
     std::cout << "Starting loop..." << std::endl;
 
     while (!glfwWindowShouldClose(window)) {
 
         //if (frameTime >= frameDelay) {
-            //oldTime = glfwGetTime();
+            oldTime = glfwGetTime();
 
-            checkCamera(deltaTime);
+            checkCamera(frameTime);
 
             update();
 
@@ -84,14 +84,16 @@ int Engine::run() {
             glfwPollEvents();
         //}
 
-            std::this_thread::sleep_until(nextFrameTime);
-            nextFrameTime += frameTime;
+        /*
+        std::this_thread::sleep_until(nextFrameTime);
+        nextFrameTime += frameTime;
 
-            float currentFrame = glfwGetTime();
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        */
 
-        //frameTime = glfwGetTime() - oldTime;
+        frameTime = glfwGetTime() - oldTime;
 
     }
 
@@ -262,24 +264,28 @@ void Engine::setIsRunning(int isRunning) {
 }
 
 
-void Engine::checkCamera(float deltaTime) {
+void Engine::checkCamera(float frameTime) {
     float x = 0;
     float y = 0;
 
+    glm::vec3 cameraPos = camera->getCameraPos();
+
     if (input->getKeyState(INPUT_UP)) {
-        y += MOVEMENT_SPEED;
+        y += MOVEMENT_SPEED * frameTime;
     }
     if (input->getKeyState(INPUT_RIGHT)) {
-        x += MOVEMENT_SPEED;
+        cameraPos += MOVEMENT_SPEED * frameTime;
+        camera->updateView(cameraPos);
     }
     if (input->getKeyState(INPUT_DOWN)) {
-        y -= MOVEMENT_SPEED;
+        y -= MOVEMENT_SPEED * frameTime;
     }
     if (input->getKeyState(INPUT_LEFT)) {
-        x -= MOVEMENT_SPEED;
+        cameraPos -= MOVEMENT_SPEED * frameTime;
+        camera->updateView(cameraPos);
     }
 
-    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
+    
 }
 
 void Engine::updateInput(int key, int action) {

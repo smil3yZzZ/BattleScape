@@ -18,6 +18,7 @@ class SpriteDrawingObject : public DrawingObject {
         SpriteDrawingObject(TextureAsset* textureAsset,
                                 const char* vertexShaderPath, const char* fragmentShaderPath);
         void initVerticesAndIndices(float x, float y);
+        void move(float x, float y);
         void update(int newState);
         void changeDirection(int direction);
         void stop();

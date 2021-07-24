@@ -35,6 +35,8 @@ private:
     float yOrigin;
 
     int isRunning;
+    
+    float frameTime;
 
     double framesPerSecond;
     float frameDelay;
@@ -68,7 +70,7 @@ public:
     void setIsRunning(int running);
     int initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     int initCharacters();
-    void checkCamera(float deltaTime);
+    void checkCamera(float frameTime);
     void updateInput(int key, int action);
 
 };

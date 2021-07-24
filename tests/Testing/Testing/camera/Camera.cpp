@@ -15,6 +15,18 @@ Camera::Camera(float xOrigin, float viewportWidth, float yOrigin, float viewport
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 }
 
+void Camera::updateView(glm::vec3 cameraPos) {
+    //cameraPos += cameraPosDiff;
+    //cameraTarget += cameraTargetDiff;
+    this->cameraPos = cameraPos;
+    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    cameraUp = glm::cross(cameraDirection, cameraRight);
+
+    view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+}
+
 void Camera::setView(glm::vec3 cameraPosDiff, glm::vec3 cameraTargetDiff) {
     cameraPos += cameraPosDiff;
     cameraTarget += cameraTargetDiff;
@@ -31,4 +43,16 @@ GLfloat* Camera::getProjection() {
 
 GLfloat* Camera::getModel() {
     return glm::value_ptr(model);
+}
+
+glm::vec3 Camera::getCameraPos() {
+    return cameraPos;
+}
+
+glm::vec3 Camera::getCameraTarget() {
+    return cameraTarget;
+}
+
+glm::vec3 Camera::getCameraUp() {
+    return cameraUp;
 }

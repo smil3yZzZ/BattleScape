@@ -30,6 +30,10 @@ void SpriteDrawingObject::initVerticesAndIndices(float initialX, float initialY)
     }
 }
 
+void SpriteDrawingObject::move(float x, float y) {
+
+}
+
 void SpriteDrawingObject::update(int newState) {
 
 }

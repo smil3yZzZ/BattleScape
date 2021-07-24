@@ -28,7 +28,7 @@ const int L = 2;
 const int XL = 3;
 const int XXL = 4;
 const int BORDERS_SIZE_IN_MATRIX = 2;
-const int FRAMES_PER_SECOND = 120;
+const int FRAMES_PER_SECOND = 60;
 
 const float X_ORIGIN = 0.0f;
 const float Y_ORIGIN = 0.0f;
@@ -45,10 +45,10 @@ const int LEFT_WALL_SHIFT = 1;
 const std::map<int, int> size = { {S, 11}, {M, 19}, {L, 39}, {XL, 71}, {XXL, 155} };
 /* ENGINE CONSTANTS */
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 400;
-const float VIEWPORT_WIDTH = 320.0f;
-const float VIEWPORT_HEIGHT = 200.0f;
+const int SCREEN_WIDTH = 1920;
+const int SCREEN_HEIGHT = 1200;
+const float VIEWPORT_WIDTH = 640.0f;
+const float VIEWPORT_HEIGHT = 400.0f;
 const float Z_NEAR = 0.0f;
 const float Z_FAR = 10000.0f;
 
@@ -75,7 +75,7 @@ const int PLATFORM_TEXTURE_COLS = 1;
 const int WALL_TEXTURE_ROWS = 1;
 const int WALL_TEXTURE_COLS = 16;
 
-const float MOVEMENT_SPEED = 1.0f;
+const float MOVEMENT_SPEED = 128.0f;
 
 const char* const SQUARE_VERTEX_SHADER_PATH = "resources/shaders/mapQuad.vs";
 const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
