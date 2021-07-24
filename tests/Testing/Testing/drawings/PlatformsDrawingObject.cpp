@@ -6,7 +6,7 @@ PlatformsDrawingObject::PlatformsDrawingObject(int dimension, TextureAsset* text
                                                 vertexShaderPath, fragmentShaderPath) {
     PlatformsDrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     PlatformsDrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
-    PlatformsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_LINEAR);
+    PlatformsDrawingObject::texture = new Texture(textureAsset, GL_NEAREST, GL_LINEAR);
 }
 
 void PlatformsDrawingObject::initVerticesAndIndices(int i, int j, int** map) {

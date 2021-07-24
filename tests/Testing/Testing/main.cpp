@@ -5,7 +5,7 @@ void setWallMap(int ** originalWallMap, int ** original, int mapDimension);
 
 int main() {
 
-    int mapSize = size.at(S);
+    int mapSize = size.at(M);
 
     int mapDimension = mapSize + BORDERS_SIZE_IN_MATRIX;
 

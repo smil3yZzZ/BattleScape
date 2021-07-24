@@ -3,7 +3,7 @@
 WallsDrawingObject::WallsDrawingObject(int dimension, TextureAsset* textureAsset, float zOffset, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(dimension, textureAsset, zOffset, vertexShaderPath, fragmentShaderPath) {
     WallsDrawingObject::vertices = new float[dimension * dimension * textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     WallsDrawingObject::indices = new unsigned int[dimension * dimension * textureAsset->getIndicesPerQuad()]();
-    WallsDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_LINEAR);
+    WallsDrawingObject::texture = new Texture(textureAsset, GL_NEAREST, GL_LINEAR);
 }
 
 void WallsDrawingObject::initVerticesAndIndices(int i, int j, int** map,

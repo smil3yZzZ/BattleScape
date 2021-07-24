@@ -3,6 +3,7 @@
     #define CAMERA_H
 #include "../utils/GLMImporter.hpp"
 #include "../utils/GLImporter.hpp"
+#include "../constants.hpp"
 #endif
 
 class Camera {
@@ -13,10 +14,6 @@ private:
 public:
 	Camera(float xOrigin, float viewportWidth, float yOrigin, float viewportHeight, float zNear, float zFar);
     void setView(glm::vec3 cameraPosDiff, glm::vec3 cameraTargetDiff);
-    void updateView(glm::vec3 cameraPosDiff);
-    glm::vec3 getCameraPos();
-    glm::vec3 getCameraUp();
-    glm::vec3 getCameraTarget();
     GLfloat* getView();
     GLfloat* getProjection();
     GLfloat* getModel();

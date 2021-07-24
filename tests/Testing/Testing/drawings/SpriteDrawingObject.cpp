@@ -1,7 +1,7 @@
 #include "SpriteDrawingObject.hpp"
 
 SpriteDrawingObject::SpriteDrawingObject(TextureAsset* textureAsset, const char* vertexShaderPath, const char* fragmentShaderPath):DrawingObject(SPRITE_DRAWING_OBJECT_DIMENSION, textureAsset, CHARACTER_Z_OFFSET, vertexShaderPath, fragmentShaderPath) {
-    SpriteDrawingObject::texture = new Texture(textureAsset, GL_LINEAR, GL_LINEAR);
+    SpriteDrawingObject::texture = new Texture(textureAsset, GL_NEAREST, GL_LINEAR);
     SpriteDrawingObject::vertices = new float[textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     SpriteDrawingObject::indices = new unsigned int[textureAsset->getIndicesPerQuad()]();
 }
@@ -28,10 +28,6 @@ void SpriteDrawingObject::initVerticesAndIndices(float initialX, float initialY)
     for (int k = 0; k < indicesPerQuad; k++) {
         indices[k] = (k > 2 ? k - 2 : k);
     }
-}
-
-void SpriteDrawingObject::move(float x, float y) {
-
 }
 
 void SpriteDrawingObject::update(int newState) {

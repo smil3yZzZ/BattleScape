@@ -61,17 +61,17 @@ int Engine::run() {
 
     //auto nextFrameTime = oldTime + frameTime;
 
-    //float deltaTime = 0.0f;
-    //float lastFrame = glfwGetTime();
+    float deltaTime = 0.0f;
+    float lastFrame = glfwGetTime();
 
     std::cout << "Starting loop..." << std::endl;
 
     while (!glfwWindowShouldClose(window)) {
 
-        //if (frameTime >= frameDelay) {
+        if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-            checkCamera(frameTime);
+            checkCamera(deltaTime);
 
             update();
 
@@ -82,16 +82,14 @@ int Engine::run() {
             glfwSwapBuffers(window);
 
             glfwPollEvents();
-        //}
+        }
 
-        /*
-        std::this_thread::sleep_until(nextFrameTime);
-        nextFrameTime += frameTime;
+        //std::this_thread::sleep_until(nextFrameTime);
+        //nextFrameTime += frameTime;
 
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        */
 
         frameTime = glfwGetTime() - oldTime;
 
@@ -170,7 +168,6 @@ int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson:
         QUAD_WIDTH, QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
 
-    //Revisar y,z. Hecho. Falta meter constantes en temas de cámara y perspectiva
     //free image data after glGenTexture
     //Añadir sombras a personaje
     //Añadir sombras a muros
@@ -264,28 +261,24 @@ void Engine::setIsRunning(int isRunning) {
 }
 
 
-void Engine::checkCamera(float frameTime) {
+void Engine::checkCamera(float deltaTime) {
     float x = 0;
     float y = 0;
 
-    glm::vec3 cameraPos = camera->getCameraPos();
-
     if (input->getKeyState(INPUT_UP)) {
-        y += MOVEMENT_SPEED * frameTime;
+        y += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_RIGHT)) {
-        cameraPos += MOVEMENT_SPEED * frameTime;
-        camera->updateView(cameraPos);
+        x += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_DOWN)) {
-        y -= MOVEMENT_SPEED * frameTime;
+        y -= MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_LEFT)) {
-        cameraPos -= MOVEMENT_SPEED * frameTime;
-        camera->updateView(cameraPos);
+        x -= MOVEMENT_SPEED;
     }
 
-    
+    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
 }
 
 void Engine::updateInput(int key, int action) {
