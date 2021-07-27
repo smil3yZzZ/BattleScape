@@ -22,7 +22,7 @@ private:
 
 public:
     Character(TextureAsset* textureAsset, const char* vertexShaderPath, const char* fragmentShaderPath);
-    void init(int x, int y);
+    void update(int x, int y);
     void move(int newState);
     void stop();
     SpriteDrawingObject* getSprite();

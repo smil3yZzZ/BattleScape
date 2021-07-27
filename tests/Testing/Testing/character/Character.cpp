@@ -18,8 +18,8 @@ Character::Character(TextureAsset* textureAsset,
     //vertices
 }
 
-void Character::init(int x, int y) {
-    sprite->initVerticesAndIndices(x, y);
+void Character::update(int x, int y) {
+    sprite->updateVerticesAndIndices(x, y);
 }
 
 void Character::move(int newState) {

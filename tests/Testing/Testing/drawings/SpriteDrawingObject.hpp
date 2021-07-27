@@ -14,10 +14,11 @@ class SpriteDrawingObject : public DrawingObject {
     private:
         int direction;
         int sprite;
+        float currentX, currentY;
     public:
         SpriteDrawingObject(TextureAsset* textureAsset,
                                 const char* vertexShaderPath, const char* fragmentShaderPath);
-        void initVerticesAndIndices(float x, float y);
+        void updateVerticesAndIndices(float x, float y);
         void update(int newState);
         void changeDirection(int direction);
         void stop();

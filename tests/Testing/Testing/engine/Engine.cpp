@@ -66,6 +66,8 @@ int Engine::run() {
 
     std::cout << "Starting loop..." << std::endl;
 
+    int frame = 0;
+
     while (!glfwWindowShouldClose(window)) {
 
         if (frameTime >= frameDelay) {
@@ -73,7 +75,7 @@ int Engine::run() {
 
             checkCamera(deltaTime);
 
-            update();
+            update(frame);
 
             clearScreen();
 
@@ -82,6 +84,8 @@ int Engine::run() {
             glfwSwapBuffers(window);
 
             glfwPollEvents();
+
+            frame++;
         }
 
         //std::this_thread::sleep_until(nextFrameTime);
@@ -198,7 +202,7 @@ int Engine::initCharacters() {
 
     Engine::testCharacter = new Character(characterTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
 
-    testCharacter->init(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y);
+    testCharacter->update(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y);
 
     return 1;
 }
@@ -225,12 +229,12 @@ int Engine::clearScreen() {
     return 1;
 }
 
-int Engine::update() {
-    updateBuffers();
+int Engine::update(int frame) {
+    updateBuffers(frame);
     return 1;
 }
 
-int Engine::updateBuffers() {
+int Engine::updateBuffers(int frame) {
 
     platforms->updateBuffers();
 
@@ -278,7 +282,8 @@ void Engine::checkCamera(float deltaTime) {
         x -= MOVEMENT_SPEED;
     }
 
-    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
+    testCharacter->update(x, y);
+    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));    
 }
 
 void Engine::updateInput(int key, int action) {

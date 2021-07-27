@@ -45,8 +45,8 @@ const int LEFT_WALL_SHIFT = 1;
 const std::map<int, int> size = { {S, 11}, {M, 19}, {L, 39}, {XL, 71}, {XXL, 155} };
 /* ENGINE CONSTANTS */
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 400;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 800;
 const float VIEWPORT_WIDTH = 320.0f;
 const float VIEWPORT_HEIGHT = 200.0f;
 const float Z_NEAR = 0.0f;

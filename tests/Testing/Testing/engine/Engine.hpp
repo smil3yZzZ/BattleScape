@@ -61,8 +61,8 @@ public:
     int initCamera();
     int clearScreen();
     int generateBuffers();
-    int update();
-    int updateBuffers();
+    int update(int frame);
+    int updateBuffers(int frame);
     int render();
     int getIsRunning();
     void setIsRunning(int running);
