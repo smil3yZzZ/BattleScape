@@ -4,6 +4,9 @@ Character::Character(TextureAsset* textureAsset,
     const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     Character::sprite = new SpriteDrawingObject(textureAsset, vertexShaderPath, fragmentShaderPath);
+    Character::currentX = 0.0f;
+    Character::currentY = 0.0f;
+    Character::frameState = 0;
 
     //Character::state = DOWN;
     //Init Maze:
@@ -18,21 +21,24 @@ Character::Character(TextureAsset* textureAsset,
     //vertices
 }
 
-void Character::update(int x, int y) {
-    sprite->updateVerticesAndIndices(x, y);
+void Character::update(int x, int y, int frame, int direction) {
+    currentX += x;
+    currentY += y;
+
+    if (frame % 15 == 0) {
+        frameState = getFrameState(x, y, frame);
+    }
+
+    sprite->updateVerticesAndIndices(currentX, currentY, frameState, direction);
 }
 
-void Character::move(int newState) {
-    if (state == newState) {
-        sprite->update(newState);
+int Character::getFrameState(int x, int y, int frame) {
+    if (x == 0 && y == 0) {
+        return 0;
     }
     else {
-        sprite->changeDirection(newState);
+        return frame / 15;
     }
-}
-
-void Character::stop() {
-    sprite->stop();
 }
 
 SpriteDrawingObject* Character::getSprite() {

@@ -73,9 +73,9 @@ int Engine::run() {
         if (frameTime >= frameDelay) {
             oldTime = glfwGetTime();
 
-            checkCamera(deltaTime);
+            checkCamera(frame);
 
-            update(frame);
+            update();
 
             clearScreen();
 
@@ -85,7 +85,7 @@ int Engine::run() {
 
             glfwPollEvents();
 
-            frame++;
+            frame = (frame % 60) + 1;
         }
 
         //std::this_thread::sleep_until(nextFrameTime);
@@ -202,7 +202,7 @@ int Engine::initCharacters() {
 
     Engine::testCharacter = new Character(characterTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
 
-    testCharacter->update(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y);
+    testCharacter->update(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y, 0, UP);
 
     return 1;
 }
@@ -229,12 +229,12 @@ int Engine::clearScreen() {
     return 1;
 }
 
-int Engine::update(int frame) {
-    updateBuffers(frame);
+int Engine::update() {
+    updateBuffers();
     return 1;
 }
 
-int Engine::updateBuffers(int frame) {
+int Engine::updateBuffers() {
 
     platforms->updateBuffers();
 
@@ -265,24 +265,29 @@ void Engine::setIsRunning(int isRunning) {
 }
 
 
-void Engine::checkCamera(float deltaTime) {
+void Engine::checkCamera(int frame) {
     float x = 0;
     float y = 0;
+    int direction = RIGHT;
 
     if (input->getKeyState(INPUT_UP)) {
+        direction = UP;
         y += MOVEMENT_SPEED;
     }
-    if (input->getKeyState(INPUT_RIGHT)) {
-        x += MOVEMENT_SPEED;
-    }
     if (input->getKeyState(INPUT_DOWN)) {
+        direction = DOWN;
         y -= MOVEMENT_SPEED;
     }
+    if (input->getKeyState(INPUT_RIGHT)) {
+        direction = RIGHT;
+        x += MOVEMENT_SPEED;
+    }
     if (input->getKeyState(INPUT_LEFT)) {
+        direction = LEFT;
         x -= MOVEMENT_SPEED;
     }
 
-    testCharacter->update(x, y);
+    testCharacter->update(x, y, frame, direction);
     camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));    
 }
 

@@ -4,15 +4,9 @@ SpriteDrawingObject::SpriteDrawingObject(TextureAsset* textureAsset, const char*
     SpriteDrawingObject::texture = new Texture(textureAsset, GL_NEAREST, GL_LINEAR);
     SpriteDrawingObject::vertices = new float[textureAsset->getVertexBufferSize() * textureAsset->getVerticesPerQuad()]();
     SpriteDrawingObject::indices = new unsigned int[textureAsset->getIndicesPerQuad()]();
-    //Pasar estas variables a "Character.hpp". Mejor separar vista de controlador
-    SpriteDrawingObject::currentX = 0.0f;
-    SpriteDrawingObject::currentY = 0.0f;
 }
 
-void SpriteDrawingObject::updateVerticesAndIndices(float x, float y) {
-
-    currentX += x;
-    currentY += y;
+void SpriteDrawingObject::updateVerticesAndIndices(float x, float y, int frameState, int direction) {
 
     int vertexBufferSize = textureAsset->getVertexBufferSize();
     int verticesPerQuad = textureAsset->getVerticesPerQuad();
@@ -22,13 +16,22 @@ void SpriteDrawingObject::updateVerticesAndIndices(float x, float y) {
     float tileHeight = textureAsset->getTileHeight();
     float textureWidth = textureAsset->getTextureWidth();
 
+    std::cout << "FrameState: " << frameState << std::endl;
+    std::cout << "Direction: " << direction << std::endl;
+
+    std::cout << "Cols: " << textureAsset->getNumCols() << std::endl;
+    std::cout << "Rows: " << textureAsset->getNumRows() << std::endl;
+
     for (int k = 0; k < verticesPerQuad; k++) {
-        int vertexY = k % 2 == 0 ? currentY + 0.5f: currentY + tileHeight + 0.5f;
-        vertices[vertexBufferSize * k] = k > 1 ? currentX + tileWidth + 0.5f: currentX + 0.5f;
+        int vertexY = k % 2 == 0 ? y + 0.5f: y + tileHeight + 0.5f;
+        vertices[vertexBufferSize * k] = k > 1 ? x + tileWidth + 0.5f: x + 0.5f;
         vertices[vertexBufferSize * k + 1] = vertexY;
         vertices[vertexBufferSize * k + 2] = zOffset - vertexY;
-        vertices[vertexBufferSize * k + 3] = k > 1 ? 0.2f : 0.0f;
-        vertices[vertexBufferSize * k + 4] = k % 2 == 0 ? 0.0f : 0.25f;
+        vertices[vertexBufferSize * k + 3] = k > 1 ? ((float)frameState) / textureAsset->getNumCols() + 1.0f/textureAsset->getNumCols() : ((float)frameState)/textureAsset->getNumCols();
+        vertices[vertexBufferSize * k + 4] = k % 2 == 0 ? ((float)direction)/textureAsset->getNumRows() : ((float)direction)/textureAsset->getNumRows() + 1.0f/textureAsset->getNumRows();
+
+        std::cout << "Texture X: " << vertices[vertexBufferSize * k + 3] << std::endl;
+        std::cout << "Texture Y: " << vertices[vertexBufferSize * k + 4] << std::endl;
     }
 
     for (int k = 0; k < indicesPerQuad; k++) {

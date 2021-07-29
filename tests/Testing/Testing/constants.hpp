@@ -82,7 +82,7 @@ const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
 const char* const WALL_TEXTURE_PATH = "resources/wall_sampled_awesome.png";
 
-const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_awesome.png";
+const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_awesome_inverted.png";
 const int CHARACTER_TEXTURE_ROWS = 4;
 const int CHARACTER_TEXTURE_COLS = 5;
 const int CHARACTER_BUFFER_VERTEX_SIZE = 5;

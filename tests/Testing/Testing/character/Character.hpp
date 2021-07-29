@@ -17,13 +17,13 @@
 class Character {
 
 private:
-    int state;
     SpriteDrawingObject* sprite;
+    float currentX, currentY;
+    int frameState;
 
 public:
     Character(TextureAsset* textureAsset, const char* vertexShaderPath, const char* fragmentShaderPath);
-    void update(int x, int y);
-    void move(int newState);
-    void stop();
+    void update(int x, int y, int frame, int direction);
+    int getFrameState(int x, int y, int frame);
     SpriteDrawingObject* getSprite();
 };

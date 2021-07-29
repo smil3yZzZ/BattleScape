@@ -61,14 +61,14 @@ public:
     int initCamera();
     int clearScreen();
     int generateBuffers();
-    int update(int frame);
-    int updateBuffers(int frame);
+    int update();
+    int updateBuffers();
     int render();
     int getIsRunning();
     void setIsRunning(int running);
     int initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     int initCharacters();
-    void checkCamera(float deltaTime);
+    void checkCamera(int frame);
     void updateInput(int key, int action);
 
 };
