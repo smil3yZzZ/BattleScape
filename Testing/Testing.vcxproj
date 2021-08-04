@@ -20,9 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{3176CAC0-704F-49CB-91C0-87677912E51F}</ProjectGuid>
+    <ProjectGuid>{6E3597FD-E51B-4AAF-BA28-B068023FEE12}</ProjectGuid>
     <RootNamespace>BattleScape</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BattleScape</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,6 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);lib-extern/opengl</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;lib-extern/opengl</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -85,24 +88,30 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>lib-extern/opengl;include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);$(ProjectDir)lib-extern/opengl/glfw3.lib;$(ProjectDir)lib-extern/opengl/glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>lib-extern/opengl</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>lib-extern\opengl;include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>lib-extern\opengl</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,23 +147,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include=".DS_Store" />
-    <None Include=".gitattributes" />
-    <None Include=".gitignore" />
-    <None Include="main" />
+    <None Include="resources\colors.json" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c" />
+    <Image Include="resources\wall\wall64x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera\Camera.hpp" />
+    <ClInclude Include="character\Character.hpp" />
+    <ClInclude Include="constants.hpp" />
+    <ClInclude Include="drawings\DrawingObject.hpp" />
+    <ClInclude Include="drawings\PlatformsDrawingObject.hpp" />
+    <ClInclude Include="drawings\PlatformShadowsDrawingObject.hpp" />
+    <ClInclude Include="drawings\ShadowDrawingObject.hpp" />
+    <ClInclude Include="drawings\SpriteDrawingObject.hpp" />
+    <ClInclude Include="drawings\WallsDrawingObject.hpp" />
+    <ClInclude Include="engine\Engine.hpp" />
+    <ClInclude Include="input\Input.hpp" />
+    <ClInclude Include="main.hpp" />
+    <ClInclude Include="shader\Shader.hpp" />
+    <ClInclude Include="texture\Texture.hpp" />
+    <ClInclude Include="texture\TextureAsset.hpp" />
+    <ClInclude Include="texture\TextureUtils.hpp" />
+    <ClInclude Include="utils\GLError.h" />
+    <ClInclude Include="utils\GLImporter.hpp" />
+    <ClInclude Include="utils\GLMImporter.hpp" />
+    <ClInclude Include="utils\RapidjsonImporter.hpp" />
+    <ClInclude Include="utils\SquareProperties.hpp" />
+    <ClInclude Include="utils\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="character\Character.cpp" />
+    <ClCompile Include="drawings\DrawingObject.cpp" />
+    <ClCompile Include="drawings\PlatformsDrawingObject.cpp" />
+    <ClCompile Include="drawings\PlatformShadowsDrawingObject.cpp" />
+    <ClCompile Include="drawings\ShadowDrawingObject.cpp" />
+    <ClCompile Include="drawings\SpriteDrawingObject.cpp" />
+    <ClCompile Include="drawings\WallsDrawingObject.cpp" />
+    <ClCompile Include="engine\Engine.cpp" />
+    <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="main_first.cpp" />
-    <ClCompile Include="main_json.cpp" />
-    <ClCompile Include="Shader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="README.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Shader.h" />
+    <ClCompile Include="shader\Shader.cpp" />
+    <ClCompile Include="texture\Texture.cpp" />
+    <ClCompile Include="texture\TextureAsset.cpp" />
+    <ClCompile Include="texture\TextureUtils.cpp" />
+    <ClCompile Include="utils\GLError.cpp" />
+    <ClCompile Include="utils\SquareProperties.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

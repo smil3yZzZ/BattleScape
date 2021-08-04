@@ -113,7 +113,7 @@ int Engine::run() {
 
 int Engine::init(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
     initGL();
-    initTextures(colorsInfo, wallsInfo);
+    initMapTextures(colorsInfo, wallsInfo);
     initCharacters();
     initCamera();
     generateBuffers();
@@ -405,7 +405,7 @@ unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document&
     return pixels;
 }
 
-unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document& colorsInfo) {
+unsigned char* Engine::createCharacterShadow() {
     unsigned char* pixels = new unsigned char[ORIGINAL_SHADOW_HEIGHT * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS];
     return pixels;
 }
