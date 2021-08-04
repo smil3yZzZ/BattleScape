@@ -1,10 +1,14 @@
+![alt text](battlescape.jpg)
+
+Use the arrow keys to move the character.
+
 Source code is located in Testing directory. 
 
-Windows:
+#####Windows
 
 Open Testing.sln with Microsoft Visual Studio and compile.
 
-OS X:
+#####OS X:
 
 Compile v1.0:
 g++ -o main -lglfw -lglew -framewoenGL main.cpp Engine.cpp utils/SquareProperties.cpp utils/Input.cpp utils/Shader.cpp -Iinclude -std=c++2a
