@@ -1,9 +1,10 @@
 #include "Character.hpp"
 
-Character::Character(TextureAsset* textureAsset,
+Character::Character(TextureAsset* textureAsset, TextureAsset* shadowTextureAsset,
     const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     Character::sprite = new SpriteDrawingObject(textureAsset, vertexShaderPath, fragmentShaderPath);
+    Character::shadow = new ShadowDrawingObject(shadowTextureAsset, vertexShaderPath, fragmentShaderPath);
     Character::currentX = 0.0f;
     Character::currentY = 0.0f;
     Character::frameState = 0;
@@ -39,6 +40,24 @@ int Character::getFrameState(int x, int y, int frame) {
     else {
         return frame / 15;
     }
+}
+
+bool Character::collisionExists(int x, int y, int** map) {
+
+    int hypotheticTopRightX = currentX + x + sprite->getTextureAsset()->getTileWidth() - 5.0f;
+    int hypotheticTopRightY = currentY + y + sprite->getTextureAsset()->getTileHeight();
+    int hypotheticBottomRightX = currentX + x + sprite->getTextureAsset()->getTileWidth() - 5.0f;
+    int hypotheticBottomRightY = currentY + y;
+    int hypotheticBottomLeftX = currentX + x + 5.0f;
+    int hypotheticBottomLeftY = currentY + y;
+    int hypotheticTopLeftX = currentX + x + 5.0f;
+    int hypotheticTopLeftY = currentY + y + sprite->getTextureAsset()->getTileHeight();
+
+    bool collisionWalls = 
+        map[hypotheticBottomLeftY / QUAD_HEIGHT][hypotheticBottomLeftX / QUAD_WIDTH] == 8 ||
+        map[hypotheticBottomRightY / QUAD_HEIGHT][hypotheticBottomRightX / QUAD_WIDTH] == 8;
+
+    return collisionWalls;
 }
 
 SpriteDrawingObject* Character::getSprite() {

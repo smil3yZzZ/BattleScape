@@ -88,6 +88,9 @@
     <ClInclude Include="main.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="drawings\ShadowDrawingObject.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera\Camera.cpp">
@@ -136,6 +139,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="drawings\ShadowDrawingObject.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

@@ -164,7 +164,7 @@ int Engine::initGL() {
     return 1;
 }
 
-int Engine::initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
+int Engine::initMapTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
 
     unsigned char* platformsData = createColorPlatformsAndShadows(colorsInfo);
 
@@ -200,9 +200,18 @@ int Engine::initCharacters() {
         CHARACTER_TEXTURE_ROWS, CHARACTER_TEXTURE_COLS, CHARACTER_BUFFER_VERTEX_SIZE,
         CHARACTER_VERTICES_PER_QUAD, CHARACTER_INDICES_PER_QUAD, SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR);
 
-    Engine::testCharacter = new Character(characterTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
+    unsigned char* characterShadowData = createCharacterShadow();
 
-    testCharacter->update(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y, 0, UP);
+    TextureAsset* characterShadowTexture = new TextureAsset(
+        ORIGINAL_SHADOW_WIDTH, ORIGINAL_SHADOW_HEIGHT,
+        ORIGINAL_SHADOW_WIDTH / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, ORIGINAL_SHADOW_HEIGHT / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, 1, 1, NUMBER_OF_RGBA_CHANNELS,
+        SHADOW_BUFFER_VERTEX_SIZE, SHADOW_VERTICES_PER_QUAD, SHADOW_INDICES_PER_QUAD, characterShadowData);
+
+    Engine::testCharacter = new Character(characterTexture, characterShadowTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
+
+    mainPlayerLastDirection = UP;
+
+    testCharacter->update(CHARACTER_INITIAL_X, CHARACTER_INITIAL_Y, 0, mainPlayerLastDirection);
 
     return 1;
 }
@@ -266,29 +275,35 @@ void Engine::setIsRunning(int isRunning) {
 
 
 void Engine::checkCamera(int frame) {
+
     float x = 0;
     float y = 0;
-    int direction = RIGHT;
 
     if (input->getKeyState(INPUT_UP)) {
-        direction = UP;
+        mainPlayerLastDirection = UP;
         y += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_DOWN)) {
-        direction = DOWN;
+        mainPlayerLastDirection = DOWN;
         y -= MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_RIGHT)) {
-        direction = RIGHT;
+        mainPlayerLastDirection = RIGHT;
         x += MOVEMENT_SPEED;
     }
     if (input->getKeyState(INPUT_LEFT)) {
-        direction = LEFT;
+        mainPlayerLastDirection = LEFT;
         x -= MOVEMENT_SPEED;
     }
 
-    testCharacter->update(x, y, frame, direction);
-    camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));    
+    if (testCharacter->collisionExists(x, y, map)) {
+        testCharacter->update(0.0f, 0.0f, 0, mainPlayerLastDirection);
+    }
+    else {
+        testCharacter->update(x, y, frame, mainPlayerLastDirection);
+        camera->setView(glm::vec3(x, y, 0.0f), glm::vec3(x, y, 0.0f));
+    }
+    
 }
 
 void Engine::updateInput(int key, int action) {
@@ -387,6 +402,11 @@ unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document&
             }
         }
     }
+    return pixels;
+}
+
+unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document& colorsInfo) {
+    unsigned char* pixels = new unsigned char[ORIGINAL_SHADOW_HEIGHT * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS];
     return pixels;
 }
 

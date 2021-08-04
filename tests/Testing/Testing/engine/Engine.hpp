@@ -35,6 +35,7 @@ private:
     float yOrigin;
 
     int isRunning;
+    int mainPlayerLastDirection;
 
     double framesPerSecond;
     float frameDelay;
@@ -50,6 +51,7 @@ private:
 
     GLFWwindow* window;
     unsigned char* createColorPlatformsAndShadows(const rapidjson::Document& colorsInfo);
+    unsigned char* createCharacterShadow();
 
 
 public:
@@ -66,7 +68,7 @@ public:
     int render();
     int getIsRunning();
     void setIsRunning(int running);
-    int initTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
+    int initMapTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
     int initCharacters();
     void checkCamera(int frame);
     void updateInput(int key, int action);

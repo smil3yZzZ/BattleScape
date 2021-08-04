@@ -31,5 +31,6 @@ public:
     void initBuffers();
     void updateBuffers();
     void render(GLfloat* projection, GLfloat* view, GLfloat* model);
+    TextureAsset* getTextureAsset();
     ~DrawingObject();
 };

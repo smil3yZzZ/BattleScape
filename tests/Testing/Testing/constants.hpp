@@ -54,10 +54,13 @@ const float Z_FAR = 10000.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
+const int SHADOW_BUFFER_VERTEX_SIZE = 5;
 const int WALL_BUFFER_VERTEX_SIZE = 5;
 const int PLATFORM_VERTICES_PER_QUAD = 4;
+const int SHADOW_VERTICES_PER_QUAD = 4;
 const int WALL_VERTICES_PER_QUAD = 8;
 const int PLATFORM_INDICES_PER_QUAD = 6;
+const int SHADOW_INDICES_PER_QUAD = 6;
 const int WALL_INDICES_PER_QUAD = 12;
 
 const int WALL_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 16;
@@ -65,6 +68,9 @@ const int SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 4;
 
 const int ORIGINAL_QUAD_WIDTH = 256;
 const int ORIGINAL_QUAD_HEIGHT = 256;
+
+const int ORIGINAL_SHADOW_WIDTH = 140;
+const int ORIGINAL_SHADOW_HEIGHT = 15;
 
 const int QUAD_WIDTH = 64;
 const int QUAD_HEIGHT = 64;
@@ -82,15 +88,15 @@ const char* const SQUARE_FRAGMENT_SHADER_PATH = "resources/shaders/mapQuad.fs";
 
 const char* const WALL_TEXTURE_PATH = "resources/wall_sampled_awesome.png";
 
-const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_awesome_inverted.png";
+const char* const CHARACTER_TEXTURE_PATH = "resources/character/mario_example_tests_4_transparent_awesome_inverted_clamped.png";
 const int CHARACTER_TEXTURE_ROWS = 4;
 const int CHARACTER_TEXTURE_COLS = 5;
 const int CHARACTER_BUFFER_VERTEX_SIZE = 5;
 const int CHARACTER_VERTICES_PER_QUAD = 4;
 const int CHARACTER_INDICES_PER_QUAD = 6;
 
-const float CHARACTER_INITIAL_X = 100.0f;
-const float CHARACTER_INITIAL_Y = 100.0f;
+const float CHARACTER_INITIAL_X = 64.0f;
+const float CHARACTER_INITIAL_Y = 64.0f;
 
 const char* const CHARACTER_VERTEX_SHADER_PATH = "resources/shaders/character.vs";
 const char* const CHARACTER_FRAGMENT_SHADER_PATH = "resources/shaders/character.fs";

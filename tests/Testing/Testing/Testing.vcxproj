@@ -158,6 +158,7 @@
     <ClInclude Include="drawings\DrawingObject.hpp" />
     <ClInclude Include="drawings\PlatformsDrawingObject.hpp" />
     <ClInclude Include="drawings\PlatformShadowsDrawingObject.hpp" />
+    <ClInclude Include="drawings\ShadowDrawingObject.hpp" />
     <ClInclude Include="drawings\SpriteDrawingObject.hpp" />
     <ClInclude Include="drawings\WallsDrawingObject.hpp" />
     <ClInclude Include="engine\Engine.hpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="drawings\DrawingObject.cpp" />
     <ClCompile Include="drawings\PlatformsDrawingObject.cpp" />
     <ClCompile Include="drawings\PlatformShadowsDrawingObject.cpp" />
+    <ClCompile Include="drawings\ShadowDrawingObject.cpp" />
     <ClCompile Include="drawings\SpriteDrawingObject.cpp" />
     <ClCompile Include="drawings\WallsDrawingObject.cpp" />
     <ClCompile Include="engine\Engine.cpp" />

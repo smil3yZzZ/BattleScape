@@ -70,6 +70,10 @@ void DrawingObject::render(GLfloat* projection, GLfloat* view, GLfloat* model) {
     glBindVertexArray(0);
 }
 
+TextureAsset* DrawingObject::getTextureAsset() {
+    return textureAsset;
+}
+
 DrawingObject::~DrawingObject(){
     delete shader;
     delete texture;
