@@ -16,5 +16,5 @@ private:
 public:
     ShadowDrawingObject(TextureAsset* textureAsset,
         const char* vertexShaderPath, const char* fragmentShaderPath);
-    void updateVerticesAndIndices(float x, float y, int frameState, int direction);
+    void updateVerticesAndIndices(float x, float y);
 };

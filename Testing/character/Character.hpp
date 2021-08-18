@@ -24,9 +24,11 @@ private:
 
 public:
     Character(TextureAsset* textureAsset, TextureAsset* shadowTextureAsset,
-        const char* vertexShaderPath, const char* fragmentShaderPath);
+        const char* vertexShaderPath, const char* fragmentShaderPath, const char* shadowFragmentShaderPath);
     void update(int x, int y, int frame, int direction);
     int getFrameState(int x, int y, int frame);
     bool collisionExists(int x, int y, int** map);
-    SpriteDrawingObject* getSprite();
+    void initBuffers();
+    void updateBuffers();
+    void render(GLfloat* projection, GLfloat* view, GLfloat* model);
 };

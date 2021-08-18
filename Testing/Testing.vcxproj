@@ -148,6 +148,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="resources\colors.json" />
+    <None Include="resources\shaders\ellipsis.fs" />
+    <None Include="resources\shaders\mapQuad.fs" />
+    <None Include="resources\shaders\mapQuad.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\wall\wall64x32.png" />
@@ -165,6 +168,7 @@
     <ClInclude Include="engine\Engine.hpp" />
     <ClInclude Include="input\Input.hpp" />
     <ClInclude Include="main.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader\Shader.hpp" />
     <ClInclude Include="texture\Texture.hpp" />
     <ClInclude Include="texture\TextureAsset.hpp" />

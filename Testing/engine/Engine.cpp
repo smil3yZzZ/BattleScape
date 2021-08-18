@@ -207,7 +207,7 @@ int Engine::initCharacters() {
         ORIGINAL_SHADOW_WIDTH / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, ORIGINAL_SHADOW_HEIGHT / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, 1, 1, NUMBER_OF_RGBA_CHANNELS,
         SHADOW_BUFFER_VERTEX_SIZE, SHADOW_VERTICES_PER_QUAD, SHADOW_INDICES_PER_QUAD, characterShadowData);
 
-    Engine::testCharacter = new Character(characterTexture, characterShadowTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH);
+    Engine::testCharacter = new Character(characterTexture, characterShadowTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH, CHARACTER_SHADOW_FRAGMENT_SHADER_PATH);
 
     mainPlayerLastDirection = UP;
 
@@ -227,7 +227,7 @@ int Engine::generateBuffers() {
 
     walls->initBuffers();
 
-    testCharacter->getSprite()->initBuffers();
+    testCharacter->initBuffers();
 
     return 1;
 }
@@ -249,7 +249,7 @@ int Engine::updateBuffers() {
 
     walls->updateBuffers();
 
-    testCharacter->getSprite()->updateBuffers();
+    testCharacter->updateBuffers();
 
     return 1;
 }
@@ -260,7 +260,7 @@ int Engine::render() {
 
     walls->render(camera->getProjection(), camera->getView(), camera->getModel());
 
-    testCharacter->getSprite()->render(camera->getProjection(), camera->getView(), camera->getModel());
+    testCharacter->render(camera->getProjection(), camera->getView(), camera->getModel());
 
     return 1;
 }
@@ -407,6 +407,14 @@ unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document&
 
 unsigned char* Engine::createCharacterShadow() {
     unsigned char* pixels = new unsigned char[ORIGINAL_SHADOW_HEIGHT * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS];
+    for (int i = 0; i < ORIGINAL_SHADOW_HEIGHT; i++) {
+        for (int j = 0; j < ORIGINAL_SHADOW_WIDTH; j++) {
+            pixels[i * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS] = 0.0f;
+            pixels[i * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 1] = 0.0f;
+            pixels[i * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 2] = 0.0f;
+            pixels[i * ORIGINAL_SHADOW_WIDTH * NUMBER_OF_RGBA_CHANNELS + j * NUMBER_OF_RGBA_CHANNELS + 3] = 63.0f;
+        }
+    }
     return pixels;
 }
 

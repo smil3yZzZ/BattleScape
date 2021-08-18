@@ -1,10 +1,10 @@
 #include "Character.hpp"
 
 Character::Character(TextureAsset* textureAsset, TextureAsset* shadowTextureAsset,
-    const char* vertexShaderPath, const char* fragmentShaderPath) {
+    const char* vertexShaderPath, const char* fragmentShaderPath, const char* shadowFragmentShaderPath) {
 
     Character::sprite = new SpriteDrawingObject(textureAsset, vertexShaderPath, fragmentShaderPath);
-    Character::shadow = new ShadowDrawingObject(shadowTextureAsset, vertexShaderPath, fragmentShaderPath);
+    Character::shadow = new ShadowDrawingObject(shadowTextureAsset, vertexShaderPath, shadowFragmentShaderPath);
     Character::currentX = 0.0f;
     Character::currentY = 0.0f;
     Character::frameState = 0;
@@ -31,6 +31,7 @@ void Character::update(int x, int y, int frame, int direction) {
     }
 
     sprite->updateVerticesAndIndices(currentX, currentY, frameState, direction);
+    shadow->updateVerticesAndIndices(currentX, currentY - shadow->getTextureAsset()->getTileHeight());
 }
 
 int Character::getFrameState(int x, int y, int frame) {
@@ -60,6 +61,17 @@ bool Character::collisionExists(int x, int y, int** map) {
     return collisionWalls;
 }
 
-SpriteDrawingObject* Character::getSprite() {
-    return sprite;
+void Character::initBuffers() {
+    sprite->initBuffers();
+    shadow->initBuffers();
+}
+
+void Character::updateBuffers() {
+    sprite->updateBuffers();
+    shadow->updateBuffers();
+}
+
+void Character::render(GLfloat* projection, GLfloat* view, GLfloat* model) {
+    sprite->render(projection, view, model);
+    shadow->render(projection, view, model);
 }

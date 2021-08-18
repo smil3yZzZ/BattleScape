@@ -100,11 +100,12 @@ const float CHARACTER_INITIAL_Y = 64.0f;
 
 const char* const CHARACTER_VERTEX_SHADER_PATH = "resources/shaders/character.vs";
 const char* const CHARACTER_FRAGMENT_SHADER_PATH = "resources/shaders/character.fs";
+const char* const CHARACTER_SHADOW_FRAGMENT_SHADER_PATH = "resources/shaders/ellipsis.fs";
 
 const float PLATFORMS_Z_OFFSET = 5.0f;
 const float WALLS_Z_OFFSET = 10.0f;
+const float CHARACTER_SHADOW_Z_OFFSET = 8.0f;
 const float CHARACTER_Z_OFFSET = 15.0f;
-
 const int SPRITE_DRAWING_OBJECT_DIMENSION = 1;
 
 const float UNITARY_COMPONENT = 1.0f;
