@@ -7,7 +7,7 @@ uniform sampler2D texture1;
 
 void main()
 {
-    // Time varying pixel color
+    // Radius variable calculation (circle formula)
     float powRadius = pow(TexCoord.x - 0.5, 2.0) + pow(TexCoord.y - 0.5, 2.0);
 
     float radius = sqrt(powRadius);

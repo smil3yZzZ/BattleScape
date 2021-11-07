@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -149,6 +149,8 @@
   <ItemGroup>
     <None Include="resources\colors.json" />
     <None Include="resources\shaders\ellipsis.fs" />
+    <None Include="resources\shaders\fog.fs" />
+    <None Include="resources\shaders\fog.vs" />
     <None Include="resources\shaders\mapQuad.fs" />
     <None Include="resources\shaders\mapQuad.vs" />
   </ItemGroup>
@@ -160,8 +162,9 @@
     <ClInclude Include="character\Character.hpp" />
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="drawings\DrawingObject.hpp" />
+    <ClInclude Include="drawings\FieldOfViewDrawingObject.hpp" />
+    <ClInclude Include="drawings\FogDrawingObject.hpp" />
     <ClInclude Include="drawings\PlatformsDrawingObject.hpp" />
-    <ClInclude Include="drawings\PlatformShadowsDrawingObject.hpp" />
     <ClInclude Include="drawings\ShadowDrawingObject.hpp" />
     <ClInclude Include="drawings\SpriteDrawingObject.hpp" />
     <ClInclude Include="drawings\WallsDrawingObject.hpp" />
@@ -184,8 +187,9 @@
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="character\Character.cpp" />
     <ClCompile Include="drawings\DrawingObject.cpp" />
+    <ClCompile Include="drawings\FieldOfViewDrawingObject.cpp" />
+    <ClCompile Include="drawings\FogDrawingObject.cpp" />
     <ClCompile Include="drawings\PlatformsDrawingObject.cpp" />
-    <ClCompile Include="drawings\PlatformShadowsDrawingObject.cpp" />
     <ClCompile Include="drawings\ShadowDrawingObject.cpp" />
     <ClCompile Include="drawings\SpriteDrawingObject.cpp" />
     <ClCompile Include="drawings\WallsDrawingObject.cpp" />

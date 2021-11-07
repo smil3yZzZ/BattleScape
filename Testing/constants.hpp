@@ -53,15 +53,21 @@ const float Z_NEAR = 0.0f;
 const float Z_FAR = 10000.0f;
 
 const int NUMBER_OF_RGBA_CHANNELS = 4;
+
 const int PLATFORM_BUFFER_VERTEX_SIZE = 5;
 const int SHADOW_BUFFER_VERTEX_SIZE = 5;
 const int WALL_BUFFER_VERTEX_SIZE = 5;
+const int FOG_BUFFER_VERTEX_SIZE = 3;
+
 const int PLATFORM_VERTICES_PER_QUAD = 4;
 const int SHADOW_VERTICES_PER_QUAD = 4;
 const int WALL_VERTICES_PER_QUAD = 8;
+const int FOG_VERTICES_PER_QUAD = 4;
+
 const int PLATFORM_INDICES_PER_QUAD = 6;
 const int SHADOW_INDICES_PER_QUAD = 6;
 const int WALL_INDICES_PER_QUAD = 12;
+const int FOG_INDICES_PER_QUAD = 6;
 
 const int WALL_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 16;
 const int SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR = 4;
@@ -102,10 +108,14 @@ const char* const CHARACTER_VERTEX_SHADER_PATH = "resources/shaders/character.vs
 const char* const CHARACTER_FRAGMENT_SHADER_PATH = "resources/shaders/character.fs";
 const char* const CHARACTER_SHADOW_FRAGMENT_SHADER_PATH = "resources/shaders/ellipsis.fs";
 
+const char* const FOG_VERTEX_SHADER_PATH = "resources/shaders/fog.vs";
+const char* const FOG_FRAGMENT_SHADER_PATH = "resources/shaders/fog.fs";
+
 const float PLATFORMS_Z_OFFSET = 5.0f;
 const float WALLS_Z_OFFSET = 10.0f;
 const float CHARACTER_SHADOW_Z_OFFSET = 8.0f;
 const float CHARACTER_Z_OFFSET = 15.0f;
+const float FOG_Z_OFFSET = 50.0f;
 const int SPRITE_DRAWING_OBJECT_DIMENSION = 1;
 
 const float UNITARY_COMPONENT = 1.0f;

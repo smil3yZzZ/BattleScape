@@ -5,6 +5,7 @@ Character::Character(TextureAsset* textureAsset, TextureAsset* shadowTextureAsse
 
     Character::sprite = new SpriteDrawingObject(textureAsset, vertexShaderPath, fragmentShaderPath);
     Character::shadow = new ShadowDrawingObject(shadowTextureAsset, vertexShaderPath, shadowFragmentShaderPath);
+    //Character::fieldOfView = new FieldOfViewDrawingObject();
     Character::currentX = 0.0f;
     Character::currentY = 0.0f;
     Character::frameState = 0;

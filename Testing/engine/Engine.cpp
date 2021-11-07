@@ -114,6 +114,7 @@ int Engine::run() {
 int Engine::init(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo) {
     initGL();
     initMapTextures(colorsInfo, wallsInfo);
+    initFog();
     initCharacters();
     initCamera();
     generateBuffers();
@@ -172,11 +173,6 @@ int Engine::initMapTextures(const rapidjson::Document& colorsInfo, const rapidjs
         QUAD_WIDTH, QUAD_HEIGHT, PLATFORM_TEXTURE_ROWS, PLATFORM_TEXTURE_COLS, NUMBER_OF_RGBA_CHANNELS,
             PLATFORM_BUFFER_VERTEX_SIZE, PLATFORM_VERTICES_PER_QUAD, PLATFORM_INDICES_PER_QUAD, platformsData);
 
-    //free image data after glGenTexture
-    //Añadir sombras a personaje
-    //Añadir sombras a muros
-    //Movimiento personaje
-    //Colisiones
     //Niebla de guerra
     //Objetivos gameplay
 
@@ -195,6 +191,23 @@ int Engine::initMapTextures(const rapidjson::Document& colorsInfo, const rapidjs
     return 1;
 }
 
+int Engine::initFog() {
+
+    float fogWidth = dimension * QUAD_WIDTH;
+    float fogHeight = dimension * QUAD_HEIGHT;
+
+    TextureAsset* fogTexture = new TextureAsset(fogWidth, fogHeight,
+        fogWidth, fogHeight, 1, 1, NUMBER_OF_RGBA_CHANNELS,
+        FOG_BUFFER_VERTEX_SIZE, FOG_VERTICES_PER_QUAD, FOG_INDICES_PER_QUAD, NULL);
+
+    Engine::fog = new FogDrawingObject(dimension, fogTexture, FOG_Z_OFFSET,
+        FOG_VERTEX_SHADER_PATH, FOG_FRAGMENT_SHADER_PATH);
+
+    fog->initVerticesAndIndices(xOrigin, yOrigin);
+    
+    return 1;
+}
+
 int Engine::initCharacters() {
     TextureAsset* characterTexture = TextureUtils::loadTextureAsset(CHARACTER_TEXTURE_PATH,
         CHARACTER_TEXTURE_ROWS, CHARACTER_TEXTURE_COLS, CHARACTER_BUFFER_VERTEX_SIZE,
@@ -206,6 +219,8 @@ int Engine::initCharacters() {
         ORIGINAL_SHADOW_WIDTH, ORIGINAL_SHADOW_HEIGHT,
         ORIGINAL_SHADOW_WIDTH / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, ORIGINAL_SHADOW_HEIGHT / SPRITE_TEXTURE_LOAD_SUBSAMPLING_FACTOR, 1, 1, NUMBER_OF_RGBA_CHANNELS,
         SHADOW_BUFFER_VERTEX_SIZE, SHADOW_VERTICES_PER_QUAD, SHADOW_INDICES_PER_QUAD, characterShadowData);
+
+    //unsigned char* characterFieldOfViewData = createCharacterFieldOfViewData();
 
     Engine::testCharacter = new Character(characterTexture, characterShadowTexture, CHARACTER_VERTEX_SHADER_PATH, CHARACTER_FRAGMENT_SHADER_PATH, CHARACTER_SHADOW_FRAGMENT_SHADER_PATH);
 
@@ -229,6 +244,8 @@ int Engine::generateBuffers() {
 
     testCharacter->initBuffers();
 
+    fog->initBuffers();
+
     return 1;
 }
 
@@ -251,6 +268,8 @@ int Engine::updateBuffers() {
 
     testCharacter->updateBuffers();
 
+    fog->updateBuffers();
+
     return 1;
 }
 
@@ -261,6 +280,8 @@ int Engine::render() {
     walls->render(camera->getProjection(), camera->getView(), camera->getModel());
 
     testCharacter->render(camera->getProjection(), camera->getView(), camera->getModel());
+
+    fog->render(camera->getProjection(), camera->getView(), camera->getModel());
 
     return 1;
 }
@@ -362,32 +383,6 @@ unsigned char* Engine::createColorPlatformsAndShadows(const rapidjson::Document&
                     }
                 }
                 else {
-                    /*
-                    float randomNumber = (float) rand()/RAND_MAX;
-                    float red, green, blue, diff;
-                    if (randomNumber < ((float)(PLATFORM_TEXTURE_ROWS - n))/12.0f) {
-                        for (int y = i; y < i + 2; y++) {
-                            for (int x = j; x < j + 2; x++) {
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = 66.0f;
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = 66.0f;
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = 66.0f;
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
-                            }
-                        }
-                    }
-                    else {
-                        std::string color_string = std::to_string(n);
-                        const char* color_char = color_string.c_str();
-                        for (int y = i; y < i + 2; y++) {
-                            for (int x = j; x < j + 2; x++) {
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS] = colorsInfo[color_char]["codePrimary"]["r"].GetInt();
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 1] = colorsInfo[color_char]["codePrimary"]["g"].GetInt();
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 2] = colorsInfo[color_char]["codePrimary"]["b"].GetInt();
-                                pixels[n * ORIGINAL_QUAD_HEIGHT * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + y * ORIGINAL_QUAD_WIDTH * NUMBER_OF_RGBA_CHANNELS + x * NUMBER_OF_RGBA_CHANNELS + 3] = 255.0f;
-                            }
-                        }
-                    }
-                    */
                     std::string color_string = std::to_string(n);
                     const char* color_char = color_string.c_str();
                     for (int y = i; y < i + 2; y++) {

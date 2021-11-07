@@ -53,9 +53,11 @@ void DrawingObject::updateBuffers() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // gradient attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    if (textureAsset->getData() != NULL) {
+        // gradient attribute
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexBufferSize * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+    }
 }
 
 void DrawingObject::render(GLfloat* projection, GLfloat* view, GLfloat* model) {
@@ -65,7 +67,11 @@ void DrawingObject::render(GLfloat* projection, GLfloat* view, GLfloat* model) {
     shader->setFloatMatrix("model", model);
 
     glBindVertexArray(VAO);
-    glBindTexture(GL_TEXTURE_2D, texture->getId());
+
+    if (textureAsset->getData() != NULL) {
+        glBindTexture(GL_TEXTURE_2D, texture->getId());
+    }
+
     glDrawElements(GL_TRIANGLES, textureAsset->getIndicesPerQuad() * dimension * dimension, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

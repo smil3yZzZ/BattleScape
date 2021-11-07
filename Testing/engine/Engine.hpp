@@ -18,6 +18,7 @@
 #include "../utils/GLError.h"
 #include "../camera/Camera.hpp"
 #include "../character/Character.hpp"
+#include "../drawings/FogDrawingObject.hpp"
 
 
 //#include <Windows.h>
@@ -44,6 +45,7 @@ private:
 
     PlatformsDrawingObject* platforms;
     WallsDrawingObject* walls;
+    FogDrawingObject* fog;
 
     Character* testCharacter;
 
@@ -69,6 +71,7 @@ public:
     int getIsRunning();
     void setIsRunning(int running);
     int initMapTextures(const rapidjson::Document& colorsInfo, const rapidjson::Document& wallsInfo);
+    int initFog();
     int initCharacters();
     void checkCamera(int frame);
     void updateInput(int key, int action);

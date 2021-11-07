@@ -27,6 +27,8 @@
     <None Include="resources\shaders\mapQuad.vs">
       <Filter>Archivos de recursos</Filter>
     </None>
+    <None Include="resources\shaders\fog.fs" />
+    <None Include="resources\shaders\fog.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\wall\wall64x32.png">
@@ -62,9 +64,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="drawings\PlatformsDrawingObject.hpp">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="drawings\PlatformShadowsDrawingObject.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="drawings\SpriteDrawingObject.hpp">
@@ -103,6 +102,12 @@
     <ClInclude Include="resource.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="drawings\FieldOfViewDrawingObject.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="drawings\FogDrawingObject.hpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera\Camera.cpp">
@@ -115,9 +120,6 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="drawings\PlatformsDrawingObject.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="drawings\PlatformShadowsDrawingObject.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="drawings\SpriteDrawingObject.cpp">
@@ -154,6 +156,12 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="drawings\ShadowDrawingObject.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="drawings\FieldOfViewDrawingObject.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="drawings\FogDrawingObject.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

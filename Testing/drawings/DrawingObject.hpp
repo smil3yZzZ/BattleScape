@@ -13,11 +13,10 @@
 class DrawingObject {
 private:
 
+protected:
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-
-protected:
     Shader* shader;
     Texture* texture;
     float* vertices;
