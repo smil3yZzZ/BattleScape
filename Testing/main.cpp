@@ -49,7 +49,7 @@ int main() {
         std::cout << "\n";
     }
 
-    //Uncomment this if you want to try black holes!
+    //Uncomment this if you want to try platform holes!
     //top_left[1][1] = 0;
 
     std::stack<std::tuple<int, int>> algorithmCells;

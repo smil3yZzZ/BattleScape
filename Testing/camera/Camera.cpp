@@ -20,7 +20,7 @@ void Camera::setView(glm::vec3 cameraPosDiff, glm::vec3 cameraTargetDiff) {
     cameraTarget += cameraTargetDiff;
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 }
-
+ 
 GLfloat* Camera::getView() {
     return glm::value_ptr(view);
 }
